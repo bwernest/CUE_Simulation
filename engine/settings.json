@@ -1,0 +1,32 @@
+{
+    "project_version": "0.1.0",
+    "project_title": "CUE_Simulation",
+
+    "prod": {
+        "test": false,
+
+        "paths": {
+
+            "file_data": "engine/data/data.txt",
+            "folder_data": "engine/data",
+            "file_save": "engine/data/save.bw",
+            "file_log": "engine/data/log.bw",
+            "file_parser_pickle": "engine/parser/parser_pickle.pkl"
+            
+        }
+    },
+    
+    "test": {
+        "test": true,
+        
+        "paths": {
+            
+            "file_data": "engine/test/data/data.txt",
+            "folder_data": "engine/test/data",
+            "file_save": "engine/test/data/save.bw",
+            "file_log": "engine/test/data/log.bw",
+            "file_parser_pickle": "engine/test/data/parser_pickle.pkl"
+
+        }
+    }
+}
