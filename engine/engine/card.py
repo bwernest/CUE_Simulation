@@ -1,14 +1,12 @@
 """___Modules___________________________________________________________________________________"""
 
 # CUE_Simulation
-from .game import Game
 from ..utils import *
 
 """___Classes___________________________________________________________________________________"""
 
 
-class Engine(ToolBox):
+class Card(ToolBox):
 
-    def start(self) -> None:
-        self.game = Game()
-        self.game.create_game()
+    def create(self) -> None:
+        pass
