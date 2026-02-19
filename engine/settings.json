@@ -2,6 +2,11 @@
     "project_version": "0.1.0",
     "project_title": "CUE_Simulation",
 
+    "deck_len": 18,
+    "play_len": 3,
+    "rounds": 4,
+    "turns": 2,
+
     "prod": {
         "test": false,
 

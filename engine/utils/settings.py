@@ -19,6 +19,12 @@ class Settings():
     paths: dict
     test: bool
 
+    # CUE_Simulation
+    deck_len: int
+    play_len: int
+    turns: int
+    rounds: int
+
     def __init__(self, category: str = "prod") -> None:
         if Settings._config is None:
 

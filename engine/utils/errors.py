@@ -4,11 +4,13 @@
 class CUE_SimulationException(Exception):
     pass
 
+class CarteIncorrecte(CUE_SimulationException):
+    pass
 
 class DeckIncorrect(CUE_SimulationException):
     pass
 
-class CardIncorrect(CUE_SimulationException):
+class NombreIncorrectDeCartes(CUE_SimulationException):
     pass
 
 class PlayIncorrect(CUE_SimulationException):

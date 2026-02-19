@@ -36,11 +36,8 @@ class Assert():
     def assertValueEqual(self, a: int | float, b: int | float, rounder: int) -> None:
         assert round(a, rounder) == round(b, rounder), self.AnalyseError(a, b)
 
-    def assertTextEqual(self, text1: str, text2: str, exact: bool = False, **kwargs) -> None:
-        if exact:
-            self.assertEqual(text1, text2)
-        else:
-            self.assertEqual(text1.split(), text2.split())
+    def assertTextEqual(self, text1: str, text2: str, **kwargs) -> None:
+        assert text1 == text2, self.AnalyseError(text1, text2)
 
     def assertListEqual(self, list1: List | Tuple, list2: List | Tuple, rounder: int) -> None:
         self.assertEqual(len(list1), len(list2))
