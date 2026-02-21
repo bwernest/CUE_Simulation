@@ -24,7 +24,7 @@ class Card(ToolBox):
             power: int = 100,
             energy: int = 10,
             attacks: List = None
-            ) -> None:
+    ) -> None:
         self.id = id
         self.name = name
         self.power = power
