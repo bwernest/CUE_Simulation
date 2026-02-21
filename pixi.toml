@@ -31,4 +31,4 @@ print_test = "pytest -s engine"
 
 # Multi
 coverage = {depends-on = ["cover_get", "cover_show"]}
-validate = {depends-on = ["format", "test", "main"]}
+validate = {depends-on = ["format", "coverage", "main"]}
