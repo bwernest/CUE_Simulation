@@ -22,8 +22,13 @@ class Settings():
     # CUE_Simulation
     deck_len: int
     play_len: int
+    hand_len: int
     turns: int
     rounds: int
+    start_energy: int
+    energy_per_turn: int
+    min_energy: int
+    max_energy: int
 
     def __init__(self, category: str = "prod") -> None:
         if Settings._config is None:

@@ -4,12 +4,18 @@
 
     "deck_len": 18,
     "play_len": 3,
+    "hand_len": 5,
     "rounds": 4,
     "turns": 2,
 
     "prod": {
         "test": false,
-
+        
+                "start_energy": 1000,
+                "energy_per_turn": 100,
+                "min_energy": 1000,
+                "max_energy": 2000,
+        
         "paths": {
 
             "file_data": "engine/data/data.txt",
@@ -23,6 +29,11 @@
     
     "test": {
         "test": true,
+        
+        "start_energy": 1000,
+        "energy_per_turn": 100,
+        "min_energy": 1000,
+        "max_energy": 2000,
         
         "paths": {
             

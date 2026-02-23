@@ -27,6 +27,11 @@ class Game(Deck):
         self.turn = 0
         self.round = 0
         self.winner = None
+    
+    def start_game(self, shuffle:bool=True) -> None:
+        if shuffle:
+            for deck in self.decks:
+                deck.shuffle()
 
     def play(self, play0: List[str | None], play1: List[str | None]) -> None:
         if not len(play0) == self.play_len or not len(play1) == self.play_len:
