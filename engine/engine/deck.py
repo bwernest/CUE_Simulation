@@ -32,7 +32,7 @@ class Deck(Card):
     def hand(self) -> List[str]:
         return self.order[:self.hand_len]
 
-    def cycle(self, cards_played: List[str|None]) -> None:
+    def cycle(self, cards_played: List[str | None]) -> None:
         for card in cards_played:
             if card is not None:
                 self.order.remove(card)

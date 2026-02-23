@@ -18,4 +18,3 @@ from engine.engine.engine import Engine
 
 engine = Engine("prod")
 engine.start()
-print(engine.game.score)

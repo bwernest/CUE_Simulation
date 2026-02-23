@@ -27,8 +27,8 @@ class Game(Deck):
         self.turn = 0
         self.round = 0
         self.winner = None
-    
-    def start_game(self, shuffle:bool=True) -> None:
+
+    def start_game(self, shuffle: bool = True) -> None:
         if shuffle:
             for deck in self.decks:
                 deck.shuffle()

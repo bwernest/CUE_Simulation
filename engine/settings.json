@@ -18,7 +18,7 @@
         
         "paths": {
 
-            "file_data": "engine/data/data.txt",
+            "file_data": "engine/data/cartes.ods",
             "folder_data": "engine/data",
             "file_save": "engine/data/save.bw",
             "file_log": "engine/data/log.bw",

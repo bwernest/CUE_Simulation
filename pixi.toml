@@ -9,7 +9,9 @@ version = "0.1.0"
 
 # Python
 python = "*"
+pandas = "*"
 numpy = "*"
+odfpy = "*"
 
 # Développement
 autopep8 = "*"
