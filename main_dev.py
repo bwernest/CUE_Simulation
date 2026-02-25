@@ -18,3 +18,5 @@ from engine.engine.engine import Engine
 
 engine = Engine("prod")
 engine.start()
+
+engine.write_raw_data()

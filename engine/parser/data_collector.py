@@ -39,3 +39,17 @@ class DataCollector(Game):
                 # print(f"non car row = {row} et l'autre = {[float('nan')] * len(row)}")
                 raw_card.append(row)
         return raw_cards
+
+    def write_raw_data(self) -> None:
+        raw_cards = self.get_raw_cards()
+        sorted_raw_cards = sorted(raw_cards, key=lambda x: x[0][0])
+        txt = ""
+        for raw_card in sorted_raw_cards:
+            for line in raw_card:
+                for data in line:
+                    if isna(data):
+                        data = ""
+                    txt += str(data) + "\t"
+                txt += "\n"
+            txt += "\n"
+        self.write_txt(f"{self.paths["folder_data"]}/new_cartes.txt", txt)

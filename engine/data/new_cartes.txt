@@ -1,0 +1,533 @@
+MYPA002	Loch Ness Monster	Loch In	Paleontology	Paleontology Mythic Cards	Mythic	Standard	
+8	50	2020	Monster Name				
+Return	Condition						
+	Cible	Opponent remaining					
+	Effet	lock					
+	Duree	turn	2				
+
+PAN001	Elasmotherium	CRASH!	Paleontology	Ancient Creatures	Common	Limited	
+7	66	2020					
+Play	Condition						
+	Cible	player hand	card	Southern White Rhinoceros			
+	Effet	power	40				
+	Duree	turn	1				
+
+PAN002	Mosasaurus	Oceanic Ancestor	Paleontology	Ancient Creatures	Common	Limited	
+6	53	2020					
+Play	Condition						
+	Cible	player hand	Collection	Ocean Mammals			
+	Effet	power	30				
+	Duree	turn	1				
+
+PAN003	Archaeopteryx	Bridge the Evolutionary Gap	Paleontology	Ancient Creatures	Epic	Limited	
+6	45	2020					
+Play	Cible	player deck	Collection	Ancient Creatures			
+	Effet	power	18				
+	Duree	until played					
+Play	Cible	player deck	Collection	Birds			
+	Effet	power	18				
+	Duree	until played					
+
+PAN004	Hallucigenia		Paleontology	Ancient Creatures	Common	Limited	
+1	8	2020					
+
+PAN005	Megalodon	Daddy Shark	Paleontology	Ancient Creatures	Rare	Limited	
+6	48	Mega Paleontology	2020				
+Play	Condition						
+	Cible	player hand	Collection	Sharks!			
+	Effet	power	15				
+	Duree	turn	1				
+
+PAN006	Paraceratherium		Paleontology	Ancient Creatures	Common	Limited	
+7	69	2020					
+
+PAN007	Megatherium	Ancestoral Aid	Paleontology	Ancient Creatures	Common	Limited	
+4	34	Mega Paleontology	2020				
+Play	Condition						
+	Cible	player hand	Card	Amazon Sloth			
+	Effet	power	20				
+	Duree	turn	1				
+
+PAN008	Dunkleosteus		Paleontology	Ancient Creatures	Common	Limited	
+5	49	2020					
+
+PAN009	Opabinia		Paleontology	Ancient Creatures	Common	Limited	
+8	72	2020					
+
+PAN010	Gastornis		Paleontology	Ancient Creatures	Common	Limited	
+3	27	2020					
+
+PAN011	Gorgonopsids		Paleontology	Ancient Creatures	Common	Limited	
+5	46	2020					
+
+PAN013	Titanoboa	Slither	Paleontology	Ancient Creatures	Rare	Limited	
+10	78						
+Play	Condition						
+	Cible	player hand	Collection	Reptiles			
+	Effet	power	15				
+	Duree	turn	1				
+
+PAN014	Glyptodon	Heavy Shell	Paleontology	Ancient Creatures	Common	Limited	
+2	19	2020					
+Play	Condition						
+	Cible	player hand	Collection	Ancient Creatures			
+	Effet	power	20				
+	Duree	turn	1				
+
+PAN016	Megacerops	To Be Blunt	Paleontology	Ancient Creatures	Rare	Limited	
+3	27	Mega Paleontology					
+Play	Condition	round score	<	0			
+	Cible	player deck	Collection	Ancient Creatures			
+	Effet	power	20				
+	Duree	until played					
+
+PAN018	Carbonemys Cofrinii	Prehistoric Giant Turtle	Paleontology	Ancient Creatures	Rare	Limited	
+2	18						
+Play	Condition						
+	Cible	player hand	Collection	Ocean Reptiles			
+	Effet	power	15				
+	Duree	1	turn				
+Play	Condition	round score	<	0			
+	Cible	player hand	Collection	Ocean Reptiles			
+	Effet	power	10				
+	Duree	1	turn				
+
+PAN022	Toxodon	Bow Tooth	Paleontology	Ancient Creatures	Common	Limited	
+9	79						
+Return	Condition	player deck	Album	Paleontology	>	8	
+	Cible	player					
+	Effet	power per turn	25				
+	Duree	Round	1				
+
+PAN023	Dinopithecus	Going Ape	Paleontology	Ancient Creatures	Rare	Limited	
+Draw	Condition						
+	Cible	player hand	Collection	Primates			
+	Effet	power	27				
+	Duree	turn	1				
+Play	Condition	turn	=	1			
+	Cible	player hand	Collection	Primates			
+	Effet	power	14				
+	Duree	turn	1				
+
+PAN024	Arsinoitherium	Around the Horns	Paleontology	Ancient Creatures	Epic	Limited	
+7	40						
+Draw	Cible	player hand					
+	Filtre	random	1				
+	Effet	power	46				
+	Duree	until played					
+Return	Cible	player hand					
+	Filtre	random	1				
+	Effet	power	46				
+	Duree	until played					
+
+PAN025	Platybelodon	Shovelhead	Paleontology	Ancient Creatures	Rare	Limited	
+3	32						
+Draw	Condition						
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	15				
+	Duree	until played					
+Play	Condition						
+	Cible	player hand	Card	Bonnethead Shark			
+	Effet	power	30				
+	Duree	turn	1				
+
+PAN028	Devil's Toenails	From the Deep	Paleontology	Ancient Creatures	Rare	Limited	
+4	36	Devil					
+Play	Condition	voisin	next to	card	Ammonite		
+	Cible	player hand	Card	Ammonite			
+	Effet	power	36				
+	Duree	1	turn				
+Play	Condition	voisin	next to	card	Trilobite		
+	Cible	player hand	Card	Trilobite			
+	Effet	power	36				
+	Duree	1	turn				
+Return	Condition						
+	Cible	player remaining	Collection	Deep Ocean			
+	Effet	energy	-1				
+	Duree	until played					
+
+PAN036	Longisquama	Long Scales	Paleontology	Ancient Creatures	Common	Limited	
+5	44						
+Draw	Condition						
+	Cible	player deck	Album	Ancient Creatures			
+	Effet	power	5				
+	Multiplier	round completed					
+	Duree	turn	3				
+
+PAN037	Litorosuchus	Semi-Aquatic	Paleontology	Ancient Creatures	Rare	Limited	
+6	46						
+Return	Condition	player deck	Album	Life on Land	>	5	
+	Cible	player deck	Album	Oceans and Seas			
+	Effet	power	16				
+	Duree	until played					
+
+PAN039	Hesperocyon	Canidae to Canid	Paleontology	Ancient Creatures	Rare	Limited	
+4	37						
+Draw	Condition						
+	Cible	player hand	Card	Hesperocyon			
+	Effet	power	8				
+	Multiplier	player played	Collection	dogs	5		
+	Duree	until played					
+
+PAN043	Synthetoceras	Y so Serious?	Paleontology	Ancient Creatures	Rare	Limited	
+3	30						
+Play	Condition						
+	Cible	opponent hand	Album	Paleontology			
+	Effet	power	-25				
+	Duree	turn	1				
+
+PAN045	American Cheetah	Former Felidae	Paleontology	Ancient Creatures	Rare	Limited	
+6	50						
+Play	Condition	player deck	Collection	Cool Cats	>	3	
+	Cible	player hand	Collection	Ancient Creatures			
+	Effet	power	20				
+	Duree	until played					
+
+PAN048	Murrayglossus	Giant Echidna	Paleontology	Ancient Creatures	Rare	Limited	
+6	46						
+Draw	Condition						
+	Cible	player deck	Collection	Mammals			
+	Filtre	base energy	>	5			
+	Effet	power	20				
+	Duree	turn	4				
+
+PAN052	Hesperosuchus	Crocodylomorph	Paleontology	Ancient Creatures	Common	Limited	
+3	21						
+Play	Condition						
+	Cible	player deck	keyword	Crocodile			
+	Effet	power	25				
+	Duree	turn	2				
+
+PAN053	Xenokeryx Amidalae	Princess	Paleontology	Ancient Creatures	Rare	Limited	
+6	52						
+Play	Condition	voisin	next to	collection	Once Upon A Time		
+	Cible	player deck	Album	Paleontology			
+	Filtre	random	4				
+	Effet	power	24				
+	Duree	until played					
+
+PAN061	Tanystropheus	Looooooooong	Paleontology	Ancient Creatures	Common	Limited	
+8	80						
+Play	Condition	Round	=	5			
+	Cible	player hand	Card	Tanystropheus			
+	Effet	power	60				
+	Duree	turn	1				
+
+PAN062	Collin's Monster	Super Armor!	Paleontology	Ancient Creatures	Rare	Limited	
+2	11	Monster Name					
+Play	Condition	voisin	gauche	album	paleontology		
+	Condition	voisin	droite	album	paleontology		
+	Cible	player hand	card	Collin's Monster			
+	Effet	power	20				
+	Duree	turn	1				
+
+PAN063	Halszkaraptor	Sink or Swim	Paleontology	Ancient Creatures	Common	Limited	
+3	22						
+Draw	Condition	round score	<	0			
+	Cible	player hand	card	Halszkaraptor			
+	Effet	power	40				
+	Duree	turn	1				
+
+PCA001	Allosaurus	Different Lizard	Paleontology	Carnivores	Common	Fusion ingredient	
+3	26	2019					
+Play	Condition						
+	Cible	player hand	Collection	Reptiles			
+	Effet	power	10				
+	Duree	turn	2				
+
+PCA002	Albertosaurus		Paleontology	Carnivores	Common	Standard	
+8	72	2019					
+
+PCA022	Majungasaurus	Skullduggery	Paleontology	Carnivores	Rare	Standard	
+4	65	2020					
+Draw	Condition						
+	Cible	player hand	Card	Majungasaurus			
+	Effet	lock					
+	Duree	turn	2				
+
+PCA023	Acrocanthosaurus	Grow a Spine	Paleontology	Carnivores	Legendary	Standard	
+4	16	2020					
+Play	Condition						
+	Cible	player hand	Album	Paleontology			
+	Effet	power	20				
+	Duree	Round	1				
+Play	Condition	player deck	Album	Paleontology	=	18	
+	Cible	player hand	Album	Paleontology			
+	Effet	power	15				
+	Duree	Round	1				
+
+PCA026	Arcovenator	Hunt Down	Paleontology	Carnivores	Epic	Limited	
+6	76						
+Return	Condition	turn score	>	0			
+	Cible	opponent					
+	Effet	energy per turn	-2				
+	Duree	turn	2				
+Return	Condition	turn score	<	0			
+	Cible	opponent					
+	Effet	energy per turn	1				
+	Duree	turn	2				
+
+PCA033	Dilong	Emperor Dragon	Paleontology	Carnivores	Epic	Limited	
+6	60						
+Return	Condition						
+	Cible	both remaining					
+	Filtre	keyword	Emperor				
+	Effet	lock					
+	Duree	turn	3				
+Return	Condition						
+	Cible	player deck	Collection	Mythical Creatures			
+	Effet	power	15				
+	Duree	Round	1				
+
+PCA034	Bambiraptor	Great Prince of the Forest	Paleontology	Carnivores	Rare	Limited	
+4	34						
+Play	Condition	arena	Paleontology				
+	Cible	player deck	Album	Life on Land			
+	Effet	power	20				
+	Duree	Round	1				
+
+PCA036	Aucasaurus	That Auc-ward Moment	Paleontology	Carnivores	Legendary	Standard	
+6	63						
+Return	Cible	both remaining					
+	Effet	power	-50				
+	Duree	turn	2				
+Return	Condition	round score	<	0			
+	Cible	player remaining					
+	Effet	power	50				
+	Duree	turn	2				
+
+PCA043	Acheroraptor	Terrestrial Wing	Paleontology	Carnivores	Legendary	Limited	
+8	73						
+Play	Condition	voisin	next to	card	Life on Land		
+	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	power	24				
+	Duree	until played					
+
+PCA046	Albertonykus	Good Grub	Paleontology	Carnivores	Common	Standard	
+5	42						
+Play	Condition						
+	Cible	player hand	Card	Albertonykus			
+	Effet	power	5				
+	Multiplier	player deck	Collection	Bugs			
+	Duree	turn	1				
+
+PCA047	Bannykus	Transitional Characteristics	Paleontology	Carnivores	Rare	Limited	
+Return	Condition	player deck	Album	any	=	9	
+	Cible	player deck	Album	any			
+	Filtre	Non-limited					
+	Effet	power	10				
+	Duree	until played					
+
+PFF002	Anhanguera	'hanguera Pangs	Paleontology	Fearsome Flyers	Common	Limited	
+4	30	2020					
+Draw	Cible	player					
+	Effet	energy	1				
+
+PFF014	Argentavis	Real Big Bird	Paleontology	Fearsome Flyers	Rare	Limited	
+3	25						
+Play	Cible	player hand	Card	Argentavis			
+	Effet	power	75				
+	Duree	permanently					
+Play	Cible	player hand	Card	Argentavis			
+	Effet	power	-15				
+	Multiplier	player hand	Collection	Fearsome Flyers			
+	Duree	permanently					
+
+PFF018	Anchiornis	Anchi-Panky	Paleontology	Fearsome Flyers	Rare	Limited	
+2	22	2020					
+Play	Cible	player hand	Card	Anchisaurus			
+	Effet	power	36				
+	Duree	turn	1				
+
+PFF030	Anurognathus	Tiny Terrors	Paleontology	Fearsome Flyers	Rare	Limited	
+3	16						
+Draw	Cible	player deck	Album	Paleontology			
+	Filtre	base energy	<	4			
+	Effet	power	15				
+	Duree	Round	1				
+
+PFF036	Amblydectes	Ambyldextrous	Paleontology	Fearsome Flyers	Rare	Limited	
+Play	Condition	placement	gauche				
+	Cible	player hand	Collection	Fearsome Flyers			
+	Effet	power	18				
+	Duree	until played					
+Play	Condition	placement	droite				
+	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	power	7				
+	Duree	until played					
+
+PFF039	Azhdarcho	Toothless Dragon	Paleontology	Fearsome Flyers	Epic	Limited	
+8	75						
+Play	Cible	player deck	Collection	Winged Mythical Creatures			
+	Effet	power	3				
+	Multiplier	player deck	Collection	Fearsome Flyers	12		
+	Duree	until played					
+
+PHE004	Alamosaurus		Paleontology	Herbivores	Common	Standard	
+2	16	2019					
+
+PHE006	Argentinosaurus		Paleontology	Herbivores	Common	Standard	
+5	47	2020					
+
+PHE011	Ankylosaurus	It's Club-berin' Time!	Paleontology	Herbivores	Legendary	Standard	
+9	85	2019					
+Play	Cible	opponent hand					
+	Effet	power	-15				
+	Duree	Round	1				
+
+PHE025	Apatosaurus	Apat on the Back	Paleontology	Herbivores	Epic	Limited	
+Play	Cible	player deck	Card	Flatback Sea Turtle			
+	Effet	power	40				
+	Duree	until played					
+Play	Cible	player deck	Card	Silverback Gorilla			
+	Effet	power	40				
+	Duree	until played					
+Play	Cible	player deck	Card	Humpback Whale			
+	Effet	power	40				
+	Duree	until played					
+
+PHE035	Amargasaurus	Smaller Sauropod	Paleontology	Herbivores	Rare	Standard	
+Play	Condition						
+	Cible	both hand					
+	Filtre	base power	>	39			
+	Effet	power	-20				
+	Duree	turn	1				
+
+PHE038	Aquilos	Basal	Paleontology	Herbivores	Epic	Standard	
+4	36						
+Play	Cible	player hand	Collection	Herbivores			
+	Effet	power	25				
+	Duree	turn	1				
+
+PHE041	Aragosaurus	Bulky Body	Paleontology	Herbivores	Epic	Standard	
+7	65						
+Draw	Condition	player deck	Collection	Herbivores	>	7	
+	Cible	player deck	Collection	Herbivores			
+	Effet	energy	-1				
+	Duree	until played					
+
+PHE043	Altirhinus	High Snout	Paleontology	Herbivores	Legendary	Standard	
+8	79						
+Play	Condition	placement	milieu				
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	16				
+	Duree	until played					
+
+PHE049	Agujaceratops	Up and Out	Paleontology	Herbivores	Common	Limited	
+5	37						
+Play	Condition	player played	Card	Agujaceratops	=	0	
+	Cible	player hand	Collection	Herbivores			
+	Effet	power	30				
+	Duree	until played					
+
+PHU003	Australopithecus Sediba	Karabo	Paleontology	Human Evolution	Rare	Limited	
+4	28						
+Play	Condition	voisin	oppose				
+	Cible	player hand	Card	Australopithecus Sediba			
+	Effet	power	45				
+	Duree	turn	45				
+
+PIC023	Agriotherium	Wild Beast	Paleontology	Ice Age	Epic	Standard	
+6	20						
+Play	Condition						
+	Cible	player hand	Agriotherium				
+	Effet	power	10				
+	Multiplier	player played	Collection	Ice Age	12		
+	Duree	permanently					
+
+PLB004	Triassic-Jurassic Extinction Event	Triassic, Parked	Paleontology	Land Before Time	Rare	Limited	
+3	27						
+Draw	Condition						
+	Cible	player hand	Card	Triassic-Jurassic Extinction Event			
+	Effet	lock					
+	Duree	turn	3				
+Draw	Condition						
+	Cible	player deck	Album	Paleontology			
+	Effet	power	10				
+	Duree	until played					
+
+PLB006	Quaternary Extinction Event	Diverse Collapse	Paleontology	Land Before Time	Rare	Limited	
+Draw	Condition						
+	Cible	player hand	Card	Quaternary Extinction Event			
+	Effet	power	-10				
+	Multiplier	player album					
+	Duree	permanently					
+
+PLB007	Antarctic Rainforest	Warm Interval	Paleontology	Land Before Time	Epic	Limited	
+6	56						
+Play	Condition	Round	=	1			
+	Cible	player deck	Collection	Ice Age			
+	Effet	power	20				
+	Duree	until played					
+Play	Condition	Round	=	2			
+	Cible	player deck	Collection	Ancient Creatures			
+	Effet	power	20				
+	Duree	until played					
+Play	Condition	Round	=	3			
+	Cible	player deck	Collection	Ice Age			
+	Effet	power	20				
+	Duree	until played					
+Play	Condition	Round	=	4			
+	Cible	player deck	Collection	Ancient Creatures			
+	Effet	power	20				
+	Duree	until played					
+Play	Condition	Round	=	5			
+	Cible	player deck	Collection	Ice Age			
+	Effet	power	20				
+	Duree	until played					
+
+PLB008	Panthalassa	Pangea's Superocean	Paleontology	Land Before Time	Common	Limited	
+5	47						
+Play	Condition	voisin	next to	card	Pangea		
+	Cible	player deck	Collection	Land Before Time			
+	Effet	power	25				
+	Duree	until played					
+
+PMO015	Archegosaurus	What a Croc	Paleontology	Monsters of the Deep	Rare	Limited	
+1	12						
+Play	Cible	player hand	Collection	Amphibians			
+	Effet	power	15				
+	Duree	turn	1				
+Play	Cible	player hand	Collection	Fabulous Fish			
+	Effet	power	15				
+	Duree	turn	1				
+Play	Cible	player hand	Collection	Feisty Fish			
+	Effet	power	15				
+	Duree	turn	1				
+
+PMO032	Anomalocaris	Abnormal Shrimp	Paleontology	Monsters of the Deep	Legendary	Limited	
+6	43						
+Play	Cible	player deck	Collection	Crustaceans			
+	Effet	power	3				
+	Multiplier	player deck	Collection	Monsters of the Deep	7		
+	Duree	until played					
+Play	Cible	player deck	Collection	Monsters of the Deep			
+	Effet	power	3				
+	Multiplier	player deck	Collection	Crustaceans	7		
+	Duree	until played					
+
+POM015	Amphicyon	Bear Dog	Paleontology	Omnivores	Common	Standard	
+5	40	2020					
+Play	Cible	player hand	Card	Grizzly Bear			
+	Effet	power	40				
+	Duree	turn	1				
+
+POM018	Balaur Bondoc	Way of the Dragon	Paleontology	Omnivores	Epic	Standard	
+7	72	2020					
+Draw	Cible	opponent hand					
+	Filtre	random	1				
+	Effet	burn	30				
+	Duree	until played					
+
+POM020	Anchisaurus	Survive the Blast	Paleontology	Omnivores	Epic	Limited	
+4	35	2020					
+Return	Condition	turn	lost				
+	Cible	player					
+	Effet	power per turn	35				
+	Duree	turn	2				
+Return	Condition	turn	lost				
+	Cible	player deck	Album	Paleontology			
+	Filtre	Non-limited					
+	Effet	power	20				
+	Duree	Round	1				
+
