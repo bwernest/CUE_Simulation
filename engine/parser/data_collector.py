@@ -34,6 +34,8 @@ class DataCollector(Game):
             row = list(row)[1:]
             if all(isna(cell) for cell in row):
                 raw_cards.append(raw_card)
+                if len(raw_card) == 0:
+                    raise ValueError("Empty raw card found")
                 raw_card = []
             else:
                 # print(f"non car row = {row} et l'autre = {[float('nan')] * len(row)}")
@@ -43,7 +45,7 @@ class DataCollector(Game):
     def write_raw_data(self) -> None:
         raw_cards = self.get_raw_cards()
         sorted_raw_cards = sorted(raw_cards, key=lambda x: x[0][0])
-        txt = ""
+        txt = "A\n"
         for raw_card in sorted_raw_cards:
             for line in raw_card:
                 for data in line:

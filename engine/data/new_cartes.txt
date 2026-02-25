@@ -1,21 +1,35 @@
+A
+MYPA001	Unicorn	Straight to the Point	Paleontology	Paleontology Mythic Cards	Mythic	Standard	
+7	77	2020					
+Draw	Cible	player hand	Card	Unicorn			
+	Effet	power	77				
+	Duree	turn	1				
+
 MYPA002	Loch Ness Monster	Loch In	Paleontology	Paleontology Mythic Cards	Mythic	Standard	
 8	50	2020	Monster Name				
-Return	Condition						
-	Cible	Opponent remaining					
+Return	Cible	Opponent remaining					
 	Effet	lock					
 	Duree	turn	2				
 
+MYPA003	Bunyip	Swamp Thing	Paleontology	Paleontology Mythic Cards	Mythic	Standard	
+4	45	2020					
+Return	Cible	player deck	Album	Paleontology			
+	Effet	energy	-2				
+	Duree	Round	1				
+Return	Condition	turn score	<	0			
+	Cible	player deck	Album	Paleontology			
+	Effet	energy	-1				
+	Duree	Round	1				
+
 PAN001	Elasmotherium	CRASH!	Paleontology	Ancient Creatures	Common	Limited	
 7	66	2020					
-Play	Condition						
-	Cible	player hand	card	Southern White Rhinoceros			
+Play	Cible	player hand	card	Southern White Rhinoceros			
 	Effet	power	40				
 	Duree	turn	1				
 
 PAN002	Mosasaurus	Oceanic Ancestor	Paleontology	Ancient Creatures	Common	Limited	
 6	53	2020					
-Play	Condition						
-	Cible	player hand	Collection	Ocean Mammals			
+Play	Cible	player hand	Collection	Ocean Mammals			
 	Effet	power	30				
 	Duree	turn	1				
 
@@ -318,7 +332,18 @@ Return	Condition	player deck	Album	any	=	9
 	Effet	power	10				
 	Duree	until played					
 
-PFF002	Anhanguera	'hanguera Pangs	Paleontology	Fearsome Flyers	Common	Limited	
+PEV002	Pangea	One World	Paleontology	Paleontology Specials	Rare	Limited	
+5	48						
+Draw	Cible	player hand	Album	Paleontology			
+	Filtre	random	1				
+	Effet	power	36				
+	Duree	until played					
+Draw	Cible	player hand	Album	Life on Land			
+	Filtre	random	1				
+	Effet	power	36				
+	Duree	until played					
+
+PFF002	Anhanguera	hanguera Pangs	Paleontology	Fearsome Flyers	Common	Limited	
 4	30	2020					
 Draw	Cible	player					
 	Effet	energy	1				
