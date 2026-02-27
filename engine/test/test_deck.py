@@ -12,15 +12,24 @@ import pytest
 
 class TestDeck(Assert):
 
-    def test_create_deck_error1(self, dummy_card: Card) -> None:
+    def test_create_deck_error1(self) -> None:
+        card = dummy_card()
         deck = Deck("test")
-        cards = [dummy_card for _ in range(17)]
+        cards = [card for _ in range(deck.deck_len + 1)]
         with pytest.raises(NombreIncorrectDeCartes):
             deck.create_deck(cards)
 
-    def test_deck_keys(self, dummy_deck: Deck) -> None:
-        keys = list(dummy_deck.keys())
-        print(keys)
+    def test_deck_keys(self) -> None:
+        deck = dummy_deck()
+        keys = list(deck.keys())
         self.assertEqual(len(keys), 18)
         self.assertEqual(keys[0], "id0")
         self.assertEqual(keys[-1], "id17")
+
+    def test_replace_card(self) -> None:
+        deck = dummy_deck()
+        card = dummy_card()
+        deck.replace_card("id0", card)
+        self.assertEqual(deck.cards["dummy_card"], card)
+        self.assertEqual(deck.order[0], "dummy_card")
+        self.assertNotIn("id0", deck.cards)

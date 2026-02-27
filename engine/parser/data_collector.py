@@ -17,14 +17,12 @@ class DataCollector(Game):
     cards: Dict[str, Card]
 
     def collect_data(self) -> None:
-
         raw_cards = self.get_raw_cards()
+        self.cards = {}
         for raw_card in raw_cards:
-            print(raw_card)
-            print()
-        # for raw_card in raw_cards:
-        #     card = Card(raw_card)
-        #     self.cards[card.id] = card
+            card = Card()
+            card.create_card_from_data(raw_card)
+            self.cards[card.id] = card
 
     def get_raw_cards(self) -> List[List[Iterable]]:
         df = read_excel(self.paths["file_data"], engine="odf", sheet_name="Data")

@@ -132,6 +132,7 @@ Return	Condition	player deck	Album	Paleontology	>	8
 	Duree	Round	1				
 
 PAN023	Dinopithecus	Going Ape	Paleontology	Ancient Creatures	Rare	Limited	
+5	54						
 Draw	Cible	player hand	Collection	Primates			
 	Effet	power	27				
 	Duree	turn	1				
@@ -467,6 +468,7 @@ Play	Cible	self
 	Duree	turn	1				
 
 PCA047	Bannykus	Transitional Characteristics	Paleontology	Carnivores	Rare	Limited	
+8	76						
 Return	Condition	player deck	Album	any	=	9	
 	Cible	player deck	Album	any			
 	Filtre	Non-limited					
@@ -513,6 +515,7 @@ Draw	Cible	player deck	Album	Paleontology
 	Duree	Round	1				
 
 PFF036	Amblydectes	Ambyldextrous	Paleontology	Fearsome Flyers	Rare	Limited	
+5	49						
 Play	Condition	placement	gauche				
 	Cible	player hand	Collection	Fearsome Flyers			
 	Effet	power	18				
@@ -542,6 +545,7 @@ Play	Cible	opponent hand
 	Duree	Round	1				
 
 PHE025	Apatosaurus	Apat on the Back	Paleontology	Herbivores	Epic	Limited	
+2	21						
 Play	Cible	player deck	Card	Flatback Sea Turtle			
 	Effet	power	40				
 	Duree	until played					
@@ -553,6 +557,7 @@ Play	Cible	player deck	Card	Humpback Whale
 	Duree	until played					
 
 PHE035	Amargasaurus	Smaller Sauropod	Paleontology	Herbivores	Rare	Standard	
+4	37						
 Play	Cible	both hand					
 	Filtre	base power	>	39			
 	Effet	power	-20				
@@ -609,6 +614,7 @@ Draw	Cible	player deck	Album	Paleontology
 	Duree	until played					
 
 PLB006	Quaternary Extinction Event	Diverse Collapse	Paleontology	Land Before Time	Rare	Limited	
+6	100						
 Draw	Cible	self					
 	Effet	power	-10				
 	Multiplier	player album					

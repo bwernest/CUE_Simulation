@@ -13,6 +13,10 @@ class DeckIncorrect(CUE_SimulationException):
     pass
 
 
+class CarteInexistante(CUE_SimulationException):
+    pass
+
+
 class NombreIncorrectDeCartes(CUE_SimulationException):
     pass
 

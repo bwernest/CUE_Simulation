@@ -37,3 +37,10 @@ class Deck(Card):
             if card is not None:
                 self.order.remove(card)
                 self.order.append(card)
+
+    def replace_card(self, card_id: str, new_card: Card) -> None:
+        if card_id not in self.cards:
+            raise CarteInexistante(f"Remplacement de la carte {card_id} dans le deck.")
+        del self.cards[card_id]
+        self.cards[new_card.id] = new_card
+        self.order[self.order.index(card_id)] = new_card.id

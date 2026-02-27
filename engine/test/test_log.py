@@ -11,5 +11,5 @@ from .fixtures import *
 class TestLog(Assert):
 
     def test_writing(self, engine: Engine) -> None:
-        engine.add_log("Libérer la Normandie")
+        engine.add_log("Not quite my tempo")
         engine.del_log()
