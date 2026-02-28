@@ -5,7 +5,7 @@ from ..utils import *
 
 # Python
 from pandas import isna
-from typing import List
+from typing import Dict, List
 
 """___Classes___________________________________________________________________________________"""
 
@@ -16,7 +16,7 @@ class Card(ToolBox):
     name: str
     power: int
     energy: int
-    attacks: List
+    attacks: Dict[str, List]
 
     def __eq__(self, value):
         if not isinstance(value, Card):
@@ -62,9 +62,28 @@ class Card(ToolBox):
         self.type = infos[0][6].lower()
         self.energy = int(infos[1][0])
         self.power = int(infos[1][1])
-        self.attacks = attacks
+        self.attacks = self.add_attacks(attacks)
 
     def split_data(self, data: List) -> tuple:
         infos = data[:2]
         attacks = data[2:]
         return infos, attacks
+
+    def add_attacks(self, attacks: List) -> Dict[str, List]:
+        attacks_dict = {
+            "draw": [],
+            "start": [],
+            "play": [],
+            "return": [],
+        }
+        for line in attacks:
+            if not isna(line[0]):
+                attacks_dict[line[0].lower()] = {
+                    "condition": [],
+                    "cible": [],
+                    "filtre": [],
+                    "effet": [],
+                    "multiplicateur": [],
+                    "duree": [],
+                }
+            attacks_dict[line[0].lower()].append(line[1:])
