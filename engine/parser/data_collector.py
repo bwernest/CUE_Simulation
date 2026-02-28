@@ -36,8 +36,8 @@ class DataCollector(Game):
                     raise ValueError("Empty raw card found")
                 raw_card = []
             else:
-                # print(f"non car row = {row} et l'autre = {[float('nan')] * len(row)}")
                 raw_card.append(row)
+        raw_cards.append(raw_card)
         return raw_cards
 
     def write_raw_data(self) -> None:

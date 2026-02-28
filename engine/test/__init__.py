@@ -20,11 +20,11 @@ def void(fonction: Callable) -> any:
     def fct(*args, **kwargs) -> any:
         settings = Settings("test")
         paths = settings.paths
-        if os.path.isdir(paths["folder_data"]):
-            shutil.rmtree(paths["folder_data"])
-        os.makedirs(paths["folder_data"])
+        if os.path.isdir(paths["folder_generated"]):
+            shutil.rmtree(paths["folder_generated"])
+        os.makedirs(paths["folder_generated"])
         result = fonction(*args, **kwargs)
-        shutil.rmtree(paths["folder_data"])
-        os.makedirs(paths["folder_data"])
+        shutil.rmtree(paths["folder_generated"])
+        os.makedirs(paths["folder_generated"])
         return result
     return fct

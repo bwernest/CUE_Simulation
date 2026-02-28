@@ -77,13 +77,23 @@ class Card(ToolBox):
             "return": [],
         }
         for line in attacks:
+            info = line[1].lower()
             if not isna(line[0]):
-                attacks_dict[line[0].lower()] = {
+                atk = line[0].lower()
+                attacks_dict[atk].append({
                     "condition": [],
                     "cible": [],
                     "filtre": [],
                     "effet": [],
                     "multiplicateur": [],
                     "duree": [],
-                }
-            attacks_dict[line[0].lower()].append(line[1:])
+                })
+            attacks_dict[atk][-1][info] = self.clean_data_line(line[2:])
+        return attacks_dict
+
+    def clean_data_line(self, line: List) -> List:
+        clean_line = []
+        for item in line:
+            if not isna(item):
+                clean_line.append(str(item).lower())
+        return clean_line

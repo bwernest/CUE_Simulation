@@ -213,7 +213,7 @@ PAN036	Longisquama	Long Scales	Paleontology	Ancient Creatures	Common	Limited
 5	44						
 Draw	Cible	player deck	Album	Ancient Creatures			
 	Effet	power	5				
-	Multiplier	round completed					
+	Multiplicateur	round completed					
 	Duree	turn	3				
 
 PAN037	Litorosuchus	Semi-Aquatic	Paleontology	Ancient Creatures	Rare	Limited	
@@ -227,18 +227,18 @@ PAN039	Hesperocyon	Canidae to Canid	Paleontology	Ancient Creatures	Rare	Limited
 4	37						
 Draw	Cible	self					
 	Effet	power	8				
-	Multiplier	player played	Collection	dogs	5		
+	Multiplicateur	player played	Collection	dogs	5		
 	Duree	until played					
 
 PAN041	Beelzebufo	Frog Outta Hell	Paleontology	Ancient Creatures	Legendary	Limited	
 6	67						
 Draw	Cible	player deck	Collection	Ancient Creatures			
 	Effet	power	3				
-	Multiplier	player deck	Collection	Amphibians			
+	Multiplicateur	player deck	Collection	Amphibians			
 	Duree	until played					
 Draw	Cible	player deck	Collection	Amphibians			
 	Effet	power	3				
-	Multiplier	player deck	Collection	Ancient Creatures			
+	Multiplicateur	player deck	Collection	Ancient Creatures			
 	Duree	until played					
 
 PAN043	Synthetoceras	Y so Serious?	Paleontology	Ancient Creatures	Rare	Limited	
@@ -262,7 +262,7 @@ Draw	Cible	player hand	Album	Paleontology
 	Duree	turn	2				
 Draw	Cible	self					
 	Effet	power	20				
-	Multiplier	player hand	Album	Paleontology			
+	Multiplicateur	player hand	Album	Paleontology			
 	Duree	until played					
 
 PAN048	Murrayglossus	Giant Echidna	Paleontology	Ancient Creatures	Rare	Limited	
@@ -464,7 +464,7 @@ PCA046	Albertonykus	Good Grub	Paleontology	Carnivores	Common	Standard
 5	42						
 Play	Cible	self					
 	Effet	power	5				
-	Multiplier	player deck	Collection	Bugs			
+	Multiplicateur	player deck	Collection	Bugs			
 	Duree	turn	1				
 
 PCA047	Bannykus	Transitional Characteristics	Paleontology	Carnivores	Rare	Limited	
@@ -498,7 +498,7 @@ Play	Cible	self
 	Duree	permanently					
 Play	Cible	self					
 	Effet	power	-15				
-	Multiplier	player hand	Collection	Fearsome Flyers			
+	Multiplicateur	player hand	Collection	Fearsome Flyers			
 	Duree	permanently					
 
 PFF018	Anchiornis	Anchi-Panky	Paleontology	Fearsome Flyers	Rare	Limited	
@@ -529,7 +529,7 @@ PFF039	Azhdarcho	Toothless Dragon	Paleontology	Fearsome Flyers	Epic	Limited
 8	75						
 Play	Cible	player deck	Collection	Winged Mythical Creatures			
 	Effet	power	3				
-	Multiplier	player deck	Collection	Fearsome Flyers	12		
+	Multiplicateur	player deck	Collection	Fearsome Flyers	12		
 	Duree	until played					
 
 PHE004	Alamosaurus		Paleontology	Herbivores	Common	Standard	
@@ -601,7 +601,7 @@ PIC023	Agriotherium	Wild Beast	Paleontology	Ice Age	Epic	Standard
 6	20						
 Play	Cible	player hand	Agriotherium				
 	Effet	power	10				
-	Multiplier	player played	Collection	Ice Age	12		
+	Multiplicateur	player played	Collection	Ice Age	12		
 	Duree	permanently					
 
 PLB004	Triassic-Jurassic Extinction Event	Triassic, Parked	Paleontology	Land Before Time	Rare	Limited	
@@ -617,7 +617,7 @@ PLB006	Quaternary Extinction Event	Diverse Collapse	Paleontology	Land Before Tim
 6	100						
 Draw	Cible	self					
 	Effet	power	-10				
-	Multiplier	player album					
+	Multiplicateur	player album					
 	Duree	permanently					
 
 PLB007	Antarctic Rainforest	Warm Interval	Paleontology	Land Before Time	Epic	Limited	
@@ -666,11 +666,11 @@ PMO032	Anomalocaris	Abnormal Shrimp	Paleontology	Monsters of the Deep	Legendary	
 6	43						
 Play	Cible	player deck	Collection	Crustaceans			
 	Effet	power	3				
-	Multiplier	player deck	Collection	Monsters of the Deep	7		
+	Multiplicateur	player deck	Collection	Monsters of the Deep	7		
 	Duree	until played					
 Play	Cible	player deck	Collection	Monsters of the Deep			
 	Effet	power	3				
-	Multiplier	player deck	Collection	Crustaceans	7		
+	Multiplicateur	player deck	Collection	Crustaceans	7		
 	Duree	until played					
 
 POM015	Amphicyon	Bear Dog	Paleontology	Omnivores	Common	Standard	

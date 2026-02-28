@@ -37,8 +37,9 @@
         
         "paths": {
             
-            "file_data": "engine/data/cartes.ods",
+            "file_data": "engine/test/data/test_cartes.ods",
             "folder_data": "engine/test/data",
+            "folder_generated": "engine/test/generated",
             "file_save": "engine/test/data/save.bw",
             "file_log": "engine/test/data/log.bw",
             "file_parser_pickle": "engine/test/data/parser_pickle.pkl"
