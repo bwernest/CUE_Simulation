@@ -35,6 +35,8 @@ class Deck(Card):
     def cycle(self, cards_played: List[str | None]) -> None:
         for card in cards_played:
             if card is not None:
+                if card not in self.hand:
+                    raise CarteCycleeNonEnMain(f"Carte {card} jouée mais non en main.")
                 self.order.remove(card)
                 self.order.append(card)
 

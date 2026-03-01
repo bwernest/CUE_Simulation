@@ -34,7 +34,7 @@ def dummy_card() -> Card:
     return card
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="function")
 def game() -> Game:
     game = Game("test")
     game.create_game(elephant_deck(), mouse_deck())

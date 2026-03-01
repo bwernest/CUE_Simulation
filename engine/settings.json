@@ -5,8 +5,8 @@
     "deck_len": 18,
     "play_len": 3,
     "hand_len": 5,
-    "rounds": 4,
-    "turns": 2,
+    "rounds": 5,
+    "turns": 3,
 
     "prod": {
         "test": false,

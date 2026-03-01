@@ -19,14 +19,18 @@ class Card(ToolBox):
     attacks: Dict[str, List]
 
     def __eq__(self, value):
-        if not isinstance(value, Card):
+        if type(value) != self.__class__:
             return False
-        return self.id == value.id and self.name == value.name and self.power == value.power and self.energy == value.energy
+        for key in ["id", "name", "keywords", "power", "energy", "attacks", "album", "collection", "rarity", "type"]:
+            if self.__dict__[key] != value.__dict__[key]:
+                return False
+        return True
 
     def create_card(
             self,
             id: str,
             name: str,
+            keywords: List[str] = [],
             power: int = 0,
             energy: int = 0,
             attack_name: str | None = None,
@@ -37,6 +41,7 @@ class Card(ToolBox):
     ) -> None:
         self.id = id.lower()
         self.name = name.lower()
+        self.keywords = keywords
         self.power = power
         self.energy = energy
         self.attack_name = attack_name
@@ -44,6 +49,7 @@ class Card(ToolBox):
         self.collection = collection
         self.rarity = rarity
         self.type = type
+        self.attacks = {}
 
     def create_card_from_data(
             self,
@@ -62,6 +68,11 @@ class Card(ToolBox):
         self.type = infos[0][6].lower()
         self.energy = int(infos[1][0])
         self.power = int(infos[1][1])
+        column = 2
+        self.keywords = []
+        while not isna(infos[1][column]):
+            self.keywords.append(infos[1][column])
+            column += 1
         self.attacks = self.add_attacks(attacks)
 
     def split_data(self, data: List) -> tuple:

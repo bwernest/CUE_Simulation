@@ -7,7 +7,7 @@ from ..utils import *
 # Python
 import numpy as np
 import numpy.typing as npt
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 """___Classes___________________________________________________________________________________"""
 
@@ -51,12 +51,31 @@ class Game(Deck):
         if self.turn == self.turns:
             self.turn = 0
             self.round += 1
-            self.ckeck_end_game()
+            self.check_end_game()
 
-    def ckeck_end_game(self) -> None:
-        rounds_player0 = np.sum(self.score[:self.round, :, 0])
-        rounds_player1 = np.sum(self.score[:self.round, :, 1])
-        if rounds_player0 > self.rounds // 2:
+    @property
+    def players_rounds(self) -> List[int]:
+        players_rounds = [0, 0]
+        for round in range(self.rounds):
+            round_score_player0 = np.sum(self.score[round, :, 0])
+            round_score_player1 = np.sum(self.score[round, :, 1])
+            if round_score_player0 > round_score_player1:
+                players_rounds[0] += 1
+            elif round_score_player1 > round_score_player0:
+                players_rounds[1] += 1
+        return players_rounds
+
+    def check_end_game(self) -> None:
+        rounds_player0, rounds_player1 = self.players_rounds
+        if self.rounds - self.round < rounds_player0 - rounds_player1:
             self.winner = 0
-        elif rounds_player1 > self.rounds // 2:
+            self.end_game()
+        elif self.rounds - self.round < rounds_player1 - rounds_player0:
             self.winner = 1
+            self.end_game()
+        elif self.round == self.rounds:
+            self.winner = None
+            self.end_game()
+
+    def end_game(self) -> None:
+        pass

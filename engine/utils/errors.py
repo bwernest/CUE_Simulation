@@ -9,6 +9,10 @@ class CarteIncorrecte(CUE_SimulationException):
     pass
 
 
+class CarteCycleeNonEnMain(CUE_SimulationException):
+    pass
+
+
 class DeckIncorrect(CUE_SimulationException):
     pass
 
