@@ -22,6 +22,8 @@ class DataCollector(Game):
         for raw_card in raw_cards:
             card = Card()
             card.create_card_from_data(raw_card)
+            if card.id in self.cards:
+                raise ValueError(f"Duplicate card id found: {card.id}")
             self.cards[card.id] = card
 
     def get_raw_cards(self) -> List[List[Iterable]]:
@@ -42,7 +44,7 @@ class DataCollector(Game):
 
     def write_raw_data(self) -> None:
         raw_cards = self.get_raw_cards()
-        sorted_raw_cards = sorted(raw_cards, key=lambda x: x[0][0])
+        sorted_raw_cards = self.sort_raw_cards(raw_cards)
         txt = "A\n"
         for raw_card in sorted_raw_cards:
             for line in raw_card:
@@ -73,3 +75,31 @@ class DataCollector(Game):
         print("\nCollections :")
         for collection, count in collections.items():
             print(f"{collection}: {count}")
+
+    def sort_raw_cards(self, raw_cards: List[List[Iterable]]) -> List[List[Iterable]]:
+        lenC = len(raw_cards)
+        for i in range(lenC-1):
+            for j in range(lenC-1):
+                if not self.check_alphabetical_order(raw_cards[j][0][0][:3], raw_cards[j+1][0][0][:3]):
+                    temp = raw_cards[j+1]
+                    raw_cards[j+1] = raw_cards[j]
+                    raw_cards[j] = temp
+                elif raw_cards[j][0][0][:3] == raw_cards[j+1][0][0][:3]:
+                    if not self.check_alphabetical_order(raw_cards[j][0][1], raw_cards[j+1][0][1]):
+                        temp = raw_cards[j+1]
+                        raw_cards[j+1] = raw_cards[j]
+                        raw_cards[j] = temp
+        return raw_cards
+
+    def check_alphabetical_order(self, string1: str, string2: str) -> bool:
+        """Check if string1 is alphabetically before string2."""
+        len1 = len(string1)
+        len2 = len(string2)
+        index = 0
+        while index < len1 and index < len2:
+            if string1[index] < string2[index]:
+                return True
+            elif string1[index] > string2[index]:
+                return False
+            index += 1
+        return len1 <= len2
