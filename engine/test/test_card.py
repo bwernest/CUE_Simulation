@@ -17,6 +17,10 @@ class TestCard(Assert):
     def test_create_card(self) -> None:
         _ = Card("test")
 
+    def test_card_import(self, engine: Engine) -> None:
+        card = engine.cards["mypa001"]
+        self.assertEqual(["2020"], card.keywords)
+
     def test_card_MYPA001(self) -> None:
         expected = np.array([77, 0])
         game = unique_card_play("MYPA001")

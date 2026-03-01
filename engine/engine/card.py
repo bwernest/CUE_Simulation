@@ -71,7 +71,7 @@ class Card(ToolBox):
         column = 2
         self.keywords = []
         while not isna(infos[1][column]):
-            self.keywords.append(infos[1][column])
+            self.keywords.append(str(infos[1][column]).lower())
             column += 1
         self.attacks = self.add_attacks(attacks)
 
