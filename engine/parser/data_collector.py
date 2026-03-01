@@ -53,3 +53,23 @@ class DataCollector(Game):
                 txt += "\n"
             txt += "\n"
         self.write_txt(f"{self.paths["folder_data"]}/new_cartes.txt", txt)
+
+    def print_cards_albums(self) -> None:
+        albums = {}
+        for card in self.cards.values():
+            if card.album not in albums:
+                albums[card.album] = 1
+            albums[card.album] += 1
+        print("\nAlbums :")
+        for album, count in albums.items():
+            print(f"{album}: {count}")
+
+    def print_cards_collections(self) -> None:
+        collections = {}
+        for card in self.cards.values():
+            if card.collection not in collections:
+                collections[card.collection] = 1
+            collections[card.collection] += 1
+        print("\nCollections :")
+        for collection, count in collections.items():
+            print(f"{collection}: {count}")
