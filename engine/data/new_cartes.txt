@@ -275,6 +275,13 @@ Play	Cible	player deck	Collection	Ocean Reptiles
 	Effet	power	21				
 	Duree	until played					
 
+PAN056	Simosuchus	Short Skull	Paleontology	Ancient Creatures	Rare	Limited	
+4	30						
+Play	Cible	player deck	Album	Paleontology			
+	Filtre	base energy	<	5			
+	Effet	power	20				
+	Duree	2					
+
 PAN043	Synthetoceras	Y so Serious?	Paleontology	Ancient Creatures	Rare	Limited	
 3	30						
 Play	Cible	opponent hand	Album	Paleontology			
@@ -651,6 +658,12 @@ Play	Cible	opponent
 	Effet	power per turn	-12				
 	Duree	Round	1				
 
+PEV001	Dinosaur Eggs	Eggs In One Basket	Paleontology	Paleontology Specials	Epic	Fusion ingredient	
+2	18	Egg	2020				
+Play	Cible	player hand	Card	Egg Nebula			
+	Effet	power	40				
+	Duree	turn	1				
+
 PEV002	Pangea	One World	Paleontology	Paleontology Specials	Rare	Limited	
 5	48						
 Draw	Cible	player hand	Album	Paleontology			
@@ -660,6 +673,15 @@ Draw	Cible	player hand	Album	Paleontology
 Draw	Cible	player hand	Album	Life on Land			
 	Filtre	random	1				
 	Effet	power	36				
+	Duree	until played					
+
+PEV004	Trilobite	Fossil Fuelled	Paleontology	Paleontology Specials	Epic	Limited	
+4	45						
+Play	Cible	player hand	Card	Ammonite			
+	Effet	power	40				
+	Duree	turn	1				
+Return	Cible	self					
+	Effet	energy	1				
 	Duree	until played					
 
 PFF036	Amblydectes	Ambyldextrous	Paleontology	Fearsome Flyers	Rare	Limited	
@@ -691,7 +713,7 @@ Draw	Cible	player deck	Album	Paleontology
 	Effet	power	15				
 	Duree	Round	1				
 
-PFF014	Argentavis	Real Big Bird	Paleontology	Fearsome Flyers	Rare	Limited	
+PFF041	Argentavis	Real Big Bird	Paleontology	Fearsome Flyers	Rare	Limited	
 3	25						
 Play	Cible	self					
 	Effet	power	75				
@@ -707,6 +729,232 @@ Play	Cible	player deck	Collection	Winged Mythical Creatures
 	Effet	power	3				
 	Multiplicateur	player deck	Collection	Fearsome Flyers	12		
 	Duree	until played					
+
+PFF027	Caihong Juji	Rainbow Crest	Paleontology	Fearsome Flyers	Legendary	Limited	
+5	52						
+Draw	Condition	player deck	Album	Paleontology	>	2	
+	Cible	player deck	Collection	Unruly Rulers			
+	Effet	power	20				
+	Duree	turn	2				
+Draw	Condition	player deck	Album	Life on Land	>	2	
+	Cible	player deck	Collection	Unruly Rulers			
+	Effet	power	20				
+	Duree	turn	2				
+Draw	Condition	player deck	Album	Science	>	2	
+	Cible	player deck	Collection	Unruly Rulers			
+	Effet	power	20				
+	Duree	turn	2				
+
+PFF023	Confuciusornis	Confuciusornism	Paleontology	Fearsome Flyers	Legendary	Limited	
+5	51						
+Return	Cible	player deck	Collection	Philosophy			
+	Effet	power	18				
+	Duree	until played					
+Return	Condition	player played	Card	Confucius			
+	Cible	player deck	Collection	Philosophy			
+	Effet	power	16				
+	Duree	until played					
+
+PFF013	Cryodrakon	Cry Some More	Paleontology	Fearsome Flyers	Epic	Limited	
+5	55	2020					
+Play	Condition	arena	Paleontology				
+	Cible	self					
+	Effet	power	55				
+	Duree	turn	1				
+
+PFF034	Cygnus Falconeri	Swan About	Paleontology	Fearsome Flyers	Rare	Limited	
+6	58						
+Play	Cible	player hand					
+	Filtre	random	1				
+	Effet	power	20				
+	Duree	until played					
+Play	Cible	opponent hand					
+	Filtre	random	1				
+	Effet	power	-20				
+	Duree	until played					
+
+PFF040	Darwinopterus	Darwin's Wing	Paleontology	Fearsome Flyers	Epic	Limited	
+7	57						
+Play	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	power	16				
+	Duree	until played					
+
+PFF038	Dawndraco	Dragon of the Dawn	Paleontology	Fearsome Flyers	Legendary	Limited	
+5	45						
+Draw	Condition	player played	Collection	Winged Mythical Creatures	>	0	
+	Cible	player deck	Album	Paleontology			
+	Effet	power	17				
+	Duree	until played					
+
+PFF031	Dearc	Detriomphe	Paleontology	Fearsome Flyers	Epic	Limited	
+7	62						
+Play	Condition	player deck	Collection	Fearsome Flyers	>	7	
+	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	power	17				
+	Duree	until played					
+
+PFF009	Dimorphodon	Tooth Hurts	Paleontology	Fearsome Flyers	Epic	Limited	
+3	27	2020					
+Play	Cible	player hand	Collection	Carnivores			
+	Effet	power	25				
+	Duree	turn	1				
+
+PFF006	Dorygnathus		Paleontology	Fearsome Flyers	Common	Limited	
+5	41	2020					
+
+PFF015	Dsungaripterus	Short Bursts	Paleontology	Fearsome Flyers	Common	Limited	
+2	40	2020					
+Draw	Cible	self					
+	Effet	power	-15				
+	Duree	permanently					
+
+PFF003	Eudimorphodon	Piscavorious	Paleontology	Fearsome Flyers	Common	Limited	
+3	29	2020					
+Play	Cible	both hand	Album	Oceans and Seas			
+	Effet	power	-15				
+	Duree	turn	1				
+
+PFF026	Haast's Eagle	Haast To Be Perfect	Paleontology	Fearsome Flyers	Epic	Limited	
+8	76						
+Return	Condition	round won	>	0			
+	Condition	turn score	>	0			
+	Cible	player					
+	Effet	energy per turn	5				
+	Duree	turn	3				
+
+PFF033	Icarosaurus	Icarus Lizard	Paleontology	Fearsome Flyers	Epic	Limited	
+5	47						
+Play	Condition	voisin	next to	card	The Sun		
+	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	power	21				
+	Duree	turn	5				
+
+PFF025	Jeholornis	Naming Dispute	Paleontology	Fearsome Flyers	Rare	Limited	
+7	63						
+Draw	Condition	round score	<	0			
+	Cible	self					
+	Effet	energy	-5				
+	Duree	until played					
+
+PFF008	Microraptor	Four-winged	Paleontology	Fearsome Flyers	Common	Limited	
+5	47	2020					
+Play	Cible	player hand	Collection	Birds			
+	Effet	power	15				
+	Duree	turn	1				
+
+PFF001	Ornithocheirus		Paleontology	Fearsome Flyers	Common	Limited	
+2	19	2020					
+
+PFF016	Peteinosaurus	Small Fly	Paleontology	Fearsome Flyers	Rare	Limited	
+2	17	2020					
+Return	Cible	player					
+	Effet	energy per turn	1				
+	Duree	Round	1				
+Play	Cible	player hand	Card	Thick-headed Fly			
+	Effet	power	20				
+	Duree	turn	1				
+
+PFF004	Pteranodon	Soar, Loser	Paleontology	Fearsome Flyers	Legendary	Limited	
+4	31	2020					
+Return	Condition	turn score	>	0			
+	Cible	player					
+	Effet	energy	6				
+
+PFF012	Pterodactylus	Night Pterrors	Paleontology	Fearsome Flyers	Legendary	Limited	
+4	27	2020					
+Return	Cible	player remaining					
+	Effet	power	15				
+	Duree	until played					
+
+PFF021	Pterodaustro	Flamin-Go!	Paleontology	Fearsome Flyers	Epic	Limited	
+3	32						
+Draw	Cible	player deck	Card	Flamingos			
+	Effet	power	46				
+	Duree	permanently					
+
+PFF007	Quetzalcoatlus	Power of the Serpent God	Paleontology	Fearsome Flyers	Rare	Limited	
+7	52	2020					
+Play	Cible	player hand	Card	Bushmaster			
+	Cible	player hand	Card	Quetzalcoatl			
+	Effet	power	50				
+	Duree	turn	1				
+
+PFF014	Rhamphorhynchus	Well Preserved	Paleontology	Fearsome Flyers	Common	Limited	
+3	10	2020					
+Return	Cible	player remaining	Album	Paleontology			
+	Effet	power	10				
+	Duree	until played					
+
+PFF024	Sharovipteryx	Maria Sharovipteryx	Paleontology	Fearsome Flyers	Rare	Limited	
+4	39						
+Draw	Cible	player deck	Card	Tennis			
+	Effet	energy	-1				
+	Duree	permanently					
+
+PFF011	Tapejara	Old Being	Paleontology	Fearsome Flyers	Common	Limited	
+3	10	2020					
+Play	Cible	player hand	Collection	Fearsome Flyers			
+	Effet	power	20				
+	Duree	turn	1				
+
+PFF005	Thalassodromeus		Paleontology	Fearsome Flyers	Common	Limited	
+4	39	2020					
+
+PFF032	Tropeognathus	Keel Jaw	Paleontology	Fearsome Flyers	Rare	Limited	
+4	37						
+Play	Condition	player deck	Album	Oceans and Seas	=	1	
+	Cible	player hand	Collection	Fearsome Flyers			
+	Effet	Power of the Serpent God	22				
+	Duree	turn	1				
+
+PFF010	Tupuxuara	Simply the Crest	Paleontology	Fearsome Flyers	Common	Limited	
+4	35	2020					
+Play	Cible	player hand	Card	Parasaurolophus			
+	Effet	power	30				
+	Duree	turn	1				
+
+PFF029	Yanornis	Upstroke Uptick	Paleontology	Fearsome Flyers	Legendary	Limited	
+3	30						
+Play	Condition	Round	1				
+	Cible	player deck	Album	Paleontology			
+	Effet	power	18				
+	Duree	until played					
+Play	Condition	Round	3				
+	Cible	player deck	Album	Paleontology			
+	Effet	power	18				
+	Duree	until played					
+Play	Condition	Round	5				
+	Cible	player deck	Album	Paleontology			
+	Effet	power	18				
+	Duree	until played					
+
+PFF022	Yi Qi	Stranger Wings	Paleontology	Fearsome Flyers	Epic	Limited	
+7	65						
+Draw	Cible	player hand					
+	Filtre	random	2				
+	Effet	power	40				
+	Duree	Round	1				
+Draw	Cible	player hand					
+	Filtre	random	2				
+	Effet	energy	3				
+	Duree	Round	1				
+
+PFF019	Zhejiangopterus	Ready to Swoop	Paleontology	Fearsome Flyers	Epic	Limited	
+6	42	2020					
+Return	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	energy	-1				
+	Duree	until played					
+Return	Condition	round score	>	0			
+	Cible	player deck	Collection	Fearsome Flyers			
+	Effet	energy	-1				
+	Duree	until played					
+
+PFF020	Zhenyuanopterus	Grin and Bear It	Paleontology	Fearsome Flyers	Rare	Limited	
+9	65	2020					
+Return	Condition	turn score	<	0			
+	Cible	player					
+	Effet	power per turn	65				
+	Duree	turn	2				
 
 PHE049	Agujaceratops	Up and Out	Paleontology	Herbivores	Common	Limited	
 5	37						
@@ -803,6 +1051,39 @@ Play	Condition	Round	=	5
 	Effet	power	20				
 	Duree	until played					
 
+PLB001	Chicxulub Crater	Massive Impact	Paleontology	Land Before Time	Epic	Limited	
+8	67						
+Play	Cible	player deck	Album	Paleontology			
+	Effet	power	-7				
+	Duree	until played					
+Play	Cible	player deck	Album	Space			
+	Effet	power	7				
+	Duree	until played					
+
+PLB010	Eye of Quebec	Triassic Vision	Paleontology	Land Before Time	Rare	Limited	
+5	30	Eye					
+Play	Condition	voisin	gauche	album	paleontology		
+	Condition	voisin	droite	album	paleontology		
+	Cible	player hand	Album	Paleontology			
+	Effet	power	15				
+	Duree	until played					
+
+PLB011	Hell Creek Formation	Fossil Hunting	Paleontology	Land Before Time	Legendary	Limited	
+8	78	Hell					
+Draw	Cible	player deck	Album	Paleontology			
+	Effet	power	10				
+	Duree	until played					
+Draw	Cible	player deck	Collection	Groundbreakers			
+	Cible	player deck	Collection	Land Before Time			
+	Effet	power	20				
+	Duree	turn	5				
+
+PLB005	Pannotia	Relatively Short-Lived	Paleontology	Land Before Time	Rare	Limited	
+6	97						
+Start	Cible	self					
+	Effet	power	-10				
+	Duree	permanently					
+
 PLB008	Panthalassa	Pangea's Superocean	Paleontology	Land Before Time	Common	Limited	
 5	47						
 Play	Condition	voisin	next to	card	Pangea		
@@ -816,6 +1097,13 @@ Draw	Cible	self
 	Effet	power	-10				
 	Multiplicateur	player album					
 	Duree	permanently					
+
+PLB014	Rhynie Chert	Plant Preservation	Paleontology	Land Before Time	Common	Limited	
+6	53						
+Play	Cible	player deck	Album	Plant Life			
+	Effet	power	8				
+	Multiplicateur	player hand	Collection	Land Before Time			
+	Duree	Round	1				
 
 PLB004	Triassic-Jurassic Extinction Event	Triassic, Parked	Paleontology	Land Before Time	Rare	Limited	
 3	27						

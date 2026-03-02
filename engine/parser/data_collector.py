@@ -60,34 +60,41 @@ class DataCollector(Game):
         albums = {}
         for card in self.cards.values():
             if card.album not in albums:
-                albums[card.album] = 1
+                albums[card.album] = 0
             albums[card.album] += 1
         print("\nAlbums :")
         for album, count in albums.items():
             print(f"{album}: {count}")
 
+    def print_collection(self, collection: str) -> None:
+        print(f"\nCollection {collection} :")
+        sorted_cards = sorted(self.cards.values(), key=lambda c: c.name)
+        for card in sorted_cards:
+            if card.collection == collection:
+                print(f"{card.id} - {card.name}")
+
     def print_cards_collections(self) -> None:
         collections = {}
         for card in self.cards.values():
             if card.collection not in collections:
-                collections[card.collection] = 1
+                collections[card.collection] = 0
             collections[card.collection] += 1
         print("\nCollections :")
-        for collection, count in collections.items():
-            print(f"{collection}: {count}")
+        for collection in sorted(collections.keys()):
+            print(f"{collection}: {collections[collection]}")
 
     def sort_raw_cards(self, raw_cards: List[List[Iterable]]) -> List[List[Iterable]]:
         lenC = len(raw_cards)
-        for i in range(lenC-1):
-            for j in range(lenC-1):
-                if not self.check_alphabetical_order(raw_cards[j][0][0][:3], raw_cards[j+1][0][0][:3]):
-                    temp = raw_cards[j+1]
-                    raw_cards[j+1] = raw_cards[j]
+        for i in range(lenC - 1):
+            for j in range(lenC - 1):
+                if not self.check_alphabetical_order(raw_cards[j][0][0][:3], raw_cards[j + 1][0][0][:3]):
+                    temp = raw_cards[j + 1]
+                    raw_cards[j + 1] = raw_cards[j]
                     raw_cards[j] = temp
-                elif raw_cards[j][0][0][:3] == raw_cards[j+1][0][0][:3]:
-                    if not self.check_alphabetical_order(raw_cards[j][0][1], raw_cards[j+1][0][1]):
-                        temp = raw_cards[j+1]
-                        raw_cards[j+1] = raw_cards[j]
+                elif raw_cards[j][0][0][:3] == raw_cards[j + 1][0][0][:3]:
+                    if not self.check_alphabetical_order(raw_cards[j][0][1], raw_cards[j + 1][0][1]):
+                        temp = raw_cards[j + 1]
+                        raw_cards[j + 1] = raw_cards[j]
                         raw_cards[j] = temp
         return raw_cards
 
