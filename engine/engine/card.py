@@ -14,8 +14,8 @@ class Card(ToolBox):
 
     id: str
     name: str
-    power: int
-    energy: int
+    base_power: int
+    base_energy: int
     attacks: Dict[str, List]
 
     def __eq__(self, value):
@@ -45,10 +45,9 @@ class Card(ToolBox):
         self.id = id.lower()
         self.name = name.lower()
         self.keywords = keywords
-        self.power = power
-        self.power_buff = []
-        self.energy = energy
-        self.energy_buff = []
+        self.base_power = power
+        self.base_energy = energy
+        self.buff = {"power": [], "energy": [], "burn": []}
         self.attack_name = attack_name
         self.album = album
         self.collection = collection
@@ -71,8 +70,9 @@ class Card(ToolBox):
         self.collection = infos[0][4].lower()
         self.rarity = infos[0][5].lower()
         self.type = infos[0][6].lower()
-        self.energy = int(infos[1][0])
-        self.power = int(infos[1][1])
+        self.base_energy = int(infos[1][0])
+        self.base_power = int(infos[1][1])
+        self.buff = {"power": [], "energy": [], "burn": []}
         column = 2
         self.keywords = []
         while not isna(infos[1][column]):

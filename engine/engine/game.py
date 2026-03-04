@@ -23,6 +23,8 @@ class Game(Deck):
 
     def create_game(self, deck0: Deck, deck1: Deck) -> None:
         self.decks = [deck0, deck1]
+        self.power_per_turn_buff = [[], []]
+        self.energy_per_turn_buff = [[], []]
         self.score = np.zeros((self.rounds, self.turns, 2), dtype=int)
         self.turn = 0
         self.round = 0
@@ -45,7 +47,7 @@ class Game(Deck):
                 if plays[player][k] is None:
                     continue
                 self.score[self.round, self.turn,
-                           player] += self.decks[player].cards[plays[player][k]].power
+                           player] += self.decks[player].cards[plays[player][k]].base_power
 
         self.count_turn()
 
@@ -103,38 +105,55 @@ class Game(Deck):
 
     def apply_effects(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         {
-            "power": self.apply_effect_power,
+            "power": self.apply_effect_card,
+            "burn": self.apply_effect_card,
             "power_per_turn": self.apply_effect_power_per_turn,
             "energy": self.apply_effect_energy,
             "energy_per_turn": self.apply_effect_energy_per_turn,
-            "burn": self.apply_effect_burn,
         }[effect[0]](effect, duree, targets)
     
-    def apply_effect_power(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         print("Apply effect power", effect, duree, targets)
         {
-            "turn": self.apply_effect_power_turn,
-            "round": self.apply_effect_power_round,
-            "until_played": self.apply_effect_power_until_played,
-            "permanently": self.apply_effect_power_permanently,
+            "turn": self.apply_effect_card_turn,
+            "round": self.apply_effect_card_round,
+            "until_played": self.apply_effect_card_until_played,
+            "permanently": self.apply_effect_card_permanently,
         }[duree[0]](effect, duree, targets)
 
     def apply_effect_power_per_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        {
+            "turn": self.apply_effect_player_per_turn_turn,
+            "round": self.apply_effect_player_per_turn_round,
+            "until_played": self.apply_effect_player_per_turn_until_played,
+            "permanently": self.apply_effect_player_per_turn_permanently,
+        }[duree[0]](effect, duree, targets)
+    
+    def apply_effect_energy_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         pass
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         pass
 
-    def apply_effect_energy_per_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
-        pass
-
-    def apply_effect_burn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
-        pass
-
-    def apply_effect_power_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         for player in range(2):
             for card in targets[player]:
-                self.decks[player].cards[card].power_buff.append([effect[1], duree[1]])
+                self.decks[player].cards[card].buff[effect[0]].append([effect[1], duree[1]])
+    
+    def apply_effect_card_round(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        for player in range(2):
+            for card in targets[player]:
+                self.decks[player].cards[card].buff[effect[0]].append([effect[1], self.turns*duree[1]-self.turn])
+    
+    def apply_effect_card_until_played(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        for player in range(2):
+            for card in targets[player]:
+                self.decks[player].cards[card].buff[effect[0]].append([effect[1], -1])
+    
+    def apply_effect_card_permanently(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        for player in range(2):
+            for card in targets[player]:
+                self.decks[player].cards[card].buff[effect[0]].append([effect[1], self.rounds*self.turns])
 
     """___Miscellaneous_________________________________________________________________________"""
 
