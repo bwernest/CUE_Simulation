@@ -1,3 +1,4 @@
+# Python
 .pixi
 *.egg-info
 pixi.lock
@@ -5,3 +6,6 @@ pixi.lock
 *.pyc
 .coverage
 *.cpython-*
+
+# CUE_Simulation
+log.bw

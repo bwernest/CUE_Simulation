@@ -60,7 +60,6 @@ def mouse_deck() -> Deck:
 def unique_card_play(card_id: str) -> Game:
     engine = Engine("test")
     engine.start_engine()
-    print(engine.cards)
     deck1 = dummy_deck()
     deck2 = dummy_deck()
     card_id = card_id.lower()

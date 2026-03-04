@@ -164,6 +164,17 @@ Play	Cible	player deck	keyword	Crocodile
 	Effet	power	25				
 	Duree	turn	2				
 
+PAN026	Hyaenodon	Laughing Matter	Paleontology	Ancient Creatures	Legendary	Limited	
+3	37						
+Return	Condition	turn score	>	0			
+	Cible	player deck					
+	Effet	power	10				
+	Duree	until played					
+Return	Condition	turn score	>	0			
+	Cible	opponent deck					
+	Effet	power	-5				
+	Duree	permanently					
+
 PAN058	Inostrancevia	Proto-Mammal	Paleontology	Ancient Creatures	Rare	Limited	
 4	25						
 Draw	Cible	player hand	Collection	Ancient Creatures			
@@ -1013,6 +1024,248 @@ Draw	Condition	player deck	Collection	Herbivores	>	7
 
 PHE006	Argentinosaurus		Paleontology	Herbivores	Common	Standard	
 5	47	2020					
+
+PHE024	Barosaurus	He is Heavy, He's My Brother	Paleontology	Herbivores	Rare	Limited	
+7	84						
+Play	Cible	player hand	Card	Diplodocus			
+	Effet	power	49				
+	Duree	permanently					
+
+PHE005	Brachiosaurus	Wind Your Neck In	Paleontology	Herbivores	Common	Fusion ingredient	
+6	43	2019					
+Play	Cible	opponent hand					
+	Effet	power	-5				
+	Duree	turn	1				
+
+PHE012	Brontosaurus	STOMP!	Paleontology	Herbivores	Rare	Standard	
+4	20	2019					
+Draw	Cible	player					
+	Effet	energy	5				
+
+PHE019	Centrosaurus	Centre of Attention	Paleontology	Herbivores	Legendary	Limited	
+5	55	2020					
+Play	Condition	arena	Paleontology				
+	Cible	self					
+	Effet	power	50				
+	Duree	permanently					
+Play	Acondition	arena	Paleontology				
+	Cible	player deck	Collection	Herbivores			
+	Filtre	other					
+	Effet	power	15				
+	Duree	until played					
+
+PHE031	Chilesaurus	Friends Not Food	Paleontology	Herbivores	Rare	Standard	
+7	56						
+Play	Cible	player deck	Collection	Herbivores			
+	Effet	power	7				
+	Duree	until played					
+
+PHE034	Corythosaurus	Duck-Billed Lizard	Paleontology	Herbivores	Epic	Standard	
+7	75						
+Play	Condition	player deck	Collection	Reptiles	>	0	
+	Condition	player deck	Collection	Sea Birds	>	0	
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	16				
+	Duree	until played					
+
+PHE046	Demandasaurus	In Demands	Paleontology	Herbivores	Common	Limited	
+3	27						
+Play	Condition	player deck	Card	Teeth			
+	Cible	self					
+	Effet	power	20				
+	Duree	turn	1				
+
+PHE013	Diabloceratops	Devil Inside	Paleontology	Herbivores	Rare	Limited	
+3	22	2019					
+Play	Condition	round score	<	0			
+	Cible	self					
+	Effet	power	22				
+	Duree	turn	1				
+
+PHE014	Diplodocus	Double Beam	Paleontology	Herbivores	Epic	Limited	
+7	49	2020					
+Play	Condition	round score	<	0			
+	Cible	self					
+	Effet	power	49				
+	Duree	turn	1				
+
+PHE020	Edmontosaurus	Top of the Bill	Paleontology	Herbivores	Legendary	Fusion ingredient	
+6	55	2020					
+Play	Condition	round score	>	-1			
+	Cible	self					
+	Effet	power	45				
+	Duree	turn	1				
+
+PHE036	Einiosaurus	Identification Problems	Paleontology	Herbivores	Epic	Standard	
+7	60						
+Play	Cible	player deck	Collection	Herbivores			
+	Effet	power	10				
+	Multiplicateur	player hand	Collection	Herbivores			
+	Duree	turn	2				
+Play	Cible	player deck	Collection	Herbivores			
+	Effet	power	-25				
+	Duree	turn	2				
+
+PHE026	Euoplocephalus	Broad Faced	Paleontology	Herbivores	Epic	Limited	
+8	65						
+Draw	Cible	player					
+	Effet	power per turn	3				
+	Duree	permanently					
+Draw	Cible	self					
+	Effet	energy	-1				
+	Duree	permanently					
+
+PHE023	Europasaurus	Stout Defence	Paleontology	Herbivores	Epic	Limited	
+3	31						
+Play	Cible	player hand					
+	Filtre	base power	<	31			
+	Effet	power	30				
+	Duree	turn	1				
+
+PHE017	Hadrosaurus	Incredible Bulk	Paleontology	Herbivores	Rare	Limited	
+8	76	2020					
+Play	Cible	player hand	Collection	Herbivores			
+	Effet	power	8				
+	Duree	permanently					
+
+PHE018	Hellboy, the regaliceratops	Summoned from Hell	Paleontology	Herbivores	Epic	Limited	
+6	60	Hell	2020				
+Draw	Cible	opponent hand					
+	Filtre	random	2				
+	Effet	burn	16				
+	Duree	Round	1				
+
+PHE027	Iguanodon	Iguana Don	Paleontology	Herbivores	Rare	Limited	
+2	16						
+Play	Condition	player deck	Card	Green Iguana			
+	Cible	player hand	Collection	Reptiles			
+	Effet	power	19				
+	Duree	Round	1				
+
+PHE022	Lambeosaurus	Hatchet Job	Paleontology	Herbivores	Rare	Limited	
+2	18						
+Play	Cible	opponent deck	Album	Arts & Culture			
+	Effet	power	-20				
+	Duree	Round	1				
+
+PHE028	Leaellynasaura	Leaellyn's Lizard	Paleontology	Herbivores	Legendary	Standard	
+5	46						
+Play	Condition	player played	Collection	Reptiles	>	0	
+	Cible	player					
+	Effet	energy per turn	2				
+	Duree	turn	4				
+
+PHE021	Maiasaura	Good Mother	Paleontology	Herbivores	Epic	Limited	
+7	62						
+Draw	Cible	player deck	Card	Elasmotherium			
+	Cible	player deck	Card	Mother Orangutan			
+	Effet	power	30				
+	Duree	permanently					
+
+PHE042	Mercuriceratops	Mercuriceratops Gemini	Paleontology	Herbivores	Legendary	Standard	
+8	76						
+Draw	Condition	player deck	Card	Mercury			
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	11				
+	Duree	until played					
+Draw	Condition	player deck	Card	Gemini			
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	11				
+	Duree	until played					
+
+PHE009	Pachycephalosaurus	Headfirst	Paleontology	Herbivores	Common	Standard	
+2	15	2019					
+Play	Condition	turn	1				
+	Cible	self					
+	Effet	power	35				
+	Duree	turn	1				
+Return	Cible	self					
+	Effet	energy	3				
+	Duree	permanently					
+
+PHE002	Parasaurolophus	Simply the Crest	Paleontology	Herbivores	Common	Standard	
+7	62	2019					
+Play	Cible	player hand	Card	Tupuxuara			
+	Effet	power	30				
+	Duree	turn	1				
+
+PHE039	Patagotitan	Living It Large	Paleontology	Herbivores	Legendary	Limited	
+8	80	Titan					
+Play	Condition	voisin	next to	collection	Land Before Time		
+	Cible	player hand	Collection	Paleontology			
+	Effet	power	16				
+	Duree	until played					
+
+PHE033	Pegomastax	Strong Jaw	Paleontology	Herbivores	Legendary	Standard	
+8	75						
+Return	Cible	player remaining	Collection	Herbivores			
+	Effet	power	24				
+	Duree	turn	3				
+
+PHE047	Pentaceratops	Five Horns	Paleontology	Herbivores	Epic	Standard	
+5	50						
+Play	Cible	player deck	Collection	Herbivores			
+	Filtre	random	5				
+	Effet	power	15				
+	Duree	permanently					
+
+PHE010	Protoceratops		Paleontology	Herbivores	Common	Standard	
+7	66	2019					
+
+PHE032	Psittacosaurus	Grounded	Paleontology	Herbivores	Legendary	Standard	
+8	65						
+Draw	Condition	player deck	Album	Paleontology	=	10	
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	15				
+	Duree	until played					
+
+PHE001	Saltasaurus		Paleontology	Herbivores	Common	Fusion ingredient	
+5	42	2019					
+
+PHE045	Shunosaurus	Club-Tailed	Paleontology	Herbivores	Common	Limited	
+3	30						
+Return	Cible	opponent					
+	Effet	power per turn	-10				
+	Duree	Round	1				
+
+PHE007	Stegosaurus	Step Up to the Plate	Paleontology	Herbivores	Epic	Fusion ingredient	
+7	62	2019					
+Play	Cible	both hand	Collection	Herbivores			
+	Effet	power	10				
+	Duree	until played					
+
+PHE016	Stygimoloch	Ramming Speed	Paleontology	Herbivores	Epic	Limited	
+3	65						
+Return	Cible	self					
+	Effet	power	-35				
+	Duree	permanently					
+
+PHE008	Styracaosaurus		Paleontology	Herbivores	Common	Fusion ingredient	
+4	37	2019					
+
+PHE040	Supersaurus	Lizard Wizard	Paleontology	Herbivores	Rare	Standard	
+5	44						
+Draw	Cible	player deck	Collection	Reptiles			
+	Effet	power	14				
+	Duree	turn	2				
+
+PHE044	Thescelosaurus	Lizard God	Paleontology	Herbivores	Rare	Standard	
+3	28						
+Play	Cible	player hand	Collection	Reptiles			
+	Effet	power	25				
+	Duree	turn	1				
+
+PHE003	Triceratops	Three-Pronged Attack	Paleontology	Herbivores	Common	Standard	
+7	63	2019					
+Play	Cible	player hand					
+	Effet	power	10				
+	Duree	turn	1				
+
+PHE037	Tsintaosaurus	Qingdao Lizard	Paleontology	Herbivores	Epic	Standard	
+5	47						
+Play	Cible	player hand	Collection	Reptiles			
+	Effet	power	26				
+	Duree	until played					
 
 PHU003	Australopithecus Sediba	Karabo	Paleontology	Human Evolution	Rare	Limited	
 4	28						

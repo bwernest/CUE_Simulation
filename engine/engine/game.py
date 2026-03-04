@@ -7,7 +7,7 @@ from ..utils import *
 # Python
 import numpy as np
 import numpy.typing as npt
-from typing import Dict, List, Tuple
+from typing import Dict, List, Literal, Tuple
 
 """___Classes___________________________________________________________________________________"""
 
@@ -28,10 +28,13 @@ class Game(Deck):
         self.round = 0
         self.winner = None
 
+    """___Play__________________________________________________________________________________"""
+
     def start_game(self, shuffle: bool = True) -> None:
         if shuffle:
             for deck in self.decks:
                 deck.shuffle()
+        self.trigger_attacks("draw")
 
     def play(self, play0: List[str | None], play1: List[str | None]) -> None:
         if not len(play0) == self.play_len or not len(play1) == self.play_len:
@@ -45,6 +48,95 @@ class Game(Deck):
                            player] += self.decks[player].cards[plays[player][k]].power
 
         self.count_turn()
+
+    """___Attack________________________________________________________________________________"""
+
+    def trigger_attacks(self, trigger: Literal["draw", "start", "play", "return"]) -> None:
+        for player in range(2):
+            for card in self.decks[player].hand:
+                for attack in self.decks[player].cards[card].attacks[trigger]:
+                    if self.check_conditions(attack["condition"], attack["acondition"], player):
+                        self.execute_attack(attack, card, player)
+
+    def execute_attack(self, attack: Dict, card: str, player: int) -> None:
+        targets = self.get_targets(attack["cible"], card, player)
+        self.apply_effects(attack["effet"], attack["duree"], targets)
+        print(targets)
+
+    """___Condition_____________________________________________________________________________"""
+
+    def check_conditions(self, conditions: List, aconditions: List, player:int) -> bool:
+        for line in conditions:
+            if not self.check_condition(line, player):
+                return False
+        for line in aconditions:
+            if self.check_condition(line, player):
+                return False
+        return True
+
+    def check_condition(self, line: List, player: int) -> bool:
+        return {
+            "player_deck": self.check_condition_pd,
+        }[line[0]](line, player)
+
+    """___Target________________________________________________________________________________"""
+
+    def get_targets(self, target_attacks: List, card: str, player: int) -> Dict[int, List]:
+        targets = {0: [], 1: []}
+        for target_attack in target_attacks:
+            target = self.get_target(target_attack, card, player)
+            for player in range(2):
+                if player in target: targets[player] += target[player]
+        targets[0] = list(set(targets[0]))
+        targets[1] = list(set(targets[1]))
+        return targets
+
+    def get_target(self, target_attack: List, card: str, player: int) -> List:
+        return {
+            "self": self.get_target_self,
+        }[target_attack](target_attack, card, player)
+    
+    def get_target_self(self, target_attack: List, card: str, player: int) -> List:
+        return {player: [card]}
+
+    """___Effect________________________________________________________________________________"""
+
+    def apply_effects(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        {
+            "power": self.apply_effect_power,
+            "power_per_turn": self.apply_effect_power_per_turn,
+            "energy": self.apply_effect_energy,
+            "energy_per_turn": self.apply_effect_energy_per_turn,
+            "burn": self.apply_effect_burn,
+        }[effect[0]](effect, duree, targets)
+    
+    def apply_effect_power(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        print("Apply effect power", effect, duree, targets)
+        {
+            "turn": self.apply_effect_power_turn,
+            "round": self.apply_effect_power_round,
+            "until_played": self.apply_effect_power_until_played,
+            "permanently": self.apply_effect_power_permanently,
+        }[duree[0]](effect, duree, targets)
+
+    def apply_effect_power_per_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_energy_per_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_burn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_power_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        for player in range(2):
+            for card in targets[player]:
+                self.decks[player].cards[card].power_buff.append([effect[1], duree[1]])
+
+    """___Miscellaneous_________________________________________________________________________"""
 
     def count_turn(self) -> None:
         self.turn += 1

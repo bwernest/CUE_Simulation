@@ -26,6 +26,9 @@ class Card(ToolBox):
                 return False
         return True
 
+    def __str__(self):
+        return f"Card {self.name}\nAttacks :\n{self.attacks}"
+
     def create_card(
             self,
             id: str,
@@ -43,13 +46,15 @@ class Card(ToolBox):
         self.name = name.lower()
         self.keywords = keywords
         self.power = power
+        self.power_buff = []
         self.energy = energy
+        self.energy_buff = []
         self.attack_name = attack_name
         self.album = album
         self.collection = collection
         self.rarity = rarity
         self.type = type
-        self.attacks = {}
+        self.attacks = self.attacks_dict
 
     def create_card_from_data(
             self,
@@ -80,19 +85,24 @@ class Card(ToolBox):
         attacks = data[2:]
         return infos, attacks
 
-    def add_attacks(self, attacks: List) -> Dict[str, List]:
-        attacks_dict = {
+    @property
+    def attacks_dict(self) -> Dict[str, List]:
+        return {
             "draw": [],
             "start": [],
             "play": [],
             "return": [],
         }
+
+    def add_attacks(self, attacks: List) -> Dict[str, List]:
+        attacks_dict = self.attacks_dict
         for line in attacks:
             info = line[1].lower()
             if not isna(line[0]):
                 atk = line[0].lower()
                 attacks_dict[atk].append({
                     "condition": [],
+                    "acondition": [],
                     "cible": [],
                     "filtre": [],
                     "effet": [],

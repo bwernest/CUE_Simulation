@@ -7,20 +7,41 @@
 - But de l'hiver : trier les cartes par interet
     -> Fonction selection qui a une carte calcule un score
 - Tests d'un play à une carte (centrosaurus)
-- On draw, le burn affecte d'un tick les cartes adveres (hellboy)
+- On draw, le burn affecte d'un tick les cartes adverses (hellboy)
 """
 """___Modules_______________________________________________________________"""
 
 # CUE_Simulation
 from engine.engine.engine import Engine
+from engine.engine.game import Game
+from engine.test.fixtures import dummy_deck
+
+"""___Fonctions_____________________________________________________________"""
+
+def unique_card_play(card_id: str) -> Game:
+    engine = Engine("test")
+    engine.start_engine()
+    deck1 = dummy_deck()
+    deck2 = dummy_deck()
+    card_id = card_id.lower()
+    deck1.replace_card("id0", engine.cards[card_id])
+    engine.start_game(deck1, deck2, shuffle=False)
+    engine.play([card_id, None, None], [None, None, None])
+    return engine.game
 
 """___Execution_____________________________________________________________"""
 
-engine = Engine("prod")
+engine = Engine("test")
 engine.start_engine()
 
-engine.write_raw_data()
+licorne = engine.cards["mypa001"]
+# print(licorne.attacks["draw"][0])
+# engine.print_info("Attaque de la licorne", licorne.attacks)
 
-engine.print_cards_albums()
-engine.print_cards_collections()
-engine.print_collection("land before time")
+unique_card_play("mypa001")
+
+# engine.write_raw_data()
+
+# engine.print_cards_albums()
+# engine.print_cards_collections()
+# engine.print_collection("herbivores")

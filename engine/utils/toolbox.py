@@ -34,25 +34,20 @@ class ToolBox(Settings):
     def export_txt(self, txt: str, title: str = "DebugExport") -> None:
         self.write_txt(f"{title}", txt)
 
-    def print_info(self, text: str, object: any, option: str = "") -> None:
+    def print_info(self, text: str, object: any) -> None:
         """
         Print function. Option available : liste -> displays object line by line.
         """
-        if option == "":
+        if isinstance(object, list):
+            print(f"{text} ({type(object)})\t:")
+            for data in object:
+                self.print_info(text, data)
+        elif isinstance(object, dict):
+            print(f"{text} ({type(object)})\t:")
+            for key, value in object.items():
+                self.print_info(key, value)
+        else:
             print(f"{text} ({type(object)})\t: {object}")
-        elif option == "liste":
-            if isinstance(object, list):
-                for data in object:
-                    self.print_info(text, data)
-            elif isinstance(object, dict):
-                self.print_info(text, "")
-                for key, value in object.items():
-                    self.print_info(key, value)
-            else:
-                raise ValueError(
-                    f"Asking to show an object like an iterable but got : {type(object)}.")
-        elif option == "token":
-            self.print_info(text, f"{object.type} / {object.value}")
 
     def add_log(self, text: str, objects: Dict[str, any] = {}, time: bool = True, disp: bool = True) -> None:
         if objects == {}:

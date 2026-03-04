@@ -15,6 +15,7 @@ from typing import List
 class Engine(DataCollector):
 
     def start_engine(self) -> None:
+        self.add_log("Collecte des données.")
         self.collect_data()
 
     def start_game(self, deck1: Deck, deck2: Deck, shuffle: bool = True) -> None:
