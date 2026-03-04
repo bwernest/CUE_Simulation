@@ -84,6 +84,9 @@ class Game(Deck):
     """___Target________________________________________________________________________________"""
 
     def get_targets(self, target_attacks: List, card: str, player: int) -> Dict[int, List]:
+        """
+        Attention si la cible est un joueur
+        """
         targets = {0: [], 1: []}
         for target_attack in target_attacks:
             target = self.get_target(target_attack, card, player)
@@ -129,7 +132,16 @@ class Game(Deck):
             "permanently": self.apply_effect_player_per_turn_permanently,
         }[duree[0]](effect, duree, targets)
     
-    def apply_effect_energy_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_player_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_player_per_turn_round(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_player_per_turn_until_played(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+        pass
+
+    def apply_effect_player_per_turn_permanently(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         pass
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
