@@ -20,6 +20,7 @@ class Assert():
         self.assertIsInstance(b, type(a), "The two arguments must be of the same type")
         assert_method = {
             type(None): self._assertNoneEqual,
+            bool: self._assertBoolEqual,
             int: self._assertValueEqual,
             float: self._assertValueEqual,
             str: self._assertTextEqual,
@@ -35,6 +36,9 @@ class Assert():
 
     def _assertNoneEqual(self, a: None, b: None, rounder: int = None) -> None:
         assert a is None and b is None, self._analyseError(a, b)
+
+    def _assertBoolEqual(self, a: bool, b: bool, rounder: int = None) -> None:
+        assert a is b, self._analyseError(a, b)
 
     def _assertValueEqual(self, a: int | float, b: int | float, rounder: int) -> None:
         assert round(a, rounder) == round(b, rounder), self._analyseError(a, b)

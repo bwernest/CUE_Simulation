@@ -4,6 +4,7 @@
 from ..utils import *
 
 # Python
+import numpy as np
 from pandas import isna
 from typing import Dict, List
 
@@ -21,7 +22,7 @@ class Card(ToolBox):
     def __eq__(self, value):
         if type(value) != self.__class__:
             return False
-        for key in ["id", "name", "keywords", "power", "energy", "attacks", "album", "collection", "rarity", "type"]:
+        for key in ["id", "name", "keywords", "base_power", "base_energy", "attacks", "album", "collection", "rarity", "type"]:
             if self.__dict__[key] != value.__dict__[key]:
                 return False
         return True
@@ -47,7 +48,11 @@ class Card(ToolBox):
         self.keywords = keywords
         self.base_power = power
         self.base_energy = energy
-        self.buff = {"power": [], "energy": [], "burn": []}
+        self.buff = {
+            "power": np.zeros((7), dtype=int),
+            "energy": np.zeros((7), dtype=int),
+            "burn": np.zeros((7), dtype=int),
+        }
         self.attack_name = attack_name
         self.album = album
         self.collection = collection
@@ -72,7 +77,11 @@ class Card(ToolBox):
         self.type = infos[0][6].lower()
         self.base_energy = int(infos[1][0])
         self.base_power = int(infos[1][1])
-        self.buff = {"power": [], "energy": [], "burn": []}
+        self.buff = {
+            "power": np.zeros((7), dtype=int),
+            "energy": np.zeros((7), dtype=int),
+            "burn": np.zeros((7), dtype=int),
+        }
         column = 2
         self.keywords = []
         while not isna(infos[1][column]):
@@ -110,6 +119,12 @@ class Card(ToolBox):
                     "duree": [],
                 })
             attacks_dict[atk][-1][info] = self.clean_data_line(line[2:])
+        attacks_dict = self.convert_data(attacks_dict)
+        return attacks_dict
+
+    def convert_data(self, attacks_dict: Dict[str, List]) -> Dict[str, List]:
+        for atk in attacks_dict.keys():
+            pass
         return attacks_dict
 
     def clean_data_line(self, line: List) -> List:

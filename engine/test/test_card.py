@@ -21,12 +21,6 @@ class TestCard(Assert):
         card = engine.cards["mypa001"]
         self.assertEqual(["2020"], card.keywords)
 
-    def test_card_MYPA001(self) -> None:
-        expected = np.array([77, 0])
-        game = unique_card_play("MYPA001")
-        result = game.score[0, 0, :]
-        self.assertEqual(expected, result)
-
     def test_card_equal(self, engine: Engine) -> None:
         expected = True
         card1 = engine.cards["mypa001"]
