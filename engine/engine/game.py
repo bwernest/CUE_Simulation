@@ -23,7 +23,9 @@ class Game(Deck):
 
     def create_game(self, deck0: Deck, deck1: Deck) -> None:
         self.decks = [deck0, deck1]
+        self.power_per_turn = [0, 0]
         self.power_per_turn_buff = [[], []]
+        self.energy_per_turn = [0, 0]
         self.energy_per_turn_buff = [[], []]
         self.score = np.zeros((self.rounds, self.turns, 2), dtype=int)
         self.turn = 0
@@ -49,7 +51,7 @@ class Game(Deck):
                 turn_score = 0
                 turn_score += max(0, self.decks[player].cards[plays[player][k]].base_power-np.sum(self.decks[player].cards[plays[player][k]].buff["burn"]))
                 turn_score += np.sum(self.decks[player].cards[plays[player][k]].buff["power"])
-                self.score[self.round, self.turn, player] += max(0, turn_score)
+                self.score[self.round, self.turn, player] += max(0, turn_score) + self.power_per_turn[player]
 
         self.count_turn()
 
