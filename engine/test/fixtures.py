@@ -22,7 +22,8 @@ def engine() -> Engine:
 
 def dummy_deck() -> Deck:
     cards = [Card("test") for k in range(18)]
-    [card.create_card(f"id{k}", f"card{k}") for k, card in enumerate(cards)]
+    [card.create_card(f"id{k}", f"card{k}", album="test_album",
+                      collection="test_collection") for k, card in enumerate(cards)]
     deck = Deck("test")
     deck.create_deck(cards)
     return deck
@@ -64,6 +65,6 @@ def unique_card_play(card_id: str) -> Game:
     deck2 = dummy_deck()
     card_id = card_id.lower()
     deck1.replace_card("id0", engine.cards[card_id])
-    engine.start_game(deck1, deck2, 100, 0, 100, 100, shuffle=False)
+    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
     engine.play([card_id, None, None], [None, None, None])
     return engine.game

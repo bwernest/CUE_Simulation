@@ -46,3 +46,12 @@ class Deck(Card):
         del self.cards[card_id]
         self.cards[new_card.id] = new_card
         self.order[self.order.index(card_id)] = new_card.id
+
+    def get_stats(self, deck: Deck) -> Dict[str, int]:
+        stats = {"album": {}, "collection": {}}
+        for card in deck.cards.values():
+            for key in ["album", "collection"]:
+                if card.__getattribute__(key) not in stats[key]:
+                    stats[key][card.__getattribute__(key)] = 0
+                stats[key][card.__getattribute__(key)] += 1
+        return stats

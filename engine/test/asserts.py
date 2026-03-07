@@ -70,7 +70,7 @@ class Assert():
         assert not isinstance(obj, _class)
 
     def assertIn(self, obj: Any, iterable: Iterable) -> None:
-        assert obj in iterable
+        assert obj in iterable, self._analyseError(obj, iterable)
 
     def assertNotIn(self, obj: Any, iterable: Iterable) -> None:
         assert not obj in iterable

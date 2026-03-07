@@ -18,6 +18,7 @@ from engine.test.fixtures import dummy_deck
 
 """___Fonctions_____________________________________________________________"""
 
+
 def unique_card_play(card_id: str) -> Game:
     engine = Engine("test")
     engine.start_engine()
@@ -28,6 +29,7 @@ def unique_card_play(card_id: str) -> Game:
     engine.start_game(deck1, deck2, shuffle=False)
     engine.play([card_id, None, None], [None, None, None])
     return engine.game
+
 
 """___Execution_____________________________________________________________"""
 
