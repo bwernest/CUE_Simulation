@@ -80,9 +80,12 @@ class Game(Deck):
         return True
 
     def check_condition(self, line: List, player: int) -> bool:
-        return {
-            "player_deck": self.check_condition_pd,
-        }[line[0]](line, player)
+        try:
+            return {
+                "player_deck": self.check_condition_pd,
+            }[line[0]](line, player)
+        except KeyError:
+            raise KeyError(f"Condition {line[0]} inconnue")
 
     """___Target________________________________________________________________________________"""
 
@@ -100,11 +103,14 @@ class Game(Deck):
         return targets
 
     def get_target(self, target_attack: List, card: str, player: int) -> List:
-        return {
-            "self": self.get_target_self,
-            "player": self.get_target_player,
-            "opponent": self.get_target_opponent,
-        }[target_attack](target_attack, card, player)
+        try:
+            return {
+                "self": self.get_target_self,
+                "player": self.get_target_player,
+                "opponent": self.get_target_opponent,
+            }[target_attack](target_attack, card, player)
+        except KeyError:
+            raise KeyError(f"Target {target_attack} inconnue")
     
     def get_target_self(self, target_attack: List, card: str, player: int) -> List:
         return {player: [card]}
@@ -118,31 +124,39 @@ class Game(Deck):
     """___Effect________________________________________________________________________________"""
 
     def apply_effects(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
-        {
-            "power": self.apply_effect_card,
-            "burn": self.apply_effect_card,
-            "energy": self.apply_effect_energy,
-            "power_per_turn": self.apply_effect_player_per_turn,
-            "energy_per_turn": self.apply_effect_player_per_turn,
-        }[effect[0]](effect, duree, targets)
+        try:
+            {
+                "power": self.apply_effect_card,
+                "burn": self.apply_effect_card,
+                "energy": self.apply_effect_energy,
+                "power_per_turn": self.apply_effect_player_per_turn,
+                "energy_per_turn": self.apply_effect_player_per_turn,
+            }[effect[0]](effect, duree, targets)
+        except KeyError:
+            raise KeyError(f"Effect {effect[0]} inconnu")
     
     def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
-        # print("Apply effect power", effect, duree, targets)
-        {
-            "turn": self.apply_effect_card_turn,
-            "round": self.apply_effect_card_round,
-            "until_played": self.apply_effect_card_until_played,
-            "permanently": self.apply_effect_card_permanently,
-        }[duree[0]](effect, duree, targets)
+        try:
+            {
+                "turn": self.apply_effect_card_turn,
+                "round": self.apply_effect_card_round,
+                "until_played": self.apply_effect_card_until_played,
+                "permanently": self.apply_effect_card_permanently,
+            }[duree[0]](effect, duree, targets)
+        except KeyError:
+            raise KeyError(f"Durée {duree[0]} inconnue")
 
     def apply_effect_player_per_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
-        {
-            "turn": self.apply_effect_player_per_turn_turn,
-            "round": self.apply_effect_player_per_turn_round,
-            "until_played": self.apply_effect_player_per_turn_until_played,
-            "permanently": self.apply_effect_player_per_turn_permanently,
-        }[duree[0]](effect, duree, targets)
-    
+        try:
+            {
+                "turn": self.apply_effect_player_per_turn_turn,
+                "round": self.apply_effect_player_per_turn_round,
+                "until_played": self.apply_effect_player_per_turn_until_played,
+                "permanently": self.apply_effect_player_per_turn_permanently,
+            }[duree[0]](effect, duree, targets)
+        except KeyError:
+            raise KeyError(f"Durée {duree[0]} inconnue")
+
     def apply_effect_player_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
         pass
 
