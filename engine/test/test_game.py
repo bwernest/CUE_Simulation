@@ -14,7 +14,7 @@ class TestGame(Assert):
 
     def test_create_deck(self) -> None:
         game = Game()
-        game.create_game(dummy_deck(), dummy_deck())
+        game.create_game(dummy_deck(), dummy_deck(), 100, 0, 100, 100)
 
     def test_play(self, game: Game) -> None:
         play0 = ["id0", "id1", None]

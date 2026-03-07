@@ -37,7 +37,7 @@ def dummy_card() -> Card:
 @pytest.fixture(scope="function")
 def game() -> Game:
     game = Game("test")
-    game.create_game(elephant_deck(), mouse_deck())
+    game.create_game(elephant_deck(), mouse_deck(), 100, 0, 100, 100)
     return game
 
 
@@ -64,6 +64,6 @@ def unique_card_play(card_id: str) -> Game:
     deck2 = dummy_deck()
     card_id = card_id.lower()
     deck1.replace_card("id0", engine.cards[card_id])
-    engine.start_game(deck1, deck2, shuffle=False)
+    engine.start_game(deck1, deck2, 100, 0, 100, 100, shuffle=False)
     engine.play([card_id, None, None], [None, None, None])
     return engine.game
