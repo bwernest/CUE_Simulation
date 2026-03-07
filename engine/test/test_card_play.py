@@ -25,8 +25,8 @@ class TestCardPlay(Assert):
         self.assertEqual(expected, result)
         self.assertEqual(np.array([100 - 8, 100]), game.energy)
 
-    # def test_card_PCA038(self) -> None:
-    #     expected = np.array([65, 0])
-    #     game = unique_card_play("PCA038")
-    #     result = game.score[0, 0, :]
-    #     self.assertEqual(expected, result)
+    def test_card_PCA038(self) -> None:
+        expected = np.array([65, 0])
+        game = unique_card_play("PCA038")
+        result = game.score[0, 0, :]
+        self.assertEqual(expected, result)

@@ -117,10 +117,52 @@ class Game(Deck):
     def check_condition(self, line: List, player: int) -> bool:
         try:
             return {
-                "player_deck": self.check_condition_pd,
+                "player deck": self.check_condition_pd,
+                "turn score": self.check_condition_turn_score,
+                "round score": self.check_condition_round_score,
             }[line[0]](line, player)
         except KeyError:
             raise KeyError(f"Condition {line[0]} inconnue")
+
+    def check_condition_pd(self, line: List, player: int) -> bool:
+        amount_deck = self.get_amount(player, line[1], line[2])
+        amount_target = int(line[4])
+        return self.check_condition_amount(line[3], amount_deck, amount_target)
+
+    def check_condition_turn_score(self, line: List, player: int) -> bool:
+        amount_turn_score = self.score[self.round, self.turn, player] - self.score[self.round, self.turn, 1-player]
+        amount_target = int(line[2])
+        return self.check_condition_amount(line[1], amount_turn_score, amount_target)
+
+    def check_condition_round_score(self, line: List, player: int) -> bool:
+        amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1-player])
+        amount_target = int(line[2])
+        return self.check_condition_amount(line[1], amount_round_score, amount_target)
+
+    def check_condition_amount(self, comparaison: str, amount_player: int, amount_target: int) -> bool:
+        try:
+            return {
+                "<": self.check_condition_amount_lt,
+                ">": self.check_condition_amount_gt,
+                "=": self.check_condition_amount_eq,
+            }[comparaison](amount_player, amount_target)
+        except KeyError:
+            raise KeyError(f"Comparaison {comparaison} inconnue")
+
+    def get_amount(self, player: int, set_type: str, set_name: str) -> int:
+        try:
+            return self.stats[player][set_type][set_name]
+        except KeyError:
+            return 0
+    
+    def check_condition_amount_lt(self, amount_player: int, amount_target: int) -> bool:
+        return amount_player < amount_target
+    
+    def check_condition_amount_gt(self, amount_player: int, amount_target: int) -> bool:
+        return amount_player > amount_target
+    
+    def check_condition_amount_eq(self, amount_player: int, amount_target: int) -> bool:
+        return amount_player == amount_target
 
     """___Target________________________________________________________________________________"""
 

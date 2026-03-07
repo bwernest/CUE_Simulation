@@ -118,7 +118,10 @@ class Card(ToolBox):
                     "multiplicateur": [],
                     "duree": [],
                 })
-            attacks_dict[atk][-1][info] = self.clean_data_line(line[2:])
+            if info in ["condition"]:
+                attacks_dict[atk][-1][info].append(self.clean_data_line(line[2:]))
+            else:
+                attacks_dict[atk][-1][info] = self.clean_data_line(line[2:])
         attacks_dict = self.convert_data(attacks_dict)
         return attacks_dict
 
