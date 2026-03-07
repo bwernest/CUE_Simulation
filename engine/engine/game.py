@@ -101,7 +101,7 @@ class Game(Deck):
 
     def execute_attack(self, attack: Dict, card: str, player: int) -> None:
         targets = self.get_targets(attack["cible"], card, player)
-        self.apply_effects(attack["effet"], attack["duree"], targets)
+        self.apply_effects(attack["effet"], attack["duree"], targets, player)
 
     """___Condition_____________________________________________________________________________"""
 
@@ -130,12 +130,14 @@ class Game(Deck):
         return self.check_condition_amount(line[3], amount_deck, amount_target)
 
     def check_condition_turn_score(self, line: List, player: int) -> bool:
-        amount_turn_score = self.score[self.round, self.turn, player] - self.score[self.round, self.turn, 1-player]
+        amount_turn_score = self.score[self.round, self.turn,
+                                       player] - self.score[self.round, self.turn, 1 - player]
         amount_target = int(line[2])
         return self.check_condition_amount(line[1], amount_turn_score, amount_target)
 
     def check_condition_round_score(self, line: List, player: int) -> bool:
-        amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1-player])
+        amount_round_score = np.sum(
+            self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
         amount_target = int(line[2])
         return self.check_condition_amount(line[1], amount_round_score, amount_target)
 
@@ -154,13 +156,13 @@ class Game(Deck):
             return self.stats[player][set_type][set_name]
         except KeyError:
             return 0
-    
+
     def check_condition_amount_lt(self, amount_player: int, amount_target: int) -> bool:
         return amount_player < amount_target
-    
+
     def check_condition_amount_gt(self, amount_player: int, amount_target: int) -> bool:
         return amount_player > amount_target
-    
+
     def check_condition_amount_eq(self, amount_player: int, amount_target: int) -> bool:
         return amount_player == amount_target
 
@@ -201,7 +203,7 @@ class Game(Deck):
 
     """___Effect________________________________________________________________________________"""
 
-    def apply_effects(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effects(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
             {
                 "power": self.apply_effect_card,
@@ -209,22 +211,22 @@ class Game(Deck):
                 "energy": self.apply_effect_energy,
                 "power_per_turn": self.apply_effect_player_per_turn,
                 "energy_per_turn": self.apply_effect_player_per_turn,
-            }[effect[0]](effect, duree, targets)
+            }[effect[0]](effect, duree, targets, player)
         except KeyError:
             raise KeyError(f"Effect {effect[0]} inconnu")
 
-    def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
             {
                 "turn": self.apply_effect_card_turn,
                 "round": self.apply_effect_card_round,
                 "until_played": self.apply_effect_card_until_played,
                 "permanently": self.apply_effect_card_permanently,
-            }[duree[0]](effect, duree, targets)
+            }[duree[0]](effect, duree, targets, player)
         except KeyError:
             raise KeyError(f"Durée {duree[0]} inconnue")
 
-    def apply_effect_player_per_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_player_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
             {
                 "turn": self.apply_effect_player_per_turn_turn,
@@ -235,38 +237,39 @@ class Game(Deck):
         except KeyError:
             raise KeyError(f"Durée {duree[0]} inconnue")
 
-    def apply_effect_player_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_player_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         pass
 
-    def apply_effect_player_per_turn_round(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_player_per_turn_round(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         pass
 
-    def apply_effect_player_per_turn_until_played(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_player_per_turn_until_played(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         pass
 
-    def apply_effect_player_per_turn_permanently(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_player_per_turn_permanently(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         pass
 
-    def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
-        self.energy[targets[0][0]] += int(effect[1])
+    def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
+        self.energy[0] += int(effect[1]) * (targets[0] == [1])
+        self.energy[1] += int(effect[1]) * (targets[1] == [1])
 
-    def apply_effect_card_turn(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         for player in range(2):
             for card in targets[player]:
                 self.decks[player].cards[card].buff[effect[0]][int(duree[1]) + 1] += int(effect[1])
 
-    def apply_effect_card_round(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card_round(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         for player in range(2):
             for card in targets[player]:
                 self.decks[player].cards[card].buff[effect[0]][int(
                     duree[1]) * 3 - self.turn + 1] += int(effect[1])
 
-    def apply_effect_card_until_played(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card_until_played(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         for player in range(2):
             for card in targets[player]:
                 self.decks[player].cards[card].buff[effect[0]][1] += int(effect[1])
 
-    def apply_effect_card_permanently(self, effect: List, duree: List, targets: Dict[int, List]) -> None:
+    def apply_effect_card_permanently(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         for player in range(2):
             for card in targets[player]:
                 self.decks[player].cards[card].buff[effect[0]][0] += int(effect[1])
