@@ -2,6 +2,7 @@
 
 # Python
 from numpy import ndarray, round
+from numpy import int64
 from typing import Any, Dict, Iterable, List, Tuple
 
 """___Classes___________________________________________________________________________________"""
@@ -63,11 +64,20 @@ class Assert():
         assert (array1 == array2).all()
 
     def assertIsInstance(self, obj: Any, _class: object, error_msg: str = None) -> None:
-        error_msg = f"Object {obj} is not an instance of class {_class}"
+        error_msg = f"L'objet {obj} n'est pas de classe {_class} mais {type(obj)}"
+        for duo in self.same_types:
+            if type(obj) in duo and _class in duo:
+                return
         assert isinstance(obj, _class), error_msg
 
     def assertIsNotInstance(self, obj: Any, _class: object) -> None:
         assert not isinstance(obj, _class)
+
+    @property
+    def same_types(self) -> List[List[type]]:
+        return [
+            [int, int64]
+        ]
 
     def assertIn(self, obj: Any, iterable: Iterable) -> None:
         assert obj in iterable, self._analyseError(obj, iterable)

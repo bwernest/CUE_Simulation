@@ -5,6 +5,7 @@ from ..utils import *
 
 # Python
 import numpy as np
+from numpy.typing import NDArray
 from pandas import isna
 from typing import Dict, List
 
@@ -30,6 +31,14 @@ class Card(GameUtility):
     def __str__(self):
         return f"Card {self.name}\nAttacks :\n{self.attacks}"
 
+    @property
+    def buff_dictionnary(self) -> Dict[str, NDArray]:
+        return {
+            "power": np.zeros((7), dtype=int),
+            "cost": np.zeros((7), dtype=int),
+            "burn": np.zeros((7), dtype=int),
+        }
+
     def create_card(
             self,
             id: str,
@@ -48,11 +57,7 @@ class Card(GameUtility):
         self.keywords = keywords
         self.base_power = power
         self.base_cost = cost
-        self.buff = {
-            "power": np.zeros((7), dtype=int),
-            "cost": np.zeros((7), dtype=int),
-            "burn": np.zeros((7), dtype=int),
-        }
+        self.buff = self.buff_dictionnary
         self.attack_name = attack_name
         self.album = album
         self.collection = collection
@@ -77,11 +82,7 @@ class Card(GameUtility):
         self.type = infos[0][6].lower()
         self.base_cost = int(infos[1][0])
         self.base_power = int(infos[1][1])
-        self.buff = {
-            "power": np.zeros((7), dtype=int),
-            "cost": np.zeros((7), dtype=int),
-            "burn": np.zeros((7), dtype=int),
-        }
+        self.buff = self.buff_dictionnary
         column = 2
         self.keywords = []
         while not isna(infos[1][column]):
