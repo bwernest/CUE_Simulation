@@ -57,7 +57,6 @@ class Deck(Card):
                 stats[key][card.__getattribute__(key)] += 1
         return stats
 
-
     def update_remaining(self, play: List[str | None]) -> None:
         self.remaining = self.hand
         for card_id in play:

@@ -25,12 +25,19 @@ class TestCardPlay(Assert):
         self.assertEqual(expected, result)
         self.assertEqual(np.array([100 - 8, 100]), game.energy)
 
+    def test_card_PAN015(self) -> None:
+        game = unique_card_play("PAN015")
+        self.assertEqual(np.array([83 + 24, 0]), game.score[0, 0, :])
+        self.assertEqual(np.array([100 - 8, 100]), game.energy)
+
     def test_card_PCA038(self) -> None:
         game = unique_card_play("PCA038")
         self.assertEqual(np.array([65, 0]), game.score[0, 0, :])
         self.assertEqual(np.array([100 - 6 + 5, 100]), game.energy)
 
-    def test_card_PAN015(self) -> None:
-        game = unique_card_play("PAN015")
-        self.assertEqual(np.array([83+24, 0]), game.score[0, 0, :])
+    def test_card_PHE017(self) -> None:
+        game = unique_card_play("PHE017")
+        self.assertEqual(np.array([76 + 8, 0]), game.score[0, 0, :])
         self.assertEqual(np.array([100 - 8, 100]), game.energy)
+        self.assertEqual(np.array([8, 0, 0, 0, 0, 0, 0]),
+                         game.decks[0].cards["phe017"].buff["power"])

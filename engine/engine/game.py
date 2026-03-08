@@ -230,10 +230,10 @@ class Game(Deck):
             raise KeyError(f"Target {target_attack} inconnue")
 
     def get_target_self(self, target_attack: List, card: str, player: int) -> List:
-        return {player: [card], 1-player:[]}
+        return {player: [card], 1 - player: []}
 
     def get_target_player(self, target_attack: List, card: str, player: int) -> List:
-        return {player: [1], 1-player: []}
+        return {player: [1], 1 - player: []}
 
     def get_target_opponent(self, target_attack: List, card: str, player: int) -> List:
         return {1 - player: [1], player: []}
@@ -248,29 +248,29 @@ class Game(Deck):
         return self.get_target_cards(target_attack, player, "remaining")
 
     def get_target_opponent_hand(self, target_attack: List, card: str, player: int) -> List:
-        return self.get_target_cards(target_attack, 1-player, "hand")
+        return self.get_target_cards(target_attack, 1 - player, "hand")
 
     def get_target_opponent_deck(self, target_attack: List, card: str, player: int) -> List:
-        return self.get_target_cards(target_attack, 1-player, "order")
+        return self.get_target_cards(target_attack, 1 - player, "order")
 
     def get_target_opponent_remaining(self, target_attack: List, card: str, player: int) -> List:
-        return self.get_target_cards(target_attack, 1-player, "remaining")
+        return self.get_target_cards(target_attack, 1 - player, "remaining")
 
     def get_target_both_hand(self, target_attack: List, card: str, player: int) -> List:
         dict0 = self.get_target_cards(target_attack, player, "hand")
-        dict1 = self.get_target_cards(target_attack, 1-player, "hand")
+        dict1 = self.get_target_cards(target_attack, 1 - player, "hand")
         dict0.update(dict1)
         return dict0
 
     def get_target_both_deck(self, target_attack: List, card: str, player: int) -> List:
         dict0 = self.get_target_cards(target_attack, player, "order")
-        dict1 = self.get_target_cards(target_attack, 1-player, "order")
+        dict1 = self.get_target_cards(target_attack, 1 - player, "order")
         dict0.update(dict1)
         return dict0
 
     def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> List:
         dict0 = self.get_target_cards(target_attack, player, "remaining")
-        dict1 = self.get_target_cards(target_attack, 1-player, "remaining")
+        dict1 = self.get_target_cards(target_attack, 1 - player, "remaining")
         dict0.update(dict1)
         return dict0
 
@@ -284,8 +284,6 @@ class Game(Deck):
         for card in self.decks[player_targeted].__getattribute__(location):
             if self.decks[player_targeted].cards[card].__getattribute__(target_attack[1]) == target_attack[2]:
                 targets[player_targeted].append(card)
-                print(f"Oui la carte {self.decks[player_targeted].cards[card].name} est dans {target_attack[2]}")
-        print(targets)
         return targets
 
     """___Effect________________________________________________________________________________"""
