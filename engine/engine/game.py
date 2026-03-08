@@ -32,11 +32,13 @@ class Game(Deck):
             max_energy: int,
     ) -> None:
         self.decks = [deck0, deck1]
-        self.power_per_turn = [0, 0]
-        self.power_per_turn_buff = [np.zeros((7), dtype=int), np.zeros((7), dtype=int)]
         self.energy = np.array([start_energy, start_energy])
-        self.energy_per_turn = np.array([energy_per_turn, energy_per_turn])
-        self.energy_per_turn_buff = [np.zeros((7), dtype=int), np.zeros((7), dtype=int)]
+        self.resource_per_turn = {
+            "power": [np.zeros((7), dtype=int), np.zeros((7), dtype=int)],
+            "energy": [np.zeros((7), dtype=int), np.zeros((7), dtype=int)]
+        }
+        self.resource_per_turn["energy"][0][0] = energy_per_turn
+        self.resource_per_turn["energy"][1][0] = energy_per_turn
         self.min_energy = np.ones(2, dtype=int) * min_energy
         self.max_energy = np.ones(2, dtype=int) * max_energy
         self.score = np.zeros((self.rounds, self.turns, 2), dtype=int)
@@ -69,11 +71,10 @@ class Game(Deck):
                     continue
                 self.trigger_attack("play", plays[player][k], player)
                 card = self.decks[player].cards[plays[player][k]]
-                turn_score = 0
-                turn_score += max(0, card.base_power - np.sum(card.buff["burn"]))
-                turn_score += np.sum(card.buff["power"])
-                self.score[self.round, self.turn,
-                           player] += max(0, turn_score) + self.power_per_turn[player]
+                card_score = max(0, card.base_power - np.sum(card.buff["burn"]))
+                card_score += np.sum(card.buff["power"])
+                power_per_turn = np.sum(self.resource_per_turn["power"][player])
+                self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
                 self.energy[player] -= max(0, card.base_energy - np.sum(card.buff["energy"]))
 
         self.post_play(plays)
@@ -84,11 +85,14 @@ class Game(Deck):
                 if plays[player][k] is None:
                     continue
                 self.trigger_attack("return", plays[player][k], player)
-        self.energy += self.energy_per_turn
-        self.energy = np.clip(self.energy, self.min_energy, self.max_energy)
-
+        self.add_energy_per_turn()
         self.debuff_cards()
         self.count_turn()
+
+    def add_energy_per_turn(self) -> None:
+        for player in range(2):
+            self.energy[player] += np.sum(self.resource_per_turn["energy"][player])
+        self.energy = np.clip(self.energy, self.min_energy, self.max_energy)
 
     def debuff_cards(self) -> None:
         for player in range(2):
@@ -328,6 +332,7 @@ class Game(Deck):
                 "energy": self.apply_effect_energy,
                 "power per turn": self.apply_effect_player_per_turn,
                 "energy per turn": self.apply_effect_player_per_turn,
+                # "lock": self.apply_effect_lock,
             }[effect[0]](effect, duree, targets, player)
         except KeyError:
             raise EffectKeyError(f"Effect <{effect[0]}> inconnu")
@@ -344,27 +349,33 @@ class Game(Deck):
             raise DureeKeyError(f"Durée <{duree[0]}> inconnue")
 
     def apply_effect_player_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
+        data = {
+            "power per turn": "power",
+            "energy per turn": "energy",
+        }[effect[0]]
+        player_targeted = targets[player][0]
+        amount = effect[1]
         try:
             {
                 "turn": self.apply_effect_player_per_turn_turn,
                 "round": self.apply_effect_player_per_turn_round,
                 "until played": self.apply_effect_player_per_turn_until_played,
                 "permanently": self.apply_effect_player_per_turn_permanently,
-            }[duree[0]](effect, duree, targets)
+            }[duree[0]](data, amount, duree, player_targeted)
         except KeyError:
             raise DureeKeyError(f"Durée {duree[0]} inconnue")
 
-    def apply_effect_player_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        pass
+    def apply_effect_player_per_turn_turn(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
+        self.resource_per_turn[data][player_targeted][int(duree[1]) + 1] += amount
 
-    def apply_effect_player_per_turn_round(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        pass
+    def apply_effect_player_per_turn_round(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
+        self.resource_per_turn[data][player_targeted][int(duree[1]) * 3 - self.turn + 1] += amount
 
-    def apply_effect_player_per_turn_until_played(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        pass
+    def apply_effect_player_per_turn_until_played(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
+        self.resource_per_turn[data][player_targeted][1] += amount
 
-    def apply_effect_player_per_turn_permanently(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        pass
+    def apply_effect_player_per_turn_permanently(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
+        self.resource_per_turn[data][player_targeted][0] += amount
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         self.energy[0] += int(effect[1]) * (targets[0] == [1])

@@ -4,7 +4,7 @@
 from . import *
 
 # Python
-from numpy import array, sum
+from numpy import array, sum, zeros
 
 """___Tests_____________________________________________________________________________________"""
 
@@ -13,6 +13,7 @@ class TestCardPlay(Assert):
 
     def test_card_MYPA001(self) -> None:
         game = unique_card_play("MYPA001")
+        self.assertEqual(zeros((7), dtype=int), game.resource_per_turn["energy"][0])
         self.assertEqual(array([154, 0]), game.score[0, 0, :])
         self.assertEqual(array([100 - 7, 100]), game.energy)
         self.assertEqual({"album": {"paleontology": 1, "test_album": 17}, "collection": {
