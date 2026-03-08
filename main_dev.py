@@ -30,6 +30,7 @@ def unique_card_play(card_id: str) -> Game:
     engine.play([card_id, None, None], [None, None, None])
     return engine.game
 
+
 def test_card_all() -> None:
     engine = Engine("prod")
     engine.start_engine()
@@ -39,6 +40,7 @@ def test_card_all() -> None:
         deck1 = dummy_deck()
         deck0.replace_card("id0", engine.cards[card_id])
         engine.start_game(deck0, deck1, 100, 0, 0, 250, shuffle=False)
+
 
 """___Execution_____________________________________________________________"""
 

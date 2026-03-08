@@ -23,15 +23,17 @@ class GameUtility(ToolBox):
         self,
         targets: Dict[int, List],
         filtre: List,
+        player: int,
+        card_id: str,
     ) -> Dict[int, List]:
         n_selected = int(filtre[1])
         len0, len1 = len(targets[0]), len(targets[1])
-        if n_selected >= len0+len1:
+        if n_selected >= len0 + len1:
             return targets
-        index_selected = sorted(sample([k for k in range(len0+len1)], n_selected))
+        index_selected = sorted(sample([k for k in range(len0 + len1)], n_selected))
         selected = {}
-        selected[0] = [targets[0][k] if k<len0 else None for k in index_selected]
-        selected[1] = [targets[1][k-len0] if k>=len0 else None for k in index_selected]
+        selected[0] = [targets[0][k] if k < len0 else None for k in index_selected]
+        selected[1] = [targets[1][k - len0] if k >= len0 else None for k in index_selected]
         while None in selected[0]:
             selected[0].remove(None)
         while None in selected[1]:

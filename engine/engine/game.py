@@ -110,22 +110,29 @@ class Game(Deck):
             if self.check_conditions(attack["condition"], attack["acondition"], player):
                 self.execute_attack(attack, card, player)
 
-    def execute_attack(self, attack: Dict, card: str, player: int) -> None:
-        targets = self.get_targets(attack["cible"], card, player)
+    def execute_attack(self, attack: Dict, card_id: str, player: int) -> None:
+        targets = self.get_targets(attack["cible"], card_id, player)
         if attack["filtre"] != []:
             for filtre in attack["filtre"]:
-                targets = self.filter_targets(targets, filtre)
+                targets = self.filter_targets(targets, filtre, player, card_id)
         self.apply_effects(attack["effet"], attack["duree"], targets, player)
 
     """___Filtre________________________________________________________________________________"""
 
-    def filter_targets(self, targets: Dict[int, List], filtre: List) -> Dict[int, List]:
+    def filter_targets(
+        self,
+        targets: Dict[int, List],
+        filtre: List,
+        player: int,
+        card_id: str,
+    ) -> Dict[int, List]:
         try:
             return {
                 "base_power": self.filter_targets_card_attribut_amount,
                 "base_energy": self.filter_targets_card_attribut_amount,
                 "random": self.filter_targets_random,
-            }[filtre[0]](targets, filtre)
+                "other": self.filter_targets_other,
+            }[filtre[0]](targets, filtre, player, card_id)
         except KeyError:
             raise FiltreKeyError(f"Filtre {filtre[0]} inconnu")
 
@@ -133,6 +140,8 @@ class Game(Deck):
         self,
         targets: Dict[int, List],
         filtre: List,
+        player: int,
+        card_id: str,
     ) -> Dict[int, List]:
         filtered_targets = {0: [], 1: []}
         for player in range(2):
@@ -140,6 +149,16 @@ class Game(Deck):
                 if self.check_condition_amount(filtre[1], int(self.decks[player].cards[card_id].__getattribute__(filtre[0])), int(filtre[2])):
                     filtered_targets[player].append(card_id)
         return filtered_targets
+
+    def filter_targets_other(
+        self,
+        targets: Dict[int, List],
+        filtre: List,
+        player: int,
+        card_id: str,
+    ) -> Dict[int, List]:
+        targets[player].remove(card_id)
+        return targets
 
     """___Condition_____________________________________________________________________________"""
 

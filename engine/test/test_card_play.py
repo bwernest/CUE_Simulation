@@ -44,7 +44,8 @@ class TestCardPlay(Assert):
 
     def test_card_PAN024(self) -> None:
         game = unique_card_play("PAN024")
-        total_hand_buff = int(sum([sum(game.decks[0].cards[card_id].buff["power"]) for card_id in game.decks[0].hand]))
-        self.assertEqual(46*2, total_hand_buff)
+        total_hand_buff = int(sum([sum(game.decks[0].cards[card_id].buff["power"])
+                              for card_id in game.decks[0].hand]))
+        self.assertEqual(46 * 2, total_hand_buff)
         self.assertIn(game.score[0, 0, 0], [40, 86])
         self.assertEqual(array([100 - 7, 100]), game.energy)
