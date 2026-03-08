@@ -53,6 +53,7 @@ class TestCardPlay(Assert):
 
     def test_card_PHE026(self) -> None:
         game = unique_card_play("PHE026")
-        # self.assertEqual(array([3, 0, 0, 0, 0, 0, 0]), game.resource_per_turn["power"][0])
-        # self.assertEqual(array([68, 0]), game.score[0, 0, :])
-        # self.assertEqual(array([100 - 8, 100]), game.energy)
+        self.assertEqual(array([3, 0, 0, 0, 0, 0, 0]), game.resource_per_turn["power"][0])
+        self.assertEqual(array([68, 0]), game.score[0, 0, :])
+        self.assertEqual(array([-1, 0, 0, 0, 0, 0, 0]), game.decks[0].cards["phe026"].buff["cost"])
+        self.assertEqual(array([100 - 8 + 1, 100]), game.energy)

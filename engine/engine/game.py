@@ -74,9 +74,10 @@ class Game(Deck):
                 if plays[player][k] is None:
                     continue
                 card = self.decks[player].cards[plays[player][k]]
-                card_score += max(0, card.base_power - np.sum(card.buff["burn"]))
+                card_score += max(0, card.base_power + np.sum(card.buff["burn"]))
                 card_score += np.sum(card.buff["power"])
-                self.energy[player] -= max(0, card.base_cost - np.sum(card.buff["cost"]))
+                self.energy[player] -= max(0, card.base_cost + np.sum(card.buff["cost"]))
+                print(f"Energie du joueur {player} à {self.energy[player]}")
             power_per_turn = np.sum(self.resource_per_turn["power"][player])
             self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
 
@@ -392,12 +393,9 @@ class Game(Deck):
         self.resource_per_turn[data][player_targeted][1] += amount
 
     def apply_effect_player_per_turn_permanently(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
-        print(f"Resources avant : {self.resource_per_turn[data][player_targeted]}")
         self.resource_per_turn[data][player_targeted][0] += amount
-        print(f"Resources après : {self.resource_per_turn[data][player_targeted]}")
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        print(f"Player targeted = {targets}")
         self.energy[targets[player][0]] += int(effect[1])
 
     def apply_effect_card_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
