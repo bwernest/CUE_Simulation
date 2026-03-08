@@ -7,13 +7,12 @@ from ..engine.engine import Engine
 from ..engine.game import Game
 
 # Python
-from copy import deepcopy
 import pytest
 
 """___Functions_________________________________________________________________________________"""
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="function")
 def engine() -> Engine:
     engine = Engine("test")
     engine.start_engine()
@@ -21,7 +20,7 @@ def engine() -> Engine:
 
 
 def dummy_deck() -> Deck:
-    cards = [Card("test") for k in range(18)]
+    cards = [Card("test") for _ in range(18)]
     [card.create_card(f"id{k}", f"card{k}", album="test_album",
                       collection="test_collection") for k, card in enumerate(cards)]
     deck = Deck("test")

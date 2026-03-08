@@ -113,7 +113,8 @@ class Game(Deck):
     def execute_attack(self, attack: Dict, card: str, player: int) -> None:
         targets = self.get_targets(attack["cible"], card, player)
         if attack["filtre"] != []:
-            targets = self.filter_targets(targets, attack["filtre"])
+            for filtre in attack["filtre"]:
+                targets = self.filter_targets(targets, filtre)
         self.apply_effects(attack["effet"], attack["duree"], targets, player)
 
     """___Filtre________________________________________________________________________________"""
@@ -126,7 +127,7 @@ class Game(Deck):
                 "random": self.filter_targets_random,
             }[filtre[0]](targets, filtre)
         except KeyError:
-            raise KeyError(f"Filtre {filtre[0]} inconnu")
+            raise FiltreKeyError(f"Filtre {filtre[0]} inconnu")
 
     def filter_targets_card_attribut_amount(
         self,
@@ -159,7 +160,7 @@ class Game(Deck):
                 "round score": self.check_condition_round_score,
             }[line[0]](line, player)
         except KeyError:
-            raise KeyError(f"Condition {line[0]} inconnue")
+            raise ConditionKeyError(f"Condition {line[0]} inconnue")
 
     def check_condition_pd(self, line: List, player: int) -> bool:
         amount_deck = self.get_amount(player, line[1], line[2])
@@ -186,7 +187,7 @@ class Game(Deck):
                 "=": self.check_condition_amount_eq,
             }[comparaison](amount_player, amount_target)
         except KeyError:
-            raise KeyError(f"Comparaison {comparaison} inconnue")
+            raise ComparaisonKeyError(f"Comparaison {comparaison} inconnue")
 
     def get_amount(self, player: int, set_type: str, set_name: str) -> int:
         try:
@@ -232,7 +233,7 @@ class Game(Deck):
                 "opponent remaining": self.get_target_opponent_remaining,
             }[target_attack[0]](target_attack, card, player)
         except KeyError:
-            raise KeyError(f"Target {target_attack} inconnue")
+            raise TargetKeyError(f"Target {target_attack} inconnue")
 
     def get_target_self(self, target_attack: List, card: str, player: int) -> List:
         return {player: [card], 1 - player: []}
@@ -289,7 +290,8 @@ class Game(Deck):
 
         # N'importe
         if len(target_attack) == 1:
-            return self.decks[player_targeted].__getattribute__(location)
+            targets[player_targeted] = self.decks[player_targeted].__getattribute__(location)
+            return targets
 
         # Collection ou Album spécifique
         for card in self.decks[player_targeted].__getattribute__(location):
@@ -309,7 +311,7 @@ class Game(Deck):
                 "energy per turn": self.apply_effect_player_per_turn,
             }[effect[0]](effect, duree, targets, player)
         except KeyError:
-            raise KeyError(f"Effect <{effect[0]}> inconnu")
+            raise EffectKeyError(f"Effect <{effect[0]}> inconnu")
 
     def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
@@ -320,7 +322,7 @@ class Game(Deck):
                 "permanently": self.apply_effect_card_permanently,
             }[duree[0]](effect, duree, targets, player)
         except KeyError:
-            raise KeyError(f"Durée {duree[0]} inconnue")
+            raise DureeKeyError(f"Durée <{duree[0]}> inconnue")
 
     def apply_effect_player_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
@@ -331,7 +333,7 @@ class Game(Deck):
                 "permanently": self.apply_effect_player_per_turn_permanently,
             }[duree[0]](effect, duree, targets)
         except KeyError:
-            raise KeyError(f"Durée {duree[0]} inconnue")
+            raise DureeKeyError(f"Durée {duree[0]} inconnue")
 
     def apply_effect_player_per_turn_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         pass

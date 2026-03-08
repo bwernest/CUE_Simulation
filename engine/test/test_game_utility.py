@@ -41,16 +41,16 @@ class TestGameUtility(Assert):
 
     def test_filtre_random3(self) -> None:
         gu = GameUtility("test")
+        seed(26)
         targets = {0: ["a", "b", "c", "d", "e"], 1: ["a", "b", "c", "d"]}
         expected = {0: ["d"], 1: []}
-        seed(26)
         result = gu.filter_targets_random(targets, ["random", "1"])
         self.assertEqual(expected, result)
 
     def test_filtre_random4(self) -> None:
         gu = GameUtility("test")
+        seed(26)
         targets = {0: ["a", "b", "c", "d", "e"], 1: ["a", "b", "c", "d"]}
         expected = {0: ["d", "e"], 1: ["a", "c", "d"]}
-        seed(26)
         result = gu.filter_targets_random(targets, ["random", "5"])
         self.assertEqual(expected, result)
