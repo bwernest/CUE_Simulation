@@ -15,9 +15,9 @@ class Assert():
             error_msg += f"argument {a + 1} :\n{arg}\n"
         return error_msg
 
-    def assertEqual(self, a: Any, b: Any, rounder: int = None):
+    def assertEqual(self, expected: Any, result: Any, rounder: int = None):
         rounder = 64 if rounder is None else rounder
-        self.assertIsInstance(b, type(a), "The two arguments must be of the same type")
+        self.assertIsInstance(result, type(expected), "The two arguments must be of the same type")
         assert_method = {
             type(None): self._assertNoneEqual,
             bool: self._assertBoolEqual,
@@ -30,9 +30,9 @@ class Assert():
             ndarray: self._assertArrayEqual,
         }
         try:
-            return assert_method[type(a)](a, b, rounder=rounder)
+            return assert_method[type(expected)](expected, result, rounder=rounder)
         except KeyError:
-            assert a == b, self._analyseError(a, b)
+            assert expected == result, self._analyseError(expected, result)
 
     def _assertNoneEqual(self, a: None, b: None, rounder: int = None) -> None:
         assert a is None and b is None, self._analyseError(a, b)

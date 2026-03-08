@@ -5,6 +5,7 @@ from .deck import Deck
 from ..utils import *
 
 # Python
+import random
 import numpy as np
 import numpy.typing as npt
 from typing import Dict, List, Literal, Tuple
@@ -122,6 +123,7 @@ class Game(Deck):
             return {
                 "base_power": self.filter_targets_card_attribut_amount,
                 "base_energy": self.filter_targets_card_attribut_amount,
+                "random": self.filter_targets_random,
             }[filtre[0]](targets, filtre)
         except KeyError:
             raise KeyError(f"Filtre {filtre[0]} inconnu")
@@ -284,6 +286,12 @@ class Game(Deck):
         location: Literal["hand", "order", "remaining"]
     ) -> Dict:
         targets = {0: [], 1: []}
+
+        # N'importe
+        if len(target_attack) == 1:
+            return self.decks[player_targeted].__getattribute__(location)
+
+        # Collection ou Album spécifique
         for card in self.decks[player_targeted].__getattribute__(location):
             if self.decks[player_targeted].cards[card].__getattribute__(target_attack[1]) == target_attack[2]:
                 targets[player_targeted].append(card)

@@ -30,20 +30,19 @@ def unique_card_play(card_id: str) -> Game:
     engine.play([card_id, None, None], [None, None, None])
     return engine.game
 
+def test_card_all() -> None:
+    engine = Engine("prod")
+    engine.start_engine()
+    for card_id in engine.cards.keys():
+        print(f"Test de {engine.cards[card_id].name}")
+        deck0 = dummy_deck()
+        deck1 = dummy_deck()
+        deck0.replace_card("id0", engine.cards[card_id])
+        engine.start_game(deck0, deck1, 100, 0, 0, 250, shuffle=False)
 
 """___Execution_____________________________________________________________"""
 
 engine = Engine("prod")
 engine.start_engine()
 
-licorne = engine.cards["mypa001"]
-# print(licorne.attacks["draw"][0])
-# engine.print_info("Attaque de la licorne", licorne.attacks)
-
-unique_card_play("mypa001")
-
-# engine.write_raw_data()
-
-# engine.print_cards_albums()
-# engine.print_cards_collections()
-# engine.print_collection("herbivores")
+test_card_all()
