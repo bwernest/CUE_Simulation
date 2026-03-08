@@ -32,10 +32,10 @@ class Game(Deck):
     ) -> None:
         self.decks = [deck0, deck1]
         self.power_per_turn = [0, 0]
-        self.power_per_turn_buff = [[], []]
+        self.power_per_turn_buff = [np.zeros((7), dtype=int), np.zeros((7), dtype=int)]
         self.energy = np.array([start_energy, start_energy])
         self.energy_per_turn = np.array([energy_per_turn, energy_per_turn])
-        self.energy_per_turn_buff = [[], []]
+        self.energy_per_turn_buff = [np.zeros((7), dtype=int), np.zeros((7), dtype=int)]
         self.min_energy = np.ones(2, dtype=int) * min_energy
         self.max_energy = np.ones(2, dtype=int) * max_energy
         self.score = np.zeros((self.rounds, self.turns, 2), dtype=int)
@@ -60,6 +60,8 @@ class Game(Deck):
         if not len(play0) == self.play_len or not len(play1) == self.play_len:
             raise PlayIncorrect("Nombre de cartes jouées incorrect")
         plays = [play0, play1]
+        self.decks[0].update_remaining(play0)
+        self.decks[1].update_remaining(play1)
         for player in range(2):
             for k in range(self.play_len):
                 if plays[player][k] is None:
@@ -83,7 +85,12 @@ class Game(Deck):
                 self.trigger_attack("return", plays[player][k], player)
         self.energy += self.energy_per_turn
         self.energy = np.clip(self.energy, self.min_energy, self.max_energy)
+
+        self.debuff()
         self.count_turn()
+
+    def debuff(self) -> None:
+        pass
 
     """___Attack________________________________________________________________________________"""
 
@@ -101,7 +108,32 @@ class Game(Deck):
 
     def execute_attack(self, attack: Dict, card: str, player: int) -> None:
         targets = self.get_targets(attack["cible"], card, player)
+        if attack["filtre"] != []:
+            targets = self.filter_targets(targets, attack["filtre"])
         self.apply_effects(attack["effet"], attack["duree"], targets, player)
+
+    """___Filtre________________________________________________________________________________"""
+
+    def filter_targets(self, targets: Dict[int, List], filtre: List) -> Dict[int, List]:
+        try:
+            return {
+                "base_power": self.filter_targets_card_attribut_amount,
+                "base_energy": self.filter_targets_card_attribut_amount,
+            }[filtre[0]](targets, filtre)
+        except KeyError:
+            raise KeyError(f"Filtre {filtre[0]} inconnu")
+
+    def filter_targets_card_attribut_amount(
+        self,
+        targets: Dict[int, List],
+        filtre: List,
+    ) -> Dict[int, List]:
+        filtered_targets = {0: [], 1: []}
+        for player in range(2):
+            for card_id in targets[player]:
+                if self.check_condition_amount(filtre[1], int(self.decks[player].cards[card_id].__getattribute__(filtre[0])), int(filtre[2])):
+                    filtered_targets[player].append(card_id)
+        return filtered_targets
 
     """___Condition_____________________________________________________________________________"""
 
@@ -176,8 +208,7 @@ class Game(Deck):
         for target_attack in target_attacks:
             target = self.get_target(target_attack, card, player)
             for player in range(2):
-                if player in target:
-                    targets[player] += target[player]
+                targets[player] += target[player]
         targets[0] = list(set(targets[0]))
         targets[1] = list(set(targets[1]))
         return targets
@@ -188,18 +219,74 @@ class Game(Deck):
                 "self": self.get_target_self,
                 "player": self.get_target_player,
                 "opponent": self.get_target_opponent,
-            }[target_attack](target_attack, card, player)
+                "player hand": self.get_target_player_hand,
+                "player deck": self.get_target_player_deck,
+                "player remaining": self.get_target_player_remaining,
+                "opponent hand": self.get_target_opponent_hand,
+                "opponent deck": self.get_target_opponent_deck,
+                "opponent remaining": self.get_target_opponent_remaining,
+            }[target_attack[0]](target_attack, card, player)
         except KeyError:
             raise KeyError(f"Target {target_attack} inconnue")
 
     def get_target_self(self, target_attack: List, card: str, player: int) -> List:
-        return {player: [card]}
+        return {player: [card], 1-player:[]}
 
     def get_target_player(self, target_attack: List, card: str, player: int) -> List:
-        return {player: [1]}
+        return {player: [1], 1-player: []}
 
     def get_target_opponent(self, target_attack: List, card: str, player: int) -> List:
-        return {1 - player: [1]}
+        return {1 - player: [1], player: []}
+
+    def get_target_player_hand(self, target_attack: List, card: str, player: int) -> List:
+        return self.get_target_cards(target_attack, player, "hand")
+
+    def get_target_player_deck(self, target_attack: List, card: str, player: int) -> List:
+        return self.get_target_cards(target_attack, player, "order")
+
+    def get_target_player_remaining(self, target_attack: List, card: str, player: int) -> List:
+        return self.get_target_cards(target_attack, player, "remaining")
+
+    def get_target_opponent_hand(self, target_attack: List, card: str, player: int) -> List:
+        return self.get_target_cards(target_attack, 1-player, "hand")
+
+    def get_target_opponent_deck(self, target_attack: List, card: str, player: int) -> List:
+        return self.get_target_cards(target_attack, 1-player, "order")
+
+    def get_target_opponent_remaining(self, target_attack: List, card: str, player: int) -> List:
+        return self.get_target_cards(target_attack, 1-player, "remaining")
+
+    def get_target_both_hand(self, target_attack: List, card: str, player: int) -> List:
+        dict0 = self.get_target_cards(target_attack, player, "hand")
+        dict1 = self.get_target_cards(target_attack, 1-player, "hand")
+        dict0.update(dict1)
+        return dict0
+
+    def get_target_both_deck(self, target_attack: List, card: str, player: int) -> List:
+        dict0 = self.get_target_cards(target_attack, player, "order")
+        dict1 = self.get_target_cards(target_attack, 1-player, "order")
+        dict0.update(dict1)
+        return dict0
+
+    def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> List:
+        dict0 = self.get_target_cards(target_attack, player, "remaining")
+        dict1 = self.get_target_cards(target_attack, 1-player, "remaining")
+        dict0.update(dict1)
+        return dict0
+
+    def get_target_cards(
+        self,
+        target_attack: List,
+        player_targeted: int,
+        location: Literal["hand", "order", "remaining"]
+    ) -> Dict:
+        targets = {0: [], 1: []}
+        for card in self.decks[player_targeted].__getattribute__(location):
+            if self.decks[player_targeted].cards[card].__getattribute__(target_attack[1]) == target_attack[2]:
+                targets[player_targeted].append(card)
+                print(f"Oui la carte {self.decks[player_targeted].cards[card].name} est dans {target_attack[2]}")
+        print(targets)
+        return targets
 
     """___Effect________________________________________________________________________________"""
 
@@ -209,18 +296,18 @@ class Game(Deck):
                 "power": self.apply_effect_card,
                 "burn": self.apply_effect_card,
                 "energy": self.apply_effect_energy,
-                "power_per_turn": self.apply_effect_player_per_turn,
-                "energy_per_turn": self.apply_effect_player_per_turn,
+                "power per turn": self.apply_effect_player_per_turn,
+                "energy per turn": self.apply_effect_player_per_turn,
             }[effect[0]](effect, duree, targets, player)
         except KeyError:
-            raise KeyError(f"Effect {effect[0]} inconnu")
+            raise KeyError(f"Effect <{effect[0]}> inconnu")
 
     def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
             {
                 "turn": self.apply_effect_card_turn,
                 "round": self.apply_effect_card_round,
-                "until_played": self.apply_effect_card_until_played,
+                "until played": self.apply_effect_card_until_played,
                 "permanently": self.apply_effect_card_permanently,
             }[duree[0]](effect, duree, targets, player)
         except KeyError:
@@ -231,7 +318,7 @@ class Game(Deck):
             {
                 "turn": self.apply_effect_player_per_turn_turn,
                 "round": self.apply_effect_player_per_turn_round,
-                "until_played": self.apply_effect_player_per_turn_until_played,
+                "until played": self.apply_effect_player_per_turn_until_played,
                 "permanently": self.apply_effect_player_per_turn_permanently,
             }[duree[0]](effect, duree, targets)
         except KeyError:

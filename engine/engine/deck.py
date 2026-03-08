@@ -15,6 +15,7 @@ class Deck(Card):
 
     cards: Dict[str, Card]
     order: List[str]
+    remaining: List[str]
 
     def create_deck(self, cards: List[Card]):
         if not len(cards) == self.deck_len:
@@ -55,3 +56,10 @@ class Deck(Card):
                     stats[key][card.__getattribute__(key)] = 0
                 stats[key][card.__getattribute__(key)] += 1
         return stats
+
+
+    def update_remaining(self, play: List[str | None]) -> None:
+        self.remaining = self.hand
+        for card_id in play:
+            if card_id is not None:
+                self.remaining.remove(card_id)
