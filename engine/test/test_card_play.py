@@ -69,3 +69,11 @@ class TestCardPlay(Assert):
         card = game.decks[0].cards["pan045"]
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100-card.base_cost, game.energy[0])
+
+    def test_card_PAN046(self) -> None:
+        game = unique_card_play("PAN046")
+        card = game.decks[0].cards["pan046"]
+        self.assertEqual(card.base_power+20, game.score[0, 0, 0])
+        self.assertEqual(100-card.base_cost, game.energy[0])
+        self.assertEqual(zeros((7), dtype=int), card.buff["power"])
+        self.assertEqual(zeros((7), dtype=int), card.buff["cost"])

@@ -349,8 +349,8 @@ class Game(Deck):
                 "burn": self.apply_effect_card,
                 "cost": self.apply_effect_card,
                 "energy": self.apply_effect_energy,
-                "power per turn": self.apply_effect_player_per_turn,
-                "energy per turn": self.apply_effect_player_per_turn,
+                "power per turn": self.apply_effect_resource_per_turn,
+                "energy per turn": self.apply_effect_resource_per_turn,
                 # "lock": self.apply_effect_lock,
             }[effect[0]](effect, duree, targets, player)
         except KeyError:
@@ -358,16 +358,24 @@ class Game(Deck):
 
     def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         try:
-            {
-                "turn": self.apply_effect_card_turn,
-                "round": self.apply_effect_card_round,
-                "until played": self.apply_effect_card_until_played,
-                "permanently": self.apply_effect_card_permanently,
-            }[duree[0]](effect, duree, targets, player)
+            index = {
+                "turn": int(duree[1]) + 1,
+                "round": int(duree[1]) * 3 - self.turn + 1,
+                "until played": 1,
+                "permanently": 0,
+            }[duree[0]]
+        except IndexError:
+            index = {
+                "until played": 1,
+                "permanently": 0,
+            }[duree[0]]
         except KeyError:
-            raise DureeKeyError(f"Durée <{duree[0]}> inconnue")
+            raise DureeKeyError(f"Durée {duree[0]} inconnue")
+        for player in range(2):
+            for card in targets[player]:
+                self.decks[player].cards[card].buff[effect[0]][index] += int(effect[1])
 
-    def apply_effect_player_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
+    def apply_effect_resource_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         data = {
             "power per turn": "power",
             "energy per turn": "energy",
@@ -375,50 +383,41 @@ class Game(Deck):
         player_targeted = targets[player][0]
         amount = int(effect[1])
         try:
-            {
-                "turn": self.apply_effect_player_per_turn_turn,
-                "round": self.apply_effect_player_per_turn_round,
-                "until played": self.apply_effect_player_per_turn_until_played,
-                "permanently": self.apply_effect_player_per_turn_permanently,
-            }[duree[0]](data, amount, duree, player_targeted)
+            index = {
+                "turn": int(duree[1]) + 1,
+                "round": int(duree[1]) * 3 - self.turn + 1,
+                "until played": 1,
+                "permanently": 0,
+            }[duree[0]]
+        except IndexError:
+            index = {
+                "until played": 1,
+                "permanently": 0,
+            }[duree[0]]
         except KeyError:
             raise DureeKeyError(f"Durée {duree[0]} inconnue")
-
-    def apply_effect_player_per_turn_turn(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
-        self.resource_per_turn[data][player_targeted][int(duree[1]) + 1] += amount
-
-    def apply_effect_player_per_turn_round(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
-        self.resource_per_turn[data][player_targeted][int(duree[1]) * 3 - self.turn + 1] += amount
-
-    def apply_effect_player_per_turn_until_played(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
-        self.resource_per_turn[data][player_targeted][1] += amount
-
-    def apply_effect_player_per_turn_permanently(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
-        self.resource_per_turn[data][player_targeted][0] += amount
+        self.resource_per_turn[data][player_targeted][index] += amount
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         self.energy[targets[player][0]] += int(effect[1])
 
-    def apply_effect_card_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        for player in range(2):
-            for card in targets[player]:
-                self.decks[player].cards[card].buff[effect[0]][int(duree[1]) + 1] += int(effect[1])
+    """___Multiplicateur________________________________________________________________________"""
 
-    def apply_effect_card_round(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        for player in range(2):
-            for card in targets[player]:
-                self.decks[player].cards[card].buff[effect[0]][int(
-                    duree[1]) * 3 - self.turn + 1] += int(effect[1])
+    def get_multiplicateur(self, attack_mult: List, player: int) -> int:
+        return {
+            "player hand": self.get_multiplicateur_hand,
+            "player deck": self.get_multiplicateur_deck,
+        }[attack_mult[0]](attack_mult)
+    
+    def get_multiplicateur_hand(self, attack_mult: List, player: int) -> int:
+        mult = 0
+        for card_id in self.decks[player].hand:
+            if self.decks[player].cards[card_id].__getattribute__(attack_mult[1]) == attack_mult[2]:
+                mult += 1
+        return mult
 
-    def apply_effect_card_until_played(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        for player in range(2):
-            for card in targets[player]:
-                self.decks[player].cards[card].buff[effect[0]][1] += int(effect[1])
-
-    def apply_effect_card_permanently(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        for player in range(2):
-            for card in targets[player]:
-                self.decks[player].cards[card].buff[effect[0]][0] += int(effect[1])
+    def get_multiplicateur_deck(self, attack_mult: List, player: int) -> int:
+        return self.stats[player][attack_mult[1]][attack_mult[2]]
 
     """___Miscellaneous_________________________________________________________________________"""
 
