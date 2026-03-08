@@ -65,19 +65,29 @@ class Game(Deck):
         plays = [play0, play1]
         self.decks[0].update_remaining(play0)
         self.decks[1].update_remaining(play1)
+
+        self.play_attacks(plays)
+
+        for player in range(2):
+            card_score = 0
+            for k in range(self.play_len):
+                if plays[player][k] is None:
+                    continue
+                card = self.decks[player].cards[plays[player][k]]
+                card_score += max(0, card.base_power - np.sum(card.buff["burn"]))
+                card_score += np.sum(card.buff["power"])
+                self.energy[player] -= max(0, card.base_cost - np.sum(card.buff["cost"]))
+            power_per_turn = np.sum(self.resource_per_turn["power"][player])
+            self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
+
+        self.post_play(plays)
+
+    def play_attacks(self, plays: List[str | None]) -> None:
         for player in range(2):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
                 self.trigger_attack("play", plays[player][k], player)
-                card = self.decks[player].cards[plays[player][k]]
-                card_score = max(0, card.base_power - np.sum(card.buff["burn"]))
-                card_score += np.sum(card.buff["power"])
-                power_per_turn = np.sum(self.resource_per_turn["power"][player])
-                self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
-                self.energy[player] -= max(0, card.base_energy - np.sum(card.buff["energy"]))
-
-        self.post_play(plays)
 
     def post_play(self, plays) -> None:
         for player in range(2):
@@ -87,6 +97,7 @@ class Game(Deck):
                 self.trigger_attack("return", plays[player][k], player)
         self.add_energy_per_turn()
         self.debuff_cards()
+        self.debuff_resources_per_turn()
         self.count_turn()
 
     def add_energy_per_turn(self) -> None:
@@ -99,6 +110,11 @@ class Game(Deck):
             for card_id in self.decks[player].order:
                 for data, buff in self.decks[player].cards[card_id].buff.items():
                     self.decks[player].cards[card_id].buff[data] = self.debuff_array(buff)
+
+    def debuff_resources_per_turn(self) -> None:
+        for player in range(2):
+            for data_per_turn, buff in self.resource_per_turn.items():
+                self.resource_per_turn[data_per_turn][player] = self.debuff_array(buff[player])
 
     """___Attack________________________________________________________________________________"""
 
@@ -133,7 +149,7 @@ class Game(Deck):
         try:
             return {
                 "base_power": self.filter_targets_card_attribut_amount,
-                "base_energy": self.filter_targets_card_attribut_amount,
+                "base_cost": self.filter_targets_card_attribut_amount,
                 "random": self.filter_targets_random,
                 "other": self.filter_targets_other,
             }[filtre[0]](targets, filtre, player, card_id)
@@ -262,10 +278,10 @@ class Game(Deck):
         return {player: [card], 1 - player: []}
 
     def get_target_player(self, target_attack: List, card: str, player: int) -> List:
-        return {player: [1], 1 - player: []}
+        return {player: [player], 1 - player: []}
 
     def get_target_opponent(self, target_attack: List, card: str, player: int) -> List:
-        return {1 - player: [1], player: []}
+        return {player: [1 - player], 1 - player: []}
 
     def get_target_player_hand(self, target_attack: List, card: str, player: int) -> List:
         return self.get_target_cards(target_attack, player, "hand")
@@ -329,6 +345,7 @@ class Game(Deck):
             {
                 "power": self.apply_effect_card,
                 "burn": self.apply_effect_card,
+                "cost": self.apply_effect_card,
                 "energy": self.apply_effect_energy,
                 "power per turn": self.apply_effect_player_per_turn,
                 "energy per turn": self.apply_effect_player_per_turn,
@@ -354,7 +371,7 @@ class Game(Deck):
             "energy per turn": "energy",
         }[effect[0]]
         player_targeted = targets[player][0]
-        amount = effect[1]
+        amount = int(effect[1])
         try:
             {
                 "turn": self.apply_effect_player_per_turn_turn,
@@ -375,11 +392,13 @@ class Game(Deck):
         self.resource_per_turn[data][player_targeted][1] += amount
 
     def apply_effect_player_per_turn_permanently(self, data: str, amount: int, duree: List, player_targeted: int) -> None:
+        print(f"Resources avant : {self.resource_per_turn[data][player_targeted]}")
         self.resource_per_turn[data][player_targeted][0] += amount
+        print(f"Resources après : {self.resource_per_turn[data][player_targeted]}")
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        self.energy[0] += int(effect[1]) * (targets[0] == [1])
-        self.energy[1] += int(effect[1]) * (targets[1] == [1])
+        print(f"Player targeted = {targets}")
+        self.energy[targets[player][0]] += int(effect[1])
 
     def apply_effect_card_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
         for player in range(2):

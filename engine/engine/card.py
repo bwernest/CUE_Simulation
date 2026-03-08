@@ -16,13 +16,13 @@ class Card(GameUtility):
     id: str
     name: str
     base_power: int
-    base_energy: int
+    base_cost: int
     attacks: Dict[str, List]
 
     def __eq__(self, value):
         if type(value) != self.__class__:
             return False
-        for key in ["id", "name", "keywords", "base_power", "base_energy", "attacks", "album", "collection", "rarity", "type"]:
+        for key in ["id", "name", "keywords", "base_power", "base_cost", "attacks", "album", "collection", "rarity", "type"]:
             if self.__dict__[key] != value.__dict__[key]:
                 return False
         return True
@@ -36,7 +36,7 @@ class Card(GameUtility):
             name: str,
             keywords: List[str] = [],
             power: int = 0,
-            energy: int = 0,
+            cost: int = 0,
             attack_name: str | None = None,
             album: str | None = None,
             collection: str | None = None,
@@ -47,10 +47,10 @@ class Card(GameUtility):
         self.name = name.lower()
         self.keywords = keywords
         self.base_power = power
-        self.base_energy = energy
+        self.base_cost = cost
         self.buff = {
             "power": np.zeros((7), dtype=int),
-            "energy": np.zeros((7), dtype=int),
+            "cost": np.zeros((7), dtype=int),
             "burn": np.zeros((7), dtype=int),
         }
         self.attack_name = attack_name
@@ -75,11 +75,11 @@ class Card(GameUtility):
         self.collection = infos[0][4].lower()
         self.rarity = infos[0][5].lower()
         self.type = infos[0][6].lower()
-        self.base_energy = int(infos[1][0])
+        self.base_cost = int(infos[1][0])
         self.base_power = int(infos[1][1])
         self.buff = {
             "power": np.zeros((7), dtype=int),
-            "energy": np.zeros((7), dtype=int),
+            "cost": np.zeros((7), dtype=int),
             "burn": np.zeros((7), dtype=int),
         }
         column = 2

@@ -43,7 +43,7 @@ def game() -> Game:
 
 def elephant_deck() -> Deck:
     cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", power=260, energy=26) for k, card in enumerate(cards)]
+    [card.create_card(f"id{k}", f"card{k}", power=260, cost=26) for k, card in enumerate(cards)]
     deck = Deck("test")
     deck.create_deck(cards)
     return deck
@@ -51,7 +51,7 @@ def elephant_deck() -> Deck:
 
 def mouse_deck() -> Deck:
     cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", power=10, energy=1) for k, card in enumerate(cards)]
+    [card.create_card(f"id{k}", f"card{k}", power=10, cost=1) for k, card in enumerate(cards)]
     deck = Deck("test")
     deck.create_deck(cards)
     return deck

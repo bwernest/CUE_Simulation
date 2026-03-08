@@ -50,3 +50,9 @@ class TestCardPlay(Assert):
         self.assertEqual(46 * 2, total_hand_buff)
         self.assertIn(game.score[0, 0, 0], [40, 86])
         self.assertEqual(array([100 - 7, 100]), game.energy)
+
+    def test_card_PHE026(self) -> None:
+        game = unique_card_play("PHE026")
+        # self.assertEqual(array([3, 0, 0, 0, 0, 0, 0]), game.resource_per_turn["power"][0])
+        # self.assertEqual(array([68, 0]), game.score[0, 0, :])
+        # self.assertEqual(array([100 - 8, 100]), game.energy)
