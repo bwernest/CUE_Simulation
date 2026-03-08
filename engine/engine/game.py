@@ -357,45 +357,32 @@ class Game(Deck):
             raise EffectKeyError(f"Effect <{effect[0]}> inconnu")
 
     def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        try:
-            index = {
-                "turn": int(duree[1]) + 1,
-                "round": int(duree[1]) * 3 - self.turn + 1,
-                "until played": 1,
-                "permanently": 0,
-            }[duree[0]]
-        except IndexError:
-            index = {
-                "until played": 1,
-                "permanently": 0,
-            }[duree[0]]
-        except KeyError:
-            raise DureeKeyError(f"Durée {duree[0]} inconnue")
+        index = self.get_index_from_duree(duree)
         for player in range(2):
             for card in targets[player]:
                 self.decks[player].cards[card].buff[effect[0]][index] += int(effect[1])
 
-    def apply_effect_resource_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        data = {
-            "power per turn": "power",
-            "energy per turn": "energy",
-        }[effect[0]]
-        player_targeted = targets[player][0]
-        amount = int(effect[1])
+    def get_index_from_duree(self, duree: List) -> int:
         try:
-            index = {
+            return {
                 "turn": int(duree[1]) + 1,
                 "round": int(duree[1]) * 3 - self.turn + 1,
                 "until played": 1,
                 "permanently": 0,
             }[duree[0]]
         except IndexError:
-            index = {
+            return {
                 "until played": 1,
                 "permanently": 0,
             }[duree[0]]
         except KeyError:
             raise DureeKeyError(f"Durée {duree[0]} inconnue")
+
+    def apply_effect_resource_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
+        data = effect[0][:-9]
+        player_targeted = targets[player][0]
+        amount = int(effect[1])
+        index = self.get_index_from_duree(duree)
         self.resource_per_turn[data][player_targeted][index] += amount
 
     def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
