@@ -11,7 +11,7 @@ from typing import Dict, List
 """___Classes___________________________________________________________________________________"""
 
 
-class Card(ToolBox):
+class Card(GameUtility):
 
     id: str
     name: str

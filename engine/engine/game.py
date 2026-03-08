@@ -86,11 +86,14 @@ class Game(Deck):
         self.energy += self.energy_per_turn
         self.energy = np.clip(self.energy, self.min_energy, self.max_energy)
 
-        self.debuff()
+        self.debuff_cards()
         self.count_turn()
 
-    def debuff(self) -> None:
-        pass
+    def debuff_cards(self) -> None:
+        for player in range(2):
+            for card_id in self.decks[player].order:
+                for data, buff in self.decks[player].cards[card_id].buff.items():
+                    self.decks[player].cards[card_id].buff[data] = self.debuff_array(buff)
 
     """___Attack________________________________________________________________________________"""
 
