@@ -77,7 +77,6 @@ class Game(Deck):
                 card_score += max(0, card.base_power + np.sum(card.buff["burn"]))
                 card_score += np.sum(card.buff["power"])
                 self.energy[player] -= max(0, card.base_cost + np.sum(card.buff["cost"]))
-                print(f"Energie du joueur {player} à {self.energy[player]}")
             power_per_turn = np.sum(self.resource_per_turn["power"][player])
             self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
 
@@ -97,7 +96,7 @@ class Game(Deck):
                     continue
                 self.trigger_attack("return", plays[player][k], player)
         self.add_energy_per_turn()
-        self.debuff_cards()
+        self.debuff_cards(plays)
         self.debuff_resources_per_turn()
         self.count_turn()
 
@@ -106,11 +105,13 @@ class Game(Deck):
             self.energy[player] += np.sum(self.resource_per_turn["energy"][player])
         self.energy = np.clip(self.energy, self.min_energy, self.max_energy)
 
-    def debuff_cards(self) -> None:
+    def debuff_cards(self, plays) -> None:
         for player in range(2):
             for card_id in self.decks[player].order:
                 for data, buff in self.decks[player].cards[card_id].buff.items():
                     self.decks[player].cards[card_id].buff[data] = self.debuff_array(buff)
+                    if card_id in plays[player]:
+                        self.decks[player].cards[card_id].buff[data][1] = 0
 
     def debuff_resources_per_turn(self) -> None:
         for player in range(2):

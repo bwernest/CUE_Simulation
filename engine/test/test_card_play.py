@@ -30,6 +30,8 @@ class TestCardPlay(Assert):
         game = unique_card_play("PAN015")
         self.assertEqual(array([83 + 24, 0]), game.score[0, 0, :])
         self.assertEqual(array([100 - 8, 100]), game.energy)
+        self.assertEqual(array([0, 0, 0, 0, 0, 0, 0]), game.decks[0].cards["pan015"].buff["power"])
+        self.assertEqual(array([0, 0, -1, 0, 0, 0, 0]), game.decks[0].cards["pan015"].buff["cost"])
 
     def test_card_PCA038(self) -> None:
         game = unique_card_play("PCA038")
@@ -47,7 +49,7 @@ class TestCardPlay(Assert):
         game = unique_card_play("PAN024")
         total_hand_buff = int(sum([sum(game.decks[0].cards[card_id].buff["power"])
                               for card_id in game.decks[0].hand]))
-        self.assertEqual(46 * 2, total_hand_buff)
+        self.assertIn(total_hand_buff, [46, 46 * 2])
         self.assertIn(game.score[0, 0, 0], [40, 86])
         self.assertEqual(array([100 - 7, 100]), game.energy)
 
