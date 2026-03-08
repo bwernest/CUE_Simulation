@@ -137,7 +137,8 @@ class Game(Deck):
         if attack["filtre"] != []:
             for filtre in attack["filtre"]:
                 targets = self.filter_targets(targets, filtre, player, card_id)
-        self.apply_effects(attack["effet"], attack["duree"], targets, player)
+        self.apply_effects(attack["effet"], attack["multiplicateur"],
+                           attack["duree"], targets, player)
 
     """___Filtre________________________________________________________________________________"""
 
@@ -342,7 +343,14 @@ class Game(Deck):
 
     """___Effect________________________________________________________________________________"""
 
-    def apply_effects(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
+    def apply_effects(
+        self,
+        atk_effect: List,
+        atk_mult: List,
+        atk_duree: List,
+        targets: Dict[int, List],
+        player: int,
+    ) -> None:
         try:
             {
                 "power": self.apply_effect_card,
@@ -352,15 +360,38 @@ class Game(Deck):
                 "power per turn": self.apply_effect_resource_per_turn,
                 "energy per turn": self.apply_effect_resource_per_turn,
                 # "lock": self.apply_effect_lock,
-            }[effect[0]](effect, duree, targets, player)
+            }[atk_effect[0]](atk_effect, atk_mult, atk_duree, targets, player)
         except KeyError:
-            raise EffectKeyError(f"Effect <{effect[0]}> inconnu")
+            raise EffectKeyError(f"Effect <{atk_effect[0]}> inconnu")
 
-    def apply_effect_card(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        index = self.get_index_from_duree(duree)
+    def apply_effect_card(
+        self,
+        atk_effect: List,
+        atk_mult: List,
+        atk_duree: List,
+        targets: Dict[int, List],
+        player: int,
+    ) -> None:
+        index = self.get_index_from_duree(atk_duree)
+        mult = 1 if atk_mult == [] else self.get_multiplicateur(atk_mult, player)
         for player in range(2):
             for card in targets[player]:
-                self.decks[player].cards[card].buff[effect[0]][index] += int(effect[1])
+                self.decks[player].cards[card].buff[atk_effect[0]
+                                                    ][index] += int(atk_effect[1]) * mult
+
+    def apply_effect_resource_per_turn(
+        self,
+        atk_effect: List,
+        atk_mult: List,
+        atk_duree: List,
+        targets: Dict[int, List],
+        player: int,
+    ) -> None:
+        data = atk_effect[0][:-9]
+        player_targeted = targets[player][0]
+        amount = int(atk_effect[1])
+        index = self.get_index_from_duree(atk_duree)
+        self.resource_per_turn[data][player_targeted][index] += amount
 
     def get_index_from_duree(self, duree: List) -> int:
         try:
@@ -378,15 +409,15 @@ class Game(Deck):
         except KeyError:
             raise DureeKeyError(f"Durée {duree[0]} inconnue")
 
-    def apply_effect_resource_per_turn(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        data = effect[0][:-9]
-        player_targeted = targets[player][0]
-        amount = int(effect[1])
-        index = self.get_index_from_duree(duree)
-        self.resource_per_turn[data][player_targeted][index] += amount
-
-    def apply_effect_energy(self, effect: List, duree: List, targets: Dict[int, List], player: int) -> None:
-        self.energy[targets[player][0]] += int(effect[1])
+    def apply_effect_energy(
+        self,
+        atk_effect: List,
+        atk_mult: List,
+        atk_duree: List,
+        targets: Dict[int, List],
+        player: int,
+    ) -> None:
+        self.energy[targets[player][0]] += int(atk_effect[1])
 
     """___Multiplicateur________________________________________________________________________"""
 
@@ -394,8 +425,8 @@ class Game(Deck):
         return {
             "player hand": self.get_multiplicateur_hand,
             "player deck": self.get_multiplicateur_deck,
-        }[attack_mult[0]](attack_mult)
-    
+        }[attack_mult[0]](attack_mult, player)
+
     def get_multiplicateur_hand(self, attack_mult: List, player: int) -> int:
         mult = 0
         for card_id in self.decks[player].hand:
