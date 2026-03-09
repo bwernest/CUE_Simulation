@@ -22,6 +22,7 @@ pytest = "*"
 
 # Mono
 main = "python main.py"
+collection = "python main_collection.py"
 config = "python config.py"
 cover_get = "coverage run -m pytest engine"
 cover_show = "coverage html"
