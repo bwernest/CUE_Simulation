@@ -435,7 +435,8 @@ class Game(Deck):
         return mult
 
     def get_multiplicateur_deck(self, attack_mult: List, player: int) -> int:
-        return self.stats[player][attack_mult[1]][attack_mult[2]]
+        try: return self.stats[player][attack_mult[1]][attack_mult[2]]
+        except KeyError: return 0
 
     """___Miscellaneous_________________________________________________________________________"""
 
