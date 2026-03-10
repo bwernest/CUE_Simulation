@@ -34,9 +34,10 @@ class Card(GameUtility):
     @property
     def buff_dictionnary(self) -> Dict[str, NDArray]:
         return {
-            "power": np.zeros((7), dtype=int),
-            "cost": np.zeros((7), dtype=int),
-            "burn": np.zeros((7), dtype=int),
+            "power": np.zeros((self.buff_array_len), dtype=int),
+            "cost": np.zeros((self.buff_array_len), dtype=int),
+            "burn": np.zeros((self.buff_array_len), dtype=int),
+            "lock": np.zeros((self.buff_array_len), dtype=int),
         }
 
     def create_card(
@@ -89,6 +90,10 @@ class Card(GameUtility):
             self.keywords.append(str(infos[1][column]).lower())
             column += 1
         self.attacks = self.add_attacks(attacks)
+
+    def reset_card(self) -> None:
+        self.played = 0
+        self.buff = self.buff_dictionnary
 
     def split_data(self, data: List) -> tuple:
         infos = data[:2]

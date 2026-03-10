@@ -8,6 +8,8 @@
     "rounds": 5,
     "turns": 3,
 
+    "buff_array_len": 7,
+
     "prod": {
         "test": false,
         
