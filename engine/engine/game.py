@@ -74,6 +74,7 @@ class Game(Deck):
                 if plays[player][k] is None:
                     continue
                 card = self.decks[player].cards[plays[player][k]]
+                card.played += 1
                 card_score += max(0, card.base_power + np.sum(card.buff["burn"]))
                 card_score += np.sum(card.buff["power"])
                 self.energy[player] -= max(0, card.base_cost + np.sum(card.buff["cost"]))
@@ -273,6 +274,9 @@ class Game(Deck):
                 "opponent hand": self.get_target_opponent_hand,
                 "opponent deck": self.get_target_opponent_deck,
                 "opponent remaining": self.get_target_opponent_remaining,
+                "both hand": self.get_target_both_hand,
+                "both deck": self.get_target_both_deck,
+                "both remaining": self.get_target_both_remaining,
             }[target_attack[0]](target_attack, card, player)
         except KeyError:
             raise TargetKeyError(f"Target {target_attack} inconnue")
@@ -356,10 +360,10 @@ class Game(Deck):
                 "power": self.apply_effect_card,
                 "burn": self.apply_effect_card,
                 "cost": self.apply_effect_card,
+                "lock": self.apply_effect_card_lock,
                 "energy": self.apply_effect_energy,
                 "power per turn": self.apply_effect_resource_per_turn,
                 "energy per turn": self.apply_effect_resource_per_turn,
-                # "lock": self.apply_effect_lock,
             }[atk_effect[0]](atk_effect, atk_mult, atk_duree, targets, player)
         except KeyError:
             raise EffectKeyError(f"Effect <{atk_effect[0]}> inconnu")
@@ -376,8 +380,20 @@ class Game(Deck):
         mult = 1 if atk_mult == [] else self.get_multiplicateur(atk_mult, player)
         for player in range(2):
             for card in targets[player]:
-                self.decks[player].cards[card].buff[atk_effect[0]
-                                                    ][index] += int(atk_effect[1]) * mult
+                self.decks[player].cards[card].buff[atk_effect[0]][index] += int(atk_effect[1]) * mult
+
+    def apply_effect_card_lock(
+        self,
+        atk_effect: List,
+        atk_mult: List,
+        atk_duree: List,
+        targets: Dict[int, List],
+        player: int,
+    ) -> None:
+        index = self.get_index_from_duree(atk_duree)
+        for player in range(2):
+            for card in targets[player]:
+                self.decks[player].cards[card].buff[atk_effect[0]][index] += 1
 
     def apply_effect_resource_per_turn(
         self,
@@ -391,7 +407,8 @@ class Game(Deck):
         player_targeted = targets[player][0]
         amount = int(atk_effect[1])
         index = self.get_index_from_duree(atk_duree)
-        self.resource_per_turn[data][player_targeted][index] += amount
+        mult = 1 if atk_mult == [] else self.get_multiplicateur(atk_mult, player)
+        self.resource_per_turn[data][player_targeted][index] += amount * mult
 
     def get_index_from_duree(self, duree: List) -> int:
         try:
@@ -425,18 +442,48 @@ class Game(Deck):
         return {
             "player hand": self.get_multiplicateur_hand,
             "player deck": self.get_multiplicateur_deck,
+            "player played": self.get_multiplicateur_played,
+            "round completed": self.get_multiplicateur_round_completed,
         }[attack_mult[0]](attack_mult, player)
 
     def get_multiplicateur_hand(self, attack_mult: List, player: int) -> int:
-        mult = 0
+        multiplicateur = 0
         for card_id in self.decks[player].hand:
             if self.decks[player].cards[card_id].__getattribute__(attack_mult[1]) == attack_mult[2]:
-                mult += 1
-        return mult
+                multiplicateur += 1
+        return self.get_maxed_multiplicateur(multiplicateur, attack_mult, 3)
 
     def get_multiplicateur_deck(self, attack_mult: List, player: int) -> int:
-        try: return self.stats[player][attack_mult[1]][attack_mult[2]]
+        try: return self.get_maxed_multiplicateur(self.stats[player][attack_mult[1]][attack_mult[2]], attack_mult, 3)
         except KeyError: return 0
+
+    def get_multiplicateur_played(self, attack_mult: List, player: int) -> int:
+        return self.get_maxed_multiplicateur({
+            "card": self.get_multiplicateur_played_card,
+            "collection": self.get_multiplicateur_played_deck,
+            "album": self.get_multiplicateur_played_deck,
+        }[attack_mult[1]](attack_mult, player), attack_mult, 3)
+    
+    def get_multiplicateur_played_card(self, attack_mult: List, player: int) -> int:
+        try:
+            card_id = self.decks[player].name_to_id[attack_mult[2]]
+        except KeyError:
+            raise CarteAbsenteDuDeck()
+        return self.decks[player].cards[card_id].played
+    
+    def get_multiplicateur_played_deck(self, attack_mult: List, player: int) -> int:
+        multiplicateur = 0
+        for card in self.decks[player].cards.values():
+            if card.__getattribute__(attack_mult[1]) == attack_mult[2]:
+                multiplicateur += card.played
+        return multiplicateur
+
+    def get_multiplicateur_round_completed(self, attack_mult: List, player: int) -> int:
+        return self.round
+
+    def get_maxed_multiplicateur(self, multiplicateur: int, attack_mult: List, index: int) -> int:
+        try: return max(multiplicateur, int(attack_mult[index]))
+        except IndexError: return multiplicateur
 
     """___Miscellaneous_________________________________________________________________________"""
 

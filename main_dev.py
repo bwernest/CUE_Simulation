@@ -8,6 +8,7 @@
     -> Fonction selection qui a une carte calcule un score
 - Tests d'un play à une carte (centrosaurus)
 - On draw, le burn affecte d'un tick les cartes adverses (hellboy)
+- Check un effet affectant les 2 joueurs pour une resource per turn
 """
 """___Modules_______________________________________________________________"""
 

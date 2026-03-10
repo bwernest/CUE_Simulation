@@ -5,11 +5,15 @@ class CUE_SimulationException(Exception):
     pass
 
 
-class CarteIncorrecte(CUE_SimulationException):
+class CarteAbsenteDuDeck(CUE_SimulationException):
     pass
 
 
 class CarteCycleeNonEnMain(CUE_SimulationException):
+    pass
+
+
+class CarteIncorrecte(CUE_SimulationException):
     pass
 
 

@@ -30,6 +30,8 @@ class Settings():
     min_energy: int
     max_energy: int
 
+    buff_array_len: int
+
     def __init__(self, category: str = "prod") -> None:
         if Settings._config is None:
 
