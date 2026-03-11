@@ -58,13 +58,13 @@ class Card(GameUtility):
         self.keywords = keywords
         self.base_power = power
         self.base_cost = cost
-        self.buff = self.buff_dictionnary
         self.attack_name = attack_name
         self.album = album
         self.collection = collection
         self.rarity = rarity
         self.type = type
         self.attacks = self.attacks_dict
+        self.reset_card()
 
     def create_card_from_data(
             self,
@@ -83,13 +83,13 @@ class Card(GameUtility):
         self.type = infos[0][6].lower()
         self.base_cost = int(infos[1][0])
         self.base_power = int(infos[1][1])
-        self.buff = self.buff_dictionnary
         column = 2
         self.keywords = []
         while not isna(infos[1][column]):
             self.keywords.append(str(infos[1][column]).lower())
             column += 1
         self.attacks = self.add_attacks(attacks)
+        self.reset_card()
 
     def reset_card(self) -> None:
         self.played = 0
