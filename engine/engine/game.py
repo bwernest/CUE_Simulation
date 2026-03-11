@@ -76,7 +76,7 @@ class Game(Deck):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                card = self.decks[player].cards[plays[player][k]]   #type:ignore
+                card = self.decks[player].cards[plays[player][k]]  # type:ignore
                 card.played += 1
                 card_score += max(0, card.base_power + np.sum(card.buff["burn"]))
                 card_score += np.sum(card.buff["power"])
@@ -91,7 +91,7 @@ class Game(Deck):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                self.trigger_attack("play", plays[player][k], player)   #type:ignore
+                self.trigger_attack("play", plays[player][k], player)  # type:ignore
 
     def post_play(self, plays) -> None:
         for player in range(2):
@@ -230,10 +230,12 @@ class Game(Deck):
             "collection": self.check_condition_deck_set,
             "album": self.check_condition_deck_set,
         }[atk_cdt[1]](atk_cdt, player)
-    
+
     def check_condition_deck_card(self, atk_cdt: List, player: int) -> bool:
-        try: _ = self.decks[player].name_to_id[atk_cdt[2]]
-        except KeyError: return False
+        try:
+            _ = self.decks[player].name_to_id[atk_cdt[2]]
+        except KeyError:
+            return False
         return True
 
     def check_condition_deck_set(self, atk_cdt: List, player: int) -> bool:
@@ -259,7 +261,7 @@ class Game(Deck):
             "collection": self.check_condition_played_deck,
             "album": self.check_condition_played_deck,
         }[atk_cdt[1]](atk_cdt, player)
-    
+
     def check_condition_played_card(self, atk_cdt: List, player: int) -> bool:
         try:
             card_id = self.decks[player].name_to_id[atk_cdt[2]]
@@ -267,7 +269,7 @@ class Game(Deck):
             raise CarteAbsenteDuDeck()
         amount_played = self.decks[player].cards[card_id].played
         return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
-    
+
     def check_condition_played_deck(self, atk_cdt: List, player: int) -> int:
         amount_played = 0
         for card in self.decks[player].cards.values():
@@ -405,8 +407,10 @@ class Game(Deck):
         location: Literal["hand", "order", "remaining"],
     ) -> Dict:
         targets = {0: [], 1: []}
-        try: card_id_targeted = self.decks[player_targeted].name_to_id[atk_target[2]]
-        except KeyError: return targets
+        try:
+            card_id_targeted = self.decks[player_targeted].name_to_id[atk_target[2]]
+        except KeyError:
+            return targets
         if card_id_targeted in self.decks[player_targeted].__getattribute__(location):
             targets[player_targeted].append(card_id_targeted)
             return targets
@@ -535,8 +539,10 @@ class Game(Deck):
         return self.get_maxed_multiplicateur(multiplicateur, attack_mult, 3)
 
     def get_multiplicateur_deck(self, attack_mult: List, player: int) -> int:
-        try: return self.get_maxed_multiplicateur(self.stats[player][attack_mult[1]][attack_mult[2]], attack_mult, 3)
-        except KeyError: return 0
+        try:
+            return self.get_maxed_multiplicateur(self.stats[player][attack_mult[1]][attack_mult[2]], attack_mult, 3)
+        except KeyError:
+            return 0
 
     def get_multiplicateur_played(self, attack_mult: List, player: int) -> int:
         return self.get_maxed_multiplicateur({
@@ -544,7 +550,7 @@ class Game(Deck):
             "collection": self.get_multiplicateur_played_deck,
             "album": self.get_multiplicateur_played_deck,
         }[attack_mult[1]](attack_mult, player), attack_mult, 3)
-    
+
     def get_multiplicateur_album(self, attack_mult: List, player: int) -> int:
         return len(self.stats[player]["album"])
 
@@ -554,7 +560,7 @@ class Game(Deck):
         except KeyError:
             raise CarteAbsenteDuDeck()
         return self.decks[player].cards[card_id].played
-    
+
     def get_multiplicateur_played_deck(self, attack_mult: List, player: int) -> int:
         multiplicateur = 0
         for card in self.decks[player].cards.values():
@@ -571,8 +577,10 @@ class Game(Deck):
         return mult_player0 + mult_player1
 
     def get_maxed_multiplicateur(self, multiplicateur: int, attack_mult: List, index: int) -> int:
-        try: return max(multiplicateur, int(attack_mult[index]))
-        except IndexError: return multiplicateur
+        try:
+            return max(multiplicateur, int(attack_mult[index]))
+        except IndexError:
+            return multiplicateur
 
     """___Miscellaneous_________________________________________________________________________"""
 

@@ -27,7 +27,7 @@ def unique_card_play(card_id: str) -> Game:
     deck2 = dummy_deck()
     card_id = card_id.lower()
     deck1.replace_card("id0", engine.cards[card_id])
-    engine.start_game(deck1, deck2, shuffle=False)
+    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
     engine.play([card_id, None, None], [None, None, None])
     return engine.game
 
