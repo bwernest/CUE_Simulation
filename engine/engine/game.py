@@ -149,7 +149,7 @@ class Game(Deck):
     def filter_targets(
         self,
         targets: Dict[int, List],
-        filtre: List,
+        atk_filtre: List,
         player: int,
         card_id: str,
     ) -> Dict[int, List]:
@@ -157,30 +157,45 @@ class Game(Deck):
             return {
                 "base_power": self.filter_targets_card_attribut_amount,
                 "base_cost": self.filter_targets_card_attribut_amount,
+                "rarity": self.filter_targets_card_rarity,
                 "random": self.filter_targets_random,
                 "other": self.filter_targets_other,
-            }[filtre[0]](targets, filtre, player, card_id)
+            }[atk_filtre[0]](targets, atk_filtre, player, card_id)
         except KeyError:
-            raise FiltreKeyError(f"Filtre {filtre[0]} inconnu")
+            raise FiltreKeyError(f"Filtre {atk_filtre[0]} inconnu")
 
     def filter_targets_card_attribut_amount(
         self,
         targets: Dict[int, List],
-        filtre: List,
+        atk_filtre: List,
         player: int,
         card_id: str,
     ) -> Dict[int, List]:
         filtered_targets = {0: [], 1: []}
         for player in range(2):
             for card_id in targets[player]:
-                if self.check_condition_amount(filtre[1], int(self.decks[player].cards[card_id].__getattribute__(filtre[0])), int(filtre[2])):
+                if self.check_condition_amount(atk_filtre[1], int(self.decks[player].cards[card_id].__getattribute__(atk_filtre[0])), int(atk_filtre[2])):
+                    filtered_targets[player].append(card_id)
+        return filtered_targets
+
+    def filter_targets_card_rarity(
+        self,
+        targets: Dict[int, List],
+        atk_filtre: List,
+        player: int,
+        card_id: str,
+    ) -> Dict[int, List]:
+        filtered_targets = {0: [], 1: []}
+        for player in range(2):
+            for card_id in targets[player]:
+                if self.decks[player].cards[card_id].rarity == atk_filtre[1]:
                     filtered_targets[player].append(card_id)
         return filtered_targets
 
     def filter_targets_other(
         self,
         targets: Dict[int, List],
-        filtre: List,
+        atk_filtre: List,
         player: int,
         card_id: str,
     ) -> Dict[int, List]:
@@ -507,7 +522,9 @@ class Game(Deck):
             "player hand": self.get_multiplicateur_hand,
             "player deck": self.get_multiplicateur_deck,
             "player played": self.get_multiplicateur_played,
+            "player album": self.get_multiplicateur_album,
             "round completed": self.get_multiplicateur_round_completed,
+            "both deck": self.get_multiplicateur_both_deck,
         }[attack_mult[0]](attack_mult, player)
 
     def get_multiplicateur_hand(self, attack_mult: List, player: int) -> int:
@@ -528,6 +545,9 @@ class Game(Deck):
             "album": self.get_multiplicateur_played_deck,
         }[attack_mult[1]](attack_mult, player), attack_mult, 3)
     
+    def get_multiplicateur_album(self, attack_mult: List, player: int) -> int:
+        return len(self.stats[player]["album"])
+
     def get_multiplicateur_played_card(self, attack_mult: List, player: int) -> int:
         try:
             card_id = self.decks[player].name_to_id[attack_mult[2]]
@@ -544,6 +564,11 @@ class Game(Deck):
 
     def get_multiplicateur_round_completed(self, attack_mult: List, player: int) -> int:
         return self.round
+
+    def get_multiplicateur_both_deck(self, atk_mult: List, player: int) -> int:
+        mult_player0 = self.get_multiplicateur_played_deck(atk_mult, 0)
+        mult_player1 = self.get_multiplicateur_played_deck(atk_mult, 1)
+        return mult_player0 + mult_player1
 
     def get_maxed_multiplicateur(self, multiplicateur: int, attack_mult: List, index: int) -> int:
         try: return max(multiplicateur, int(attack_mult[index]))
