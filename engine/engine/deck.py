@@ -48,7 +48,7 @@ class Deck(Card):
         self.cards[new_card.id] = new_card
         self.order[self.order.index(card_id)] = new_card.id
 
-    def get_stats(self, deck: Deck) -> Dict[str, int]:
+    def get_stats(self, deck: Deck) -> Dict[str, Dict[str, int]]:
         stats = {"album": {}, "collection": {}}
         for card in deck.cards.values():
             for key in ["album", "collection"]:
