@@ -64,5 +64,5 @@ class Deck(Card):
                 self.remaining.remove(card_id)
 
     @property
-    def name_to_id(self) -> Dict:
+    def name_to_id(self) -> Dict[str, str]:
         return {name: card_id for name, card_id in zip([self.cards[cid].name for cid in self.order], self.order)}

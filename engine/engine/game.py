@@ -201,7 +201,7 @@ class Game(Deck):
     def check_condition(self, atk_cdt: List, player: int) -> bool:
         try:
             return {
-                "player deck": self.check_condition_pd,
+                "player deck": self.check_condition_deck,
                 "turn score": self.check_condition_turn_score,
                 "round score": self.check_condition_round_score,
                 "player played": self.check_condition_player_played,
@@ -209,7 +209,19 @@ class Game(Deck):
         except KeyError:
             raise ConditionKeyError(f"Condition {atk_cdt[0]} inconnue")
 
-    def check_condition_pd(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_deck(self, atk_cdt: List, player: int) -> bool:
+        return {
+            "card": self.check_condition_deck_card,
+            "collection": self.check_condition_deck_set,
+            "album": self.check_condition_deck_set,
+        }[atk_cdt[1]](atk_cdt, player)
+    
+    def check_condition_deck_card(self, atk_cdt: List, player: int) -> bool:
+        try: _ = self.decks[player].name_to_id[atk_cdt[2]]
+        except KeyError: return False
+        return True
+
+    def check_condition_deck_set(self, atk_cdt: List, player: int) -> bool:
         amount_deck = self.get_amount(player, atk_cdt[1], atk_cdt[2])
         amount_target = int(atk_cdt[4])
         return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
@@ -354,21 +366,47 @@ class Game(Deck):
 
     def get_target_cards(
         self,
-        target_attack: List,
+        atk_target: List,
         player_targeted: int,
-        location: Literal["hand", "order", "remaining"]
+        location: Literal["hand", "order", "remaining"],
     ) -> Dict:
-        targets = {0: [], 1: []}
-
         # N'importe
-        if len(target_attack) == 1:
+        if len(atk_target) == 1:
+            targets = {0: [], 1: []}
             targets[player_targeted] = self.decks[player_targeted].__getattribute__(location)
             return targets
-
         # Collection ou Album spécifique
-        for card in self.decks[player_targeted].__getattribute__(location):
-            if self.decks[player_targeted].cards[card].__getattribute__(target_attack[1]) == target_attack[2]:
-                targets[player_targeted].append(card)
+        else:
+            return {
+                "card": self.get_target_cards_card,
+                "collection": self.get_target_cards_deck,
+                "album": self.get_target_cards_deck,
+            }[atk_target[1]](atk_target, player_targeted, location)
+
+    def get_target_cards_card(
+        self,
+        atk_target: List,
+        player_targeted: int,
+        location: Literal["hand", "order", "remaining"],
+    ) -> Dict:
+        targets = {0: [], 1: []}
+        try: card_id_targeted = self.decks[player_targeted].name_to_id[atk_target[2]]
+        except KeyError: return targets
+        if card_id_targeted in self.decks[player_targeted].__getattribute__(location):
+            targets[player_targeted].append(card_id_targeted)
+            return targets
+        return targets
+
+    def get_target_cards_deck(
+        self,
+        atk_target: List,
+        player_targeted: int,
+        location: Literal["hand", "order", "remaining"],
+    ) -> Dict:
+        targets = {0: [], 1: []}
+        for card_id in self.decks[player_targeted].__getattribute__(location):
+            if self.decks[player_targeted].cards[card_id].__getattribute__(atk_target[1]) == atk_target[2]:
+                targets[player_targeted].append(card_id)
         return targets
 
     """___Effect________________________________________________________________________________"""
