@@ -21,10 +21,16 @@ def engine() -> Engine:
 
 def dummy_deck() -> Deck:
     cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", album="test_album",
-                      collection="test_collection") for k, card in enumerate(cards)]
+    [card.create_card(f"id{k}", f"card{k}", album="test_album", collection="test_collection") for k, card in enumerate(cards)]
     deck = Deck("test")
     deck.create_deck(cards)
+    return deck
+
+
+def album_deck(album: str) -> Deck:
+    deck = dummy_deck()
+    for card in deck.cards.values():
+        card.album = album.lower()
     return deck
 
 
@@ -57,11 +63,11 @@ def mouse_deck() -> Deck:
     return deck
 
 
-def unique_card_play(card_id: str) -> Game:
+def unique_card_play(card_id: str, deck_album: str = "test_album") -> Game:
     engine = Engine("test")
     engine.start_engine()
-    deck1 = dummy_deck()
-    deck2 = dummy_deck()
+    deck1 = album_deck(deck_album)
+    deck2 = album_deck(deck_album)
     card_id = card_id.lower()
     deck1.replace_card("id0", engine.cards[card_id])
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
