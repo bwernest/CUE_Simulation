@@ -11,12 +11,10 @@ from numpy import array, sum, zeros
 
 class TestCardSinglePlay(Assert):
 
-    buff_array_len: int = 7
-
     def test_card_MYPA001(self) -> None:
         game = unique_card_play("MYPA001")
         card = game.decks[0].cards["mypa001"]
-        self.assertEqual(zeros((self.buff_array_len), dtype=int), game.resource_per_turn["energy"][0])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), game.resource_per_turn["energy"][0])
         self.assertEqual(card.base_power + 77, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
         self.assertEqual({"album": {"paleontology": 1, "test_album": 17}, "collection": {
@@ -76,31 +74,64 @@ class TestCardSinglePlay(Assert):
         card = game.decks[0].cards["pan046"]
         self.assertEqual(card.base_power + 20, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        self.assertEqual(zeros((self.buff_array_len), dtype=int), card.buff["power"])
-        self.assertEqual(zeros((self.buff_array_len), dtype=int), card.buff["cost"])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["cost"])
 
     def test_card_PAN022(self) -> None:
         game = unique_card_play("PAN022")
         card = game.decks[0].cards["pan022"]
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        self.assertEqual(zeros((self.buff_array_len), dtype=int), game.resource_per_turn["power"][0])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), game.resource_per_turn["power"][0])
 
-        game = unique_card_play("PAN022", "paleontology")
+        game = unique_card_play("PAN022", album_deck("Paleontology"))
         card = game.decks[0].cards["pan022"]
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        expected_power_per_turn = zeros((self.buff_array_len), dtype=int)
+        expected_power_per_turn = zeros((game.buff_array_len), dtype=int)
         expected_power_per_turn[3] += 25
         self.assertEqual(expected_power_per_turn, game.resource_per_turn["power"][0])
 
     def test_card_PCA023(self) -> None:
-        game = unique_card_play("PCA023", "paleontology")
+        game = unique_card_play("PCA023", album_deck("Paleontology"))
         card = game.decks[0].cards["pca023"]
         self.assertEqual(card.base_power + 35, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        expected_buff = zeros((self.buff_array_len), dtype=int)
+        expected_buff = zeros((game.buff_array_len), dtype=int)
         expected_buff[3] += 35
         self.assertEqual(expected_buff, card.buff["power"])
         self.assertEqual(expected_buff, game.decks[0].cards["id1"].buff["power"])
-        self.assertEqual(zeros((7), dtype=int), game.decks[1].cards["id1"].buff["power"])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), game.decks[1].cards["id1"].buff["power"])
+
+    def test_card_PIC008(self) -> None:
+        deck = album_deck("Paleontology")
+        for card_id in range(10):
+            deck.cards[f"id{card_id}"].base_cost = 10
+        for card_id in range(0, 3):
+            deck.cards[f"id{card_id}"].rarity = "rare"
+        for card_id in range(3, 6):
+            deck.cards[f"id{card_id}"].rarity = "epic"
+        for card_id in range(6, 9):
+            deck.cards[f"id{card_id}"].rarity = "legendary"
+
+        game = unique_card_play("PIC008", deck)
+        card = game.decks[0].cards["pic008"]
+        self.assertEqual(card.base_power, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost + 1, game.energy[0])
+
+        for card_id in range(1, 3):
+            self.assertEqual(-1, deck.cards[f"id{card_id}"].buff["cost"][0])
+        for card_id in range(3, 6):
+            self.assertEqual(-1, deck.cards[f"id{card_id}"].buff["cost"][0])
+        for card_id in range(6, 9):
+            self.assertEqual(0, deck.cards[f"id{card_id}"].buff["cost"][0])
+
+    def test_card_PAN058(self) -> None:
+        game = unique_card_play("PAN058")
+        card = game.decks[0].cards["pan058"]
+        self.assertEqual(card.base_power, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost + 1, game.energy[0])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[2] = -1
+        self.assertEqual(expected_buff_array, card.buff["cost"])

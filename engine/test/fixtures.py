@@ -7,7 +7,9 @@ from ..engine.engine import Engine
 from ..engine.game import Game
 
 # Python
+from copy import deepcopy
 import pytest
+from typing import Literal, Optional
 
 """___Functions_________________________________________________________________________________"""
 
@@ -27,7 +29,7 @@ def dummy_deck() -> Deck:
     return deck
 
 
-def album_deck(album: str) -> Deck:
+def album_deck(album: Literal["Paleontology"]) -> Deck:
     deck = dummy_deck()
     for card in deck.cards.values():
         card.album = album.lower()
@@ -63,11 +65,17 @@ def mouse_deck() -> Deck:
     return deck
 
 
-def unique_card_play(card_id: str, deck_album: str = "test_album") -> Game:
+def unique_card_play(
+    card_id: str,
+    player_deck: Optional[Deck] = None,
+    opponent_deck: Optional[Deck] = None,
+) -> Game:
     engine = Engine("test")
     engine.start_engine()
-    deck1 = album_deck(deck_album)
-    deck2 = album_deck(deck_album)
+    player_deck = dummy_deck() if player_deck is None else player_deck
+    opponent_deck = dummy_deck() if opponent_deck is None else opponent_deck
+    deck1 = player_deck
+    deck2 = opponent_deck
     card_id = card_id.lower()
     deck1.replace_card("id0", engine.cards[card_id])
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)

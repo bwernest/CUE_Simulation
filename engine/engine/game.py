@@ -56,9 +56,6 @@ class Game(Deck):
         if shuffle:
             for deck in self.decks:
                 deck.shuffle()
-        self.pre_play()
-
-    def pre_play(self) -> None:
         self.trigger_attacks("draw")
         self.trigger_attacks("start")
 
@@ -244,14 +241,12 @@ class Game(Deck):
         return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
 
     def check_condition_turn_score(self, atk_cdt: List, player: int) -> bool:
-        amount_turn_score = self.score[self.round, self.turn,
-                                       player] - self.score[self.round, self.turn, 1 - player]
+        amount_turn_score = self.score[self.round, self.turn, player] - self.score[self.round, self.turn, 1 - player]
         amount_target = int(atk_cdt[2])
         return self.check_condition_amount(atk_cdt[1], amount_turn_score, amount_target)
 
     def check_condition_round_score(self, atk_cdt: List, player: int) -> bool:
-        amount_round_score = np.sum(
-            self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
+        amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
         amount_target = int(atk_cdt[2])
         return self.check_condition_amount(atk_cdt[1], amount_round_score, amount_target)
 

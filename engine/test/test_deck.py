@@ -41,13 +41,24 @@ class TestDeck(Assert):
         with pytest.raises(CarteInexistante):
             deck.replace_card("id18", card)
 
-    def test_shuffle(self) -> None:
+    def test_shuffle1(self) -> None:
         expected = ["id11", "id13", "id17", "id0", "id1", "id4", "id10", "id8",
                     "id3", "id9", "id6", "id5", "id15", "id2", "id7", "id14", "id12", "id16"]
         deck = dummy_deck()
         seed("Porco Rosso")
         deck.shuffle()
         result = deck.order
+        self.assertEqual(expected, result)
+
+    def test_shuffle2(self) -> None:
+        expected = ["id11", "id0", "id6", "id9", "id14", "id3", "id2", "id1", "id15",
+                    "id7", "id16", "id17", "id13", "id4", "id10", "id12", "id5", "id8"]
+        deck = dummy_deck()
+        game = Game("test")
+        game.create_game(deck, deck, 100, 0, 0, 250)
+        seed("Porco Rosso")
+        game.start_game()
+        result = game.decks[0].order
         self.assertEqual(expected, result)
 
     def test_hand(self) -> None:
@@ -68,3 +79,9 @@ class TestDeck(Assert):
         deck = dummy_deck()
         with pytest.raises(CarteCycleeNonEnMain):
             deck.cycle(["id15", None, None])
+
+    def test_name_to_id(self) -> None:
+        expected = {f"card{k}": f"id{k}" for k in range(18)}
+        deck = dummy_deck()
+        result = deck.name_to_id
+        self.assertEqual(expected, result)

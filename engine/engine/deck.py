@@ -23,6 +23,12 @@ class Deck(Card):
         self.cards = {card.id: card for card in cards}
         self.order = [card.id for card in cards]
 
+    def copy_deck(self) -> Deck:
+        new_deck = Deck(self.category)
+        for key, value in self.__dict__.items():
+            new_deck.__dict__[key] = value
+        return new_deck
+
     def keys(self) -> Iterable[str]:
         return self.cards.keys()
 
@@ -43,6 +49,7 @@ class Deck(Card):
 
     def replace_card(self, card_id: str, new_card: Card) -> None:
         if card_id not in self.cards:
+            print(f"Voilà mes id : {self.order}")
             raise CarteInexistante(f"Remplacement de la carte {card_id} dans le deck.")
         del self.cards[card_id]
         self.cards[new_card.id] = new_card
