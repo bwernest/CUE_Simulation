@@ -47,6 +47,8 @@ def test_card_all() -> None:
 
 engine = Engine("prod")
 engine.start_engine()
-engine.print_check_raw_cards()
-
+# engine.print_check_raw_cards()
+engine.rewrite_raw_data()
+engine.print_cards_collections()
+engine.print_collection("ice age")
 # test_card_all()

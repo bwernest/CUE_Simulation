@@ -10,7 +10,7 @@ from engine.test.fixtures import dummy_deck
 engine = Engine("prod")
 engine.start_engine()
 
-engine.write_raw_data()
+engine.rewrite_raw_data()
 
 engine.print_cards_albums()
 engine.print_cards_collections()

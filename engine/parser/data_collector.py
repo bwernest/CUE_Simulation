@@ -42,7 +42,7 @@ class DataCollector(Game):
         raw_cards.append(raw_card)
         return raw_cards
 
-    def write_raw_data(self) -> None:
+    def rewrite_raw_data(self) -> None:
         raw_cards = self.get_raw_cards()
         sorted_raw_cards = self.sort_raw_cards(raw_cards)
         txt = "A\n"

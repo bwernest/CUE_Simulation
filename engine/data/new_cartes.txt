@@ -72,21 +72,11 @@ Play	Condition	round score	<	0
 PAN054	Cartorhynchus	Sudden Diversification	Paleontology	Ancient Creatures	Rare	Limited	
 8	68						
 Play	Condition	Round	2				
-	Cible	player deck	Album	Arts & Culture			
-	Cible	player deck	Album	Oceans and Seas			
-	Cible	player deck	Album	Space			
-	Cible	player deck	Album	Life on Land			
-	Cible	player deck	Album	History			
-	Cible	player deck	Album	Science			
+	Acible	player deck	Album	Paleontology			
 	Effet	power	12				
 	Duree	until played					
 Play	Condition	Round	4				
-	Cible	player deck	Album	Arts & Culture			
-	Cible	player deck	Album	Oceans and Seas			
-	Cible	player deck	Album	Space			
-	Cible	player deck	Album	Life on Land			
-	Cible	player deck	Album	History			
-	Cible	player deck	Album	Science			
+	Acible	player deck	Album	Paleontology			
 	Effet	power	12				
 	Duree	until played					
 
@@ -238,7 +228,7 @@ Draw	Cible	player deck	Album	Ancient Creatures
 
 PAN017	Mastodon	Tuskmaster	Paleontology	Ancient Creatures	Epic	Limited	
 5	48	2020					
-Return	player deck	card	Woolly Mammoth				
+Return	Cible	player deck	card	Woolly Mammoth			
 	Effet	cost	-2				
 	Duree	until played					
 
@@ -436,7 +426,7 @@ PCA047	Bannykus	Transitional Characteristics	Paleontology	Carnivores	Rare	Limite
 8	76						
 Return	Condition	player deck	Album	any	=	9	
 	Cible	player deck	Album	any			
-	Filtre	Non-limited					
+	Afiltre	Limited					
 	Effet	power	10				
 	Duree	until played					
 
@@ -1404,6 +1394,17 @@ Play	Cible	player hand	Agriotherium
 	Multiplicateur	player played	Collection	Ice Age	12		
 	Duree	permanently					
 
+PIC008	Scimitar Cat	Tusk Force	Paleontology	Ice Age	Epic	Limited	
+7	49						
+Draw	Cible	player deck	Album	Paleontology			
+	Filtre	rarity	Rare				
+	Effet	cost	-1				
+	Duree	permanently					
+Draw	Cible	player deck	Album	Paleontology			
+	Filtre	rarity	Epic				
+	Effet	cost	-1				
+	Duree	permanently					
+
 PLB007	Antarctic Rainforest	Warm Interval	Paleontology	Land Before Time	Epic	Limited	
 6	56						
 Play	Condition	Round	=	1			
@@ -1464,18 +1465,12 @@ Draw	Cible	player deck	Collection	Groundbreakers
 PLB002	Lepidodendron	Serpent Tree	Paleontology	Land Before Time	Legendary	Limited	
 6	69						
 Draw	Cible	player deck	Collection	Tremendous Trees			
+	Cible	player deck	Collection	Reptiles			
 	Filtre	rarity	Common				
 	Effet	power	20				
 	Duree	permanently					
 Draw	Cible	player deck	Collection	Tremendous Trees			
-	Filtre	rarity	Rare				
-	Effet	power	20				
-	Duree	permanently					
-Draw	Cible	player deck	Collection	Reptiles			
-	Filtre	rarity	Common				
-	Effet	power	20				
-	Duree	permanently					
-Draw	Cible	player deck	Collection	Reptiles			
+	Cible	player deck	Collection	Reptiles			
 	Filtre	rarity	Rare				
 	Effet	power	20				
 	Duree	permanently					
@@ -1530,12 +1525,8 @@ Play	Cible	player deck	Collection	Monsters of the Deep
 PMO015	Archegosaurus	What a Croc	Paleontology	Monsters of the Deep	Rare	Limited	
 1	12						
 Play	Cible	player hand	Collection	Amphibians			
-	Effet	power	15				
-	Duree	turn	1				
-Play	Cible	player hand	Collection	Fabulous Fish			
-	Effet	power	15				
-	Duree	turn	1				
-Play	Cible	player hand	Collection	Feisty Fish			
+	Cible	player hand	Collection	Fabulous Fish			
+	Cible	player hand	Collection	Feisty Fish			
 	Effet	power	15				
 	Duree	turn	1				
 
@@ -1574,7 +1565,7 @@ Return	Condition	turn	lost
 	Duree	turn	2				
 Return	Condition	turn	lost				
 	Cible	player deck	Album	Paleontology			
-	Filtre	Non-limited					
+	Afiltre	Limited					
 	Effet	power	20				
 	Duree	Round	1				
 
