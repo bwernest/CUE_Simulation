@@ -99,6 +99,14 @@ Draw	Cible	self
 	Multiplicateur	player hand	Album	Paleontology			
 	Duree	until played					
 
+PAN020	Deinotherium	Never Forget	Paleontology	Ancient Creatures	Legendary	Limited	
+7	78						
+Return	Cible	player deck	Card	Elephant Seal			
+	Cible	player deck	Card	Elephant's Trunk Nebula			
+	Cible	player deck	Card	African Elephant			
+	Effet	power	30				
+	Duree	until played					
+
 PAN028	Devil's Toenails	From the Deep	Paleontology	Ancient Creatures	Rare	Limited	
 4	36	Devil					
 Play	Condition	voisin	next to	card	Ammonite		
@@ -311,6 +319,12 @@ Play	Cible	player deck	Album	Paleontology
 	Effet	power	20				
 	Duree	2					
 
+PAN012	Smilodon	Pounce!	Paleontology	Ancient Creatures	Legendary	Limited	
+7	65	2020					
+Play	Cible	player hand	Collection	Cool Cats			
+	Effet	power	40				
+	Duree	until played					
+
 PAN043	Synthetoceras	Y so Serious?	Paleontology	Ancient Creatures	Rare	Limited	
 3	30						
 Play	Cible	opponent hand	Album	Paleontology			
@@ -342,6 +356,17 @@ Return	Condition	player deck	Album	Paleontology	>	8
 	Cible	player					
 	Effet	power per turn	25				
 	Duree	Round	1				
+
+PAN027	Waimanu	Water Bird	Paleontology	Ancient Creatures	Legendary	Limited	
+7	69						
+Play	Cible	player hand	Collection	Birds			
+	Cible	player hand	Collection	Sea Birds			
+	Effet	power	12				
+	Duree	turn	2				
+Return	Cible	player remaining	Collection	Birds			
+	Cible	player remaining	Collection	Sea Birds			
+	Effet	cost	-1				
+	Duree	permanently					
 
 PAN015	Woolly Mammoth	Mammoth Undertaking	Paleontology	Ancient Creatures	Legendary	Limited	
 8	83	2020					
@@ -439,6 +464,16 @@ Play	Condition	arena	Paleontology
 	Cible	opponent hand					
 	Effet	power	-35				
 	Duree	turn	1				
+
+PCA025	Big Al	Keep it Together	Paleontology	Carnivores	Legendary	Limited	
+6	52	2020					
+Draw	Cible	player hand	Collection	Carnivores			
+	Effet	power	20				
+	Duree	until played					
+Return	Condition	round score	>	0			
+	Cible	player remaining	Collection	Carnivores			
+	Effet	power	20				
+	Duree	permanently					
 
 PCA019	Carcharodontosaurus	Jagged Edge	Paleontology	Carnivores	Epic	Fusion ingredient	
 9	81	2020					
@@ -602,6 +637,16 @@ Play	Condition	voisin	next to	card	Prometheus
 	Effet	power	40				
 	Duree	turn	1				
 
+PCA048	Qianzhousaurus	Pinocchio Rex	Paleontology	Carnivores	Epic	Limited	
+8	75						
+Draw	Cible	player deck	Collection	Once Upon A Time			
+	Cible	player deck	Collection	Fiction and Fantasy			
+	Effet	power	15				
+	Duree	until played					
+Play	Cible	player deck	Card	Pinocchio			
+	Effet	power	15				
+	Duree	permanently					
+
 PCA027	Rajasaurus	Princely Sum	Paleontology	Carnivores	Epic	Limited	
 6	54						
 Draw	Cible	player					
@@ -686,6 +731,15 @@ PCA003	Velociraptor	Vicious Claw	Paleontology	Carnivores	Rare	Fusion ingredient
 Play	Cible	opponent					
 	Effet	power per turn	-12				
 	Duree	Round	1				
+
+PEV003	Ammonite	Fossil Fuelled	Paleontology	Paleontology Specials	Epic	Limited	
+4	40						
+Play	Cible	player hand	Card	Trilobite			
+	Effet	power	35				
+	Duree	turn	1				
+Return	Cible	self					
+	Effet	cost	1				
+	Duree	until played					
 
 PEV001	Dinosaur Eggs	Eggs In One Basket	Paleontology	Paleontology Specials	Epic	Fusion ingredient	
 2	18	Egg	2020				
@@ -992,12 +1046,112 @@ Return	Condition	turn score	<	0
 	Effet	power per turn	65				
 	Duree	turn	2				
 
+PGB005	Barnum Brown	We Have a T-Rex	Paleontology	Groundbreakers	Legendary	Limited	
+7	65						
+Draw	Condition	player deck	Card	Tyrannosaurus Rex			
+	Cible	player deck	Collection	Groundbreakers			
+	Effet	cost	-1				
+	Duree	permanently					
+Play	Condition	voisin	next to	Tyrannosaurus Rex			
+	Cible	player deck	Collection	Carnivores			
+	Effet	power	24				
+	Duree	until played					
+
+PGB010	Benjamin Franklin Mudge	Field Notes	Paleontology	Groundbreakers	Common	Limited	
+2	18						
+Play	Condition	player deck	Card	Allosaurus			
+	Cible	player hand	Collection	Groundbreakers			
+	Effet	power	7				
+	Duree	permanently					
+Play	Condition	player deck	Card	Diplodocus			
+	Cible	player hand	Collection	Groundbreakers			
+	Effet	power	7				
+	Duree	permanently					
+
+PGB008	Edwin H. Colbert	Fossil Haul	Paleontology	Groundbreakers	Common	Limited	
+8	78						
+Play	Condition	player deck	Card	Coelophysis			
+	Cible	player deck	Collection	Groundbreakers			
+	Effet	power	5				
+	Duree	until played					
+Play	Condition	player deck	Card	Georgia O'Keeffe			
+	Cible	player deck	Collection	Groundbreakers			
+	Effet	power	5				
+	Duree	until played					
+
+PGB003	Georges Cuvier	Catastrophism	Paleontology	Groundbreakers	Rare	Limited	
+6	48						
+Draw	Cible	player deck	Album	Paleontology			
+	Filtre	random	9				
+	Effet	power	22				
+	Duree	turn	2				
+
+PGB011	Gideon Mantell	Iguana-Saurus	Paleontology	Groundbreakers	Common	Limited	
+4	39						
+Draw	Cible	player deck	Card	Iguanodon			
+	Effet	power	35				
+	Duree	permanently					
+
+PGB015	Henry De La Beche	High (Palaeontographical) Society	Paleontology	Groundbreakers	Legendary	Limited	
+6	48						
+Draw	Condition	round won	>	0			
+	Cible	player hand	Album	Paleontology			
+	Effet	power	15				
+	Duree	until played					
+Play	Condition	round score	>	0			
+	Cible	self					
+	Effet	power	60				
+	Duree	permanently					
+Return	Cible	player deck	Collection	Groundbreakers			
+	Filtre	other					
+	Effet	power	19				
+	Duree	until played					
+
 PGB009	James Hall	Paleological Influence	Paleontology	Groundbreakers	Rare	Limited	
 8	75						
 Play	Condition	turn	1				
 	Cible	player hand	Album	Paleontology			
 	Effet	power	25				
 	Duree	Round	1				
+
+PGB014	Joseph Leidy	Total Fossil	Paleontology	Groundbreakers	Common	Limited	
+5	45						
+Play	Condition	voisin	next to	card	Hadrosaurus		
+	Cible	player deck	Collection	Herbivores			
+	Effet	power	6				
+	Duree	permanently					
+
+PGB001	Mary Anning	Fossilist	Paleontology	Groundbreakers	Legendary	Limited	
+6	58	Mary					
+Draw	Condition	player deck	Album	Science	>	7	
+	Condition	player deck	Album	Paleontology	>	7	
+	Cible	player deck					
+	Effet	power	19				
+	Duree	until played					
+
+PGB006	Othniel Charles Marsh	The War Wages On	Paleontology	Groundbreakers	Rare	Limited	
+7	65						
+Play	Cible	player deck	Collection	Groundbreakers			
+	Effet	power	18				
+	Duree	until played					
+Play	Condition	player deck	Card	Edward Drinker Cope			
+	Cible	player deck	Card	Edward Drinker Cope			
+	Effet	power	-20				
+	Duree	permanently					
+
+PGB013	Patricia Vickers-Rich	Big Birds!	Paleontology	Groundbreakers	Epic	Limited	
+7	63						
+Play	Cible	player deck	Collection	Fearsome Flyers			
+	Filtre	played	>	0			
+	Effet	power	20				
+	Duree	until played					
+
+PGB002	William Buckland	Full Account	Paleontology	Groundbreakers	Epic	Limited	
+8	62						
+Play	Condition	voisin	next to	Megalosaurus			
+	Cible	player hand	Album	Paleontology			
+	Effet	power	11				
+	Duree	permanently					
 
 PHE049	Agujaceratops	Up and Out	Paleontology	Herbivores	Common	Limited	
 5	37						
@@ -1394,6 +1548,112 @@ Play	Cible	player hand	Agriotherium
 	Multiplicateur	player played	Collection	Ice Age	12		
 	Duree	permanently					
 
+PIC006	Camelops	Hump Day	Paleontology	Ice Age	Common	Standard	
+4	35						
+Play	Condition	arena	Paleontology				
+	Cible	self					
+	Effet	power	30				
+	Duree	turn	1				
+
+PIC020	Castoroides	Extended Underwater Activity	Paleontology	Ice Age	Epic	Standard	
+5	45						
+Draw	Cible	player deck	Collection	Ice Age			
+	Effet	power	6				
+	Multiplicateur	round completed					
+	Duree	until played					
+
+PIC019	Cave Bear	Hiding Out	Paleontology	Ice Age	Legendary	Limited	
+7	65						
+Draw	Cible	player deck	Collection	Ice Age			
+	Effet	power	9				
+	Multiplicateur	player deck	Collection	Natural Monuments	5		
+	Duree	until played					
+Play	Condition	player deck	Collection	Natural Monuments	>	2	
+	Cible	player deck	Collection	Mammals			
+	Effet	power	25				
+	Duree	until played					
+
+PIC013	Celebochoerus	Celeb Gossip	Paleontology	Ice Age	Common	Standard	
+2	19						
+Draw	Cible	self					
+	Effet	power	-8				
+	Duree	permanently					
+Draw	Cible	player hand					
+	Filtre	other					
+	Effet	power	6				
+	Duree	permanently					
+
+PIC022	Ceratogaulus	Horned Defense	Paleontology	Ice Age	Rare	Standard	
+6	56						
+Draw	Cible	player hand	Collection	Ice Age			
+	Effet	cost	-1				
+	Duree	turn	2				
+
+PIC011	Columbian Mammoth	Mammoth Mammoth	Paleontology	Ice Age	Epic	Standard	
+8	120						
+Draw	Condition	player deck	Album	History	>	1	
+	Cible	self					
+	Effet	power	-40				
+	Duree	until played					
+
+PIC016	Cronopio	Gone Nutty!	Paleontology	Ice Age	Rare	Limited	
+3	28						
+Draw	Cible	player deck	Card	Woolly Mammoth			
+	Cible	player deck	Card	Smilodon			
+	Cible	player deck	Card	Megatherium			
+	Effet	cost	-1				
+	Duree	until played					
+
+PIC007	Doedicurus	Shell to Pay	Paleontology	Ice Age	Common	Standard	
+2	18						
+Play	Cible	player hand	Card	Glyptodon			
+	Cible	player hand	Card	Giant Armadillo			
+	Cible	player hand	Collection	Ocean Reptiles			
+	Effet	power	10				
+	Duree	turn	1				
+
+PIC017	Hagerman Horse	Quarry	Paleontology	Ice Age	Epic	Limited	
+4	38	Horse					
+Start	Cible	player hand	Album	Life on Land			
+	Filtre	random	1				
+	Effet	cost	-1				
+	Duree	until played					
+
+PIC005	Kyptoceras	Kyptonite	Paleontology	Ice Age	Rare	Standard	
+4	37						
+Draw	Cible	opponent hand	Album	History			
+	Cible	opponent hand	Album	Arts & Culture			
+	Effet	power	-15				
+	Duree	Round	1				
+
+PIC004	Macrauchenia	Llama Drama	Paleontology	Ice Age	Common	Standard	
+5	40						
+Play	Cible	opponent hand					
+	Effet	power	-2				
+	Duree	turn	1				
+Play	Cible	self					
+	Effet	power	10				
+	Duree	permanently					
+
+PIC010	Megaloceros	Great Horn	Paleontology	Ice Age	Legendary	Limited	
+5	56	Mega Paleontology					
+Draw	Condition	player deck	Collection	Mammals	>	1	
+	Cible	player deck	Collection	Mammals			
+	Effet	power	24				
+	Duree	until played					
+Play	Cible	player hand	Card	Gjallarhorn			
+	Effet	power	32				
+	Duree	turn	1				
+
+PIC012	Megalonyx	Jefferson's Bones	Paleontology	Ice Age	Common	Standard	
+4	38	Mega Paleontology					
+Play	Cible	player hand	Card	Declaration of Independance			
+	Effet	power	60				
+	Duree	turn	1				
+Return	Cible	player deck	Album	Paleontology			
+	Effet	power	4				
+	Duree	permanently					
+
 PIC008	Scimitar Cat	Tusk Force	Paleontology	Ice Age	Epic	Limited	
 7	49						
 Draw	Cible	player deck	Album	Paleontology			
@@ -1404,6 +1664,67 @@ Draw	Cible	player deck	Album	Paleontology
 	Filtre	rarity	Epic				
 	Effet	cost	-1				
 	Duree	permanently					
+
+PIC002	Short-faced Bear	Role Rev-Ursa	Paleontology	Ice Age	Legendary	Limited	
+7	75						
+Return	Condition	round score	<	0			
+	Cible	player					
+	Effet	power per turn	15				
+	Duree	Round	1				
+Return	Condition	round score	<	0			
+	Cible	opponent					
+	Effet	power per turn	-15				
+	Duree	Round	1				
+Return	Condition	player deck	Collection	Ice Age	>	9	
+	Cible	player deck	Collection	Ice Age			
+	Filtre	random	10				
+	Effet	power	15				
+	Duree	until played					
+
+PIC021	Sinomegaceros	Giant Deer	Paleontology	Ice Age	Legendary	Standard	
+5	38	Mega Paleontology					
+Play	Condition	voisin	next to	card	Megaloceros		
+	Cible	player hand	Album	Paleontology			
+	Effet	power	20				
+	Duree	until played					
+
+PIC009	Straight-Tusked Elephant	Straight-Forward	Paleontology	Ice Age	Rare	Limited	
+3	10						
+Play	Cible	player					
+	Effet	power per turn	7				
+	Duree	Round	1				
+Play	Cible	player hand	Album	Paleontology			
+	Effet	power	18				
+	Duree	turn	1				
+
+PIC014	Tasmanian Emu	Tas-Team	Paleontology	Ice Age	Epic	Limited	
+5	33						
+Draw	Cible	player deck	Card	Tasmanian Devil			
+	Effet	cost	-2				
+	Duree	until played					
+Play	Cible	player deck	Collection	Ice Age			
+	Effet	power	20				
+	Duree	turn	3				
+Return	Cible	player deck	Collection	Marsupials			
+	Effet	power	17				
+	Duree	Round	1				
+
+PIC018	Thylacoleo	Wounding Bite	Paleontology	Ice Age	Rare	Standard	
+6	57						
+Play	Cible	voisin	oppose				
+	Effet	power	-25				
+	Duree	turn	1				
+Return	Cible	voisin	oppose				
+	Effet	cost	2				
+	Duree	until played					
+
+PIC003	Woolly Rhino	Crash Test	Paleontology	Ice Age	Epic	Limited	
+6	60						
+Play	Cible	player deck	Card	Elasmotherium			
+	Cible	player deck	Card	Black Rhinoceros			
+	Cible	player deck	Card	Southern White Rhinoceros			
+	Effet	power	20				
+	Duree	until played					
 
 PLB007	Antarctic Rainforest	Warm Interval	Paleontology	Land Before Time	Epic	Limited	
 6	56						
