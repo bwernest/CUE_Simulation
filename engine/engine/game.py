@@ -217,9 +217,14 @@ class Game(Deck):
                 "turn score": self.check_condition_turn_score,
                 "round score": self.check_condition_round_score,
                 "player played": self.check_condition_player_played,
+                "player album": self.check_condition_player_album,
             }[atk_cdt[0]](atk_cdt, player)
         except KeyError:
             raise ConditionKeyError(f"Condition {atk_cdt[0]} inconnue")
+
+    def check_condition_player_album(self, atk_cdt: List, player: int) -> int:
+        amount_player = len(self.stats[player]["album"])
+        return self.check_condition_amount(atk_cdt[1], amount_player, int(atk_cdt[2]))
 
     def check_condition_deck(self, atk_cdt: List, player: int) -> bool:
         return {
