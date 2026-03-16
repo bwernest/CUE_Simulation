@@ -34,6 +34,21 @@ def album_deck(album: Literal["Paleontology"]) -> Deck:
         card.album = album.lower()
     return deck
 
+def collection_deck(collection: Literal[
+    "Ancient Creatures",
+    "Carnivores",
+    "Fearsome Flyers",
+    "Groundbreakers",
+    "Herbivores",
+    "Land Before Time",
+    "Monsters of The Deep",
+    "Omnivores",
+]) -> Deck:
+    deck = dummy_deck()
+    for card in deck.cards.values():
+        card.album = "paleontology"
+        card.collection = collection.lower()
+    return deck
 
 def dummy_card() -> Card:
     card = Card("test")

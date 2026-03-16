@@ -60,8 +60,6 @@ class Game(Deck):
         self.trigger_attacks("start")
 
     def play(self, play0: List[str | None], play1: List[str | None]) -> None:
-        if not len(play0) == self.play_len or not len(play1) == self.play_len:
-            raise PlayIncorrect("Nombre de cartes jouées incorrect")
         plays = [play0, play1]
         self.decks[0].update_remaining(play0)
         self.decks[1].update_remaining(play1)
@@ -223,7 +221,7 @@ class Game(Deck):
                 "voisin": self.check_condition_voisin,
             }[atk_cdt[0]](atk_cdt, plays, player, card_index)
         except KeyError:
-            raise ConditionKeyError(f"Condition {atk_cdt[0]} inconnue")
+            raise ConditionKeyError(f"Condition <{atk_cdt[0]}> inconnue")
 
     def check_condition_voisin(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
@@ -236,16 +234,19 @@ class Game(Deck):
         return self.check_condition_voisin_gauche(atk_cdt, plays, player, card_index) or self.check_condition_voisin_droite(atk_cdt, plays, player, card_index)
 
     def check_condition_voisin_gauche(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        try: nei_card = self.decks[player].cards[plays[player][card_index-1]]
-        except IndexError: return False
         if atk_cdt[2] == "vide": return plays[player][card_index-1] is None
-        else: return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+        
+        try: nei_card = self.decks[player].cards[plays[player][card_index-1]]
+        except KeyError or IndexError: return False
+        
+        return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_voisin_droite(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        try: nei_card = self.decks[player].cards[plays[player][card_index+1]]
-        except IndexError: return False
         if atk_cdt[2] == "vide": return plays[player][card_index+1] is None
-        else: return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+
+        try: nei_card = self.decks[player].cards[plays[player][card_index+1]]
+        except KeyError or IndexError: return False
+        return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
