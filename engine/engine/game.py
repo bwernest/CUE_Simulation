@@ -88,14 +88,14 @@ class Game(Deck):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                self.trigger_attack("play", plays[player][k], player)  # type:ignore
+                self.trigger_attack("play", plays, player, k)  # type:ignore
 
     def post_play(self, plays) -> None:
         for player in range(2):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                self.trigger_attack("return", plays[player][k], player)
+                self.trigger_attack("return", plays, player, k)
         self.add_energy_per_turn()
         self.debuff_cards(plays)
         self.debuff_resources_per_turn()
@@ -125,12 +125,13 @@ class Game(Deck):
         for player in range(2):
             for card in self.decks[player].hand:
                 for attack in self.decks[player].cards[card].attacks[trigger]:
-                    if self.check_conditions(attack["condition"], attack["acondition"], player):
+                    if self.check_conditions(attack["condition"], attack["acondition"], [], player, 26):
                         self.execute_attack(attack, card, player)
 
-    def trigger_attack(self, trigger: Literal["play", "return"], card: str, player: int) -> None:
+    def trigger_attack(self, trigger: Literal["play", "return"], plays: List[List[str]], player: int, card_index: int) -> None:
+        card = plays[player][card_index]
         for attack in self.decks[player].cards[card].attacks[trigger]:
-            if self.check_conditions(attack["condition"], attack["acondition"], player):
+            if self.check_conditions(attack["condition"], attack["acondition"], plays, player, card_index):
                 self.execute_attack(attack, card, player)
 
     def execute_attack(self, attack: Dict, card_id: str, player: int) -> None:
@@ -201,16 +202,16 @@ class Game(Deck):
 
     """___Condition_____________________________________________________________________________"""
 
-    def check_conditions(self, conditions: List, aconditions: List, player: int) -> bool:
+    def check_conditions(self, conditions: List, aconditions: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         for atk_cdt in conditions:
-            if not self.check_condition(atk_cdt, player):
+            if not self.check_condition(atk_cdt, plays, player, card_index):
                 return False
         for atk_cdt in aconditions:
-            if self.check_condition(atk_cdt, player):
+            if self.check_condition(atk_cdt, plays, player, card_index):
                 return False
         return True
 
-    def check_condition(self, atk_cdt: List, player: int) -> bool:
+    def check_condition(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         try:
             return {
                 "player deck": self.check_condition_deck,
@@ -218,51 +219,59 @@ class Game(Deck):
                 "round score": self.check_condition_round_score,
                 "player played": self.check_condition_player_played,
                 "player album": self.check_condition_player_album,
-            }[atk_cdt[0]](atk_cdt, player)
+                "placement": self.check_condition_placement,
+            }[atk_cdt[0]](atk_cdt, plays, player, card_index)
         except KeyError:
             raise ConditionKeyError(f"Condition {atk_cdt[0]} inconnue")
 
-    def check_condition_player_album(self, atk_cdt: List, player: int) -> int:
+    def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+        return {
+            "gauche": 0,
+            "milieu": 1,
+            "droite": 2,
+        }[atk_cdt[1]] == card_index
+
+    def check_condition_player_album(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_player = len(self.stats[player]["album"])
         return self.check_condition_amount(atk_cdt[1], amount_player, int(atk_cdt[2]))
 
-    def check_condition_deck(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
             "card": self.check_condition_deck_card,
             "collection": self.check_condition_deck_set,
             "album": self.check_condition_deck_set,
-        }[atk_cdt[1]](atk_cdt, player)
+        }[atk_cdt[1]](atk_cdt, plays, player, card_index)
 
-    def check_condition_deck_card(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_deck_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         try:
             _ = self.decks[player].name_to_id[atk_cdt[2]]
         except KeyError:
             return False
         return True
 
-    def check_condition_deck_set(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_deck_set(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_deck = self.get_amount(player, atk_cdt[1], atk_cdt[2])
         amount_target = int(atk_cdt[4])
         return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
 
-    def check_condition_turn_score(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_turn_score(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_turn_score = self.score[self.round, self.turn, player] - self.score[self.round, self.turn, 1 - player]
         amount_target = int(atk_cdt[2])
         return self.check_condition_amount(atk_cdt[1], amount_turn_score, amount_target)
 
-    def check_condition_round_score(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_round_score(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
         amount_target = int(atk_cdt[2])
         return self.check_condition_amount(atk_cdt[1], amount_round_score, amount_target)
 
-    def check_condition_player_played(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
             "card": self.check_condition_played_card,
             "collection": self.check_condition_played_deck,
             "album": self.check_condition_played_deck,
         }[atk_cdt[1]](atk_cdt, player)
 
-    def check_condition_played_card(self, atk_cdt: List, player: int) -> bool:
+    def check_condition_played_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         try:
             card_id = self.decks[player].name_to_id[atk_cdt[2]]
         except KeyError:
@@ -270,7 +279,7 @@ class Game(Deck):
         amount_played = self.decks[player].cards[card_id].played
         return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
 
-    def check_condition_played_deck(self, atk_cdt: List, player: int) -> int:
+    def check_condition_played_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> int:
         amount_played = 0
         for card in self.decks[player].cards.values():
             if card.__getattribute__(atk_cdt[1]) == atk_cdt[2]:

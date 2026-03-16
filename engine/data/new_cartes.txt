@@ -287,6 +287,18 @@ Draw	Cible	player deck	Collection	Mammals
 PAN009	Opabinia		Paleontology	Ancient Creatures	Common	Limited	
 8	72	2020					
 
+PAN057	Pakicetus	The First Whale	Paleontology	Ancient Creatures	Epic	Limited	
+6	50						
+Draw	Cible	player deck	Collection	Ancient Creatures			
+	Effet	cost	-1				
+	Duree	until played					
+Return	Cible	self					
+	Effet	power	-10				
+	Duree	permanently					
+Return	Cible	self					
+	Effet	cost	-1				
+	Duree	permanently					
+
 PAN006	Paraceratherium		Paleontology	Ancient Creatures	Common	Limited	
 7	69	2020					
 
@@ -298,6 +310,13 @@ Draw	Cible	player deck	Collection	Herbivores
 Play	Condition						
 	Cible	player hand	Card	Bonnethead Shark			
 	Effet	power	30				
+	Duree	turn	1				
+
+PAN038	Protictitherium	First Striking Beast	Paleontology	Ancient Creatures	Epic	Limited	
+5	22						
+Play	Condition	turn	1				
+	Cible	player hand	Album	Paleontology			
+	Effet	power	25				
 	Duree	turn	1				
 
 PAN030	Purgatorius	Primate Progenitor	Paleontology	Ancient Creatures	Epic	Limited	
@@ -1866,11 +1885,166 @@ Play	Condition	player deck	Album	Paleontology	<	7
 	Effet	power	15				
 	Duree	turn	6				
 
+PMO005	Basilosaurus	Strike From the Deep	Paleontology	Monsters of the Deep	Common	Limited	
+6	54	2020					
+Play	Cible	opponent hand	Album	Oceans and Seas			
+	Effet	power	-10				
+	Duree	turn	1				
+
+PMO045	Bothriolepis	Extreme Diverse	Paleontology	Monsters of the Deep	Rare	Limited	
+4	40						
+Play	Condition	player album	>	13			
+	Cible	player deck					
+	Effet	power	10				
+	Duree	until played					
+Play	Condition	player album	>	13			
+	Cible	self					
+	Effet	power	10				
+	Duree	permanently					
+
+PMO027	Brachypterygius	Wide Paddle	Paleontology	Monsters of the Deep	Rare	Limited	
+3	28						
+Play	Condition	placement	milieu				
+	Cible	player hand	Album	Paleontology			
+	Cible	player hand	Album	Oceans and Seas			
+	Effet	power	29				
+	Duree	turn	1				
+
+PMO014	Cymbospondylus	Not a Fluke	Paleontology	Monsters of the Deep	Common	Limited	
+8	79						
+Return	Condition	turn score	>	0			
+	Cible	player					
+	Effet	power per turn	15				
+	Duree	turn	2				
+
+PMO010	Dakosaurus	Dak to the Future	Paleontology	Monsters of the Deep	Common	Limited	
+5	0						
+Play	Cible	self					
+	Effet	power	45				
+	Duree	permanently					
+
+PMO041	Dipterus	Lungish Out Of Water	Paleontology	Monsters of the Deep	Rare	Limited	
+5	37						
+Play	Condition	player deck	Album	Paleontology	<	4	
+	Cible	player hand	Collection	Fabulous Fish			
+	Cible	player hand	Collection	Feisty Fish			
+	Effet	power	13				
+	Duree	permanently					
+
+PMO002	Edestus	Scissortoothed	Paleontology	Monsters of the Deep	Common	Limited	
+5	70	2020					
+Draw	Condition	round score	>	0			
+	Cible	self					
+	Effet	power	-35				
+	Duree	Round	1				
+
+PMO011	Elasmosaurus	Cope-ing Mechanism	Paleontology	Monsters of the Deep	Legendary	Limited	
+6	62	2020					
+Return	Condition	turn score	<	0			
+	Cible	player					
+	Effet	energy	6				
+
+PMO038	Eretmorhipis	Oar Fan	Paleontology	Monsters of the Deep	Common	Limited	
+6	59						
+Draw	Cible	player hand	Collection	Riding the Waves!			
+	Effet	power	16				
+	Duree	until played					
+
+PMO021	Eurhinosaurus	You, Rhino, Saw Us.	Paleontology	Monsters of the Deep	Common	Limited	
+3	36						
+Return	Cible	player deck	Card	Southern White Rhinoceros			
+	Cible	player deck	Card	Black Rhinoceros			
+	Cible	player deck	Card	Elasmotherium			
+	Effet	cost	-1				
+	Duree	until played					
+
+PMO020	Eurypterus	Scorpion Ascendant	Paleontology	Monsters of the Deep	Epic	Limited	
+2	21						
+Return	Cible	player remaining	Collection	Venomous Creatures			
+	Effet	power	40				
+	Duree	Round	1				
+
+PMO044	Eusthenopteron	Lobe-Finned	Paleontology	Monsters of the Deep	Common	Limited	
+5	39						
+Draw	Cible	player deck	Collection	Amphibians			
+	Filtre	random	1				
+	Effet	power	25				
+	Duree	until played					
+Draw	Cible	player deck	Album	Paleontology			
+	Filtre	random	1				
+	Effet	power	25				
+	Duree	until played					
+
+PMO023	Galagadon	Mopping Shmup	Paleontology	Monsters of the Deep	Epic	Limited	
+9	81						
+Return	Cible	player deck	Album	Space			
+	Effet	power	12				
+	Duree	turn	3				
+
+PMO025	Gavialinum	Teeth on Edge	Paleontology	Monsters of the Deep	Common	Limited	
+6	50						
+Play	Condition	round score	>	64			
+	Cible	self					
+	Effet	power	66				
+	Duree	turn	1				
+
+PMO007	Helicoprion	Into the Jaws of Defeat!	Paleontology	Monsters of the Deep	Epic	Limited	
+9	86	2020					
+Draw	Cible	player hand	Collection	Sharks!			
+	Effet	power	40				
+	Duree	until played					
+
+PMO033	Hurdia	Rake-Like	Paleontology	Monsters of the Deep	Rare	Limited	
+3	25						
+Draw	Condition	player deck	Collection	Curious Cuisine	>	1	
+	Cible	self					
+	Effet	power	30				
+	Duree	turn	3				
+
+PMO013	Kronosaurus	Lizard of Kronos	Paleontology	Monsters of the Deep	Rare	Limited	
+4	39	2020					
+Play	Cible	player hand	Collection	Reptiles			
+	Effet	power	25				
+	Duree	turn	1				
+
+PMO001	Liopleurodon	Deep Trouble	Paleontology	Monsters of the Deep	Epic	Limited	
+4	36	2020					
+Draw	Cible	player hand	Album	Paleontology			
+	Effet	power	20				
+	Duree	until played					
+
+PMO008	Livyatan Melvillei	Whale of a Time	Paleontology	Monsters of the Deep	Common	Limited	
+7	65	2020					
+Draw	Cible	player hand	Card	Orca			
+	Effet	cost	-3				
+	Duree	until played					
+
+PMO034	Marrella	Active Swimmer	Paleontology	Monsters of the Deep	Rare	Limited	
+5	50						
+Play	Condition	voisin	gauche	album	Oceans and Seas		
+	Condition	voisin	droite	album	Oceans and Seas		
+	Cible	player hand	Collection	Ancient Creatures			
+	Effet	power	35				
+	Duree	until played					
+
 PMO009	Mawsonia	Maw Power!	Paleontology	Monsters of the Deep	Epic	Limited	
 5	30	2020					
 Play	Cible	player hand	Collection	Monsters of the Deep			
 	Effet	power	24				
 	Duree	turn	1				
+
+PMO017	Nothosaurus	Seal the Deal	Paleontology	Monsters of the Deep	Legendary	Limited	
+9	70						
+Draw	Cible	self					
+	Effet	cost	-6				
+	Duree	turn	1				
+
+PMO042	Protosphyraena	Early Barracuda	Paleontology	Monsters of the Deep	Epic	Limited	
+7	67						
+Play	Condition	turn	1				
+	Cible	player deck	Collection	Feisty Fish			
+	Effet	power	21				
+	Duree	until played					
 
 POM015	Amphicyon	Bear Dog	Paleontology	Omnivores	Common	Standard	
 5	40	2020					
