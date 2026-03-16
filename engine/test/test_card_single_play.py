@@ -142,3 +142,22 @@ class TestCardSinglePlay(Assert):
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
         self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+
+    def test_card_PMO045_false(self) -> None:
+        game = unique_card_play("PMO045")
+        card = game.decks[0].cards["pmo045"]
+        self.assertEqual(card.base_power, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost, game.energy[0])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+
+    def test_card_PMO045_true(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        for card_id, card in player_deck.cards.items():
+            card.album = card_id    # L'histoire d'avoir des albums différents
+        game = unique_card_play("PMO045", player_deck)
+        card = game.decks[0].cards["pmo045"]
+        self.assertEqual(card.base_power + 20, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost, game.energy[0])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[0] += 10
+        self.assertEqual(expected_buff_array, card.buff["power"])
