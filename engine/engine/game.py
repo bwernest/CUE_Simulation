@@ -237,7 +237,8 @@ class Game(Deck):
         if atk_cdt[2] == "vide": return plays[player][card_index-1] is None
         
         try: nei_card = self.decks[player].cards[plays[player][card_index-1]]
-        except KeyError or IndexError: return False
+        except KeyError: return False
+        except IndexError: return False
         
         return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
@@ -245,7 +246,8 @@ class Game(Deck):
         if atk_cdt[2] == "vide": return plays[player][card_index+1] is None
 
         try: nei_card = self.decks[player].cards[plays[player][card_index+1]]
-        except KeyError or IndexError: return False
+        except KeyError: return False
+        except IndexError: return False
         return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
