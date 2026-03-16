@@ -7,9 +7,8 @@ from ..engine.engine import Engine
 from ..engine.game import Game
 
 # Python
-from copy import deepcopy
 import pytest
-from typing import Literal, Optional
+from typing import List, Literal, Optional
 
 """___Functions_________________________________________________________________________________"""
 
@@ -80,4 +79,27 @@ def unique_card_play(
     deck1.replace_card("id0", engine.cards[card_id])
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
     engine.play([card_id, None, None], [None, None, None])
+    return engine.game
+
+def unique_turn_play(
+    player_play: List[str | None],
+    opponent_play: List[str | None],
+    player_deck: Optional[Deck] = None,
+    opponent_deck: Optional[Deck] = None,
+) -> Game:
+    engine = Engine("test")
+    engine.start_engine()
+    player_deck = dummy_deck() if player_deck is None else player_deck
+    opponent_deck = dummy_deck() if opponent_deck is None else opponent_deck
+    deck1 = player_deck
+    deck2 = opponent_deck
+
+    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
+    for card in player_play:
+        if card is not None:
+            assert card in player_deck.order, "Erreur dans la rédaction du test unique_turn_play."
+    for card in opponent_play:
+        if card is not None:
+            assert card in opponent_deck.order, "Erreur dans la rédaction du test unique_turn_play."
+    engine.play(player_play, opponent_play)
     return engine.game

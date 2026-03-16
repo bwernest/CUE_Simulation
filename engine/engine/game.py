@@ -220,9 +220,32 @@ class Game(Deck):
                 "player played": self.check_condition_player_played,
                 "player album": self.check_condition_player_album,
                 "placement": self.check_condition_placement,
+                "voisin": self.check_condition_voisin,
             }[atk_cdt[0]](atk_cdt, plays, player, card_index)
         except KeyError:
             raise ConditionKeyError(f"Condition {atk_cdt[0]} inconnue")
+
+    def check_condition_voisin(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+        return {
+            "gauche": self.check_condition_voisin_gauche,
+            "droite": self.check_condition_voisin_droite,
+            "next to": self.check_condition_voisin_next_to,
+        }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+    
+    def check_condition_voisin_next_to(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+        return self.check_condition_voisin_gauche(atk_cdt, plays, player, card_index) or self.check_condition_voisin_droite(atk_cdt, plays, player, card_index)
+
+    def check_condition_voisin_gauche(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+        try: nei_card = self.decks[player].cards[plays[player][card_index-1]]
+        except IndexError: return False
+        if atk_cdt[2] == "vide": return plays[player][card_index-1] is None
+        else: return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+
+    def check_condition_voisin_droite(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+        try: nei_card = self.decks[player].cards[plays[player][card_index+1]]
+        except IndexError: return False
+        if atk_cdt[2] == "vide": return plays[player][card_index+1] is None
+        else: return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
@@ -237,7 +260,7 @@ class Game(Deck):
 
     def check_condition_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
-            "card": self.check_condition_deck_card,
+            "name": self.check_condition_deck_card,
             "collection": self.check_condition_deck_set,
             "album": self.check_condition_deck_set,
         }[atk_cdt[1]](atk_cdt, plays, player, card_index)
@@ -266,7 +289,7 @@ class Game(Deck):
 
     def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
-            "card": self.check_condition_played_card,
+            "name": self.check_condition_played_card,
             "collection": self.check_condition_played_deck,
             "album": self.check_condition_played_deck,
         }[atk_cdt[1]](atk_cdt, player)
@@ -404,7 +427,7 @@ class Game(Deck):
         # Collection ou Album spécifique
         else:
             return {
-                "card": self.get_target_cards_card,
+                "name": self.get_target_cards_card,
                 "collection": self.get_target_cards_deck,
                 "album": self.get_target_cards_deck,
             }[atk_target[1]](atk_target, player_targeted, location)
@@ -555,7 +578,7 @@ class Game(Deck):
 
     def get_multiplicateur_played(self, attack_mult: List, player: int) -> int:
         return self.get_maxed_multiplicateur({
-            "card": self.get_multiplicateur_played_card,
+            "name": self.get_multiplicateur_played_card,
             "collection": self.get_multiplicateur_played_deck,
             "album": self.get_multiplicateur_played_deck,
         }[attack_mult[1]](attack_mult, player), attack_mult, 3)
