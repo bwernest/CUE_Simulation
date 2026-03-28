@@ -39,3 +39,9 @@ class GameUtility(ToolBox):
         while None in selected[1]:
             selected[1].remove(None)
         return selected
+
+    def merge_dict(self, dict1: Dict[int, List], dict2: Dict[int, List]) -> Dict[int, List]:
+        merged = {}
+        for key in dict1.keys():
+            merged[key] = dict1[key] + dict2[key]
+        return merged

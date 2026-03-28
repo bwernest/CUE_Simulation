@@ -432,8 +432,7 @@ class Game(Deck):
     def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         dict0 = self.get_target_cards(target_attack, player, "remaining")
         dict1 = self.get_target_cards(target_attack, 1 - player, "remaining")
-        dict0.update(dict1)
-        return dict0
+        return self.merge_dict(dict0, dict1)
 
     def get_target_cards(
         self,
