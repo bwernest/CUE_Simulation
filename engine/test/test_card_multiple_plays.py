@@ -4,7 +4,7 @@
 from . import *
 
 # Python
-from numpy import array, sum, zeros
+from numpy import zeros
 
 """___Tests_____________________________________________________________________________________"""
 
@@ -26,3 +26,18 @@ class TestCardMultiplePlays(Assert):
         self.assertEqual(100 * 3, game.score[0, 0, 1])
         self.assertEqual(100 * 3, game.score[0, 1, 1])
         self.assertEqual(card.base_power + 40, game.score[0, 1, 0])
+
+    def test_card_PHU013(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id4", engine.cards["phu013"])
+        game = multiple_turns_play(
+            player_plays=[[None, None, None], ["phu013", None, None]],
+            opponent_plays=[[None, None, None], [None, None, None]],
+            player_deck=player_deck,
+        )
+        card = game.decks[0].cards["phu013"]
+        self.assertEqual(card.base_power + 9 * 2, game.score[0, 1, 0])
+        self.assertEqual(100 - card.base_cost, game.energy[0])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[0] += 9 * 2
+        self.assertEqual(expected_buff_array, card.buff["power"])
