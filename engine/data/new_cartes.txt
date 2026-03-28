@@ -43,7 +43,7 @@ Draw	Cible	player hand
 	Filtre	random	1				
 	Effet	power	46				
 	Duree	until played					
-Return	Cible	player hand					
+Return	Cible	player remaining					
 	Filtre	random	1				
 	Effet	power	46				
 	Duree	until played					
@@ -177,6 +177,14 @@ Draw	Condition	round score	<	0
 	Effet	power	40				
 	Duree	turn	1				
 
+PAN060	Heracles Inexpectatus	Unexpected Hero	Paleontology	Ancient Creatures	Legendary	Limited	
+5	35						
+Play	Condition	round score	<	0			
+	Condition	player deck	Album	Paleontology	>	2	
+	Cible	player deck	Album	The Roman Empire			
+	Effet	power	29				
+	Duree	turn	3				
+
 PAN039	Hesperocyon	Canidae to Canid	Paleontology	Ancient Creatures	Rare	Limited	
 4	37						
 Draw	Cible	self					
@@ -210,6 +218,13 @@ Play	Condition	player deck	Name	Teeth
 	Cible	self					
 	Effet	power	60				
 	Duree	turn	1				
+
+PAN050	Josephoartigasia	Enormous Rodent	Paleontology	Ancient Creatures	Epic	Limited	
+7	76						
+Play	Cible	player deck	Collection	Going Underground			
+	Filtre	base_cost	>	5			
+	Effet	power	24				
+	Duree	until played					
 
 PAN035	Langstonia	Teeth Bared	Paleontology	Ancient Creatures	Legendary	Limited	
 7	54						
@@ -1562,7 +1577,7 @@ Play	Condition	player deck	Collection	Human Evolution	<	4
 
 PIC023	Agriotherium	Wild Beast	Paleontology	Ice Age	Epic	Standard	
 6	20						
-Play	Cible	player hand	Agriotherium				
+Play	Cible	self					
 	Effet	power	10				
 	Multiplicateur	player played	Collection	Ice Age	12		
 	Duree	permanently					
@@ -1785,6 +1800,21 @@ Play	Condition	voisin	gauche	album	paleontology
 	Effet	power	15				
 	Duree	until played					
 
+PLB012	Flaming Cliffs	Important Findings	Paleontology	Land Before Time	Legendary	Limited	
+6	25						
+Draw	Cible	player deck	Album	Paleontology			
+	Filtre	played	=	0			
+	Effet	power	10				
+	Duree	permanently					
+Play	Condition	turn	1				
+	Cible	player deck	Album	Paleontology			
+	Effet	power	10				
+	Duree	until played					
+Return	Cible	player remaining	Album	Paleontology			
+	Effet	cost	-1				
+	Multiplicateur	player played	Name	Dinosaur Eggs			
+	Duree	permanently					
+
 PLB009	Garden of Ediacara	Evolutionary Radiation	Paleontology	Land Before Time	Epic	Limited	
 6	51						
 Draw	Condition	player played	Album	Paleontology	>	3	
@@ -1869,6 +1899,13 @@ Play	Cible	player hand	Collection	Amphibians
 	Cible	player hand	Collection	Feisty Fish			
 	Effet	power	15				
 	Duree	turn	1				
+
+PMO029	Archelon	Southward Migration	Paleontology	Monsters of the Deep	Legendary	Limited	
+6	110						
+Draw	Cible	self					
+	Effet	power	-15				
+	Multiplicateur	round completed					
+	Duree	permanently					
 
 PMO026	Attenborosaurus	A True Natural	Paleontology	Monsters of the Deep	Legendary	Limited	
 5	52						
@@ -2151,7 +2188,11 @@ Play	Condition	placement	droite
 
 PMO040	Xenacanthus	Dorsal Ribbon	Paleontology	Monsters of the Deep	Rare	Limited	
 5	47						
-Play	Condition						
+Play	Acondition	voisin	next to	vide			
+	Acondition	voisin	next to	album	Paleontology		
+	Cible	player deck	Collection	Monsters of the Deep			
+	Effet	power	20				
+	Duree	turn	2				
 
 POM015	Amphicyon	Bear Dog	Paleontology	Omnivores	Common	Standard	
 5	40	2020					
@@ -2176,5 +2217,124 @@ POM018	Balaur Bondoc	Way of the Dragon	Paleontology	Omnivores	Epic	Standard
 Draw	Cible	opponent hand					
 	Filtre	random	1				
 	Effet	burn	30				
+	Duree	until played					
+
+POM010	Caudipteryx	Shake Your Tail Feather	Paleontology	Omnivores	Common	Standard	
+3	26	2020					
+Play	Cible	player hand	Name	Peacock			
+	Effet	power	25				
+	Duree	turn	1				
+
+POM013	Citipati		Paleontology	Omnivores	Common	Fusion ingredient	
+3	39	2020					
+
+POM003	Deinocheirus	Armed and Dangerous	Paleontology	Omnivores	Common	Standard	
+4	80	2020					
+Play	Cible	player hand					
+	Effet	power	-10				
+	Duree	turn	1				
+
+POM022	Dracorex	Reptilium Leviosa	Paleontology	Omnivores	Rare	Limited	
+6	41	2020					
+Draw	Condition	player deck	Album	Paleontology	>	7	
+	Cible	player hand	Album	Paleontology			
+	Effet	cost	-1				
+	Duree	Round	1				
+
+POM014	Entelodont	Pig Out	Paleontology	Omnivores	Common	Fusion ingredient	
+3	27	2020					
+Play	Cible	player hand	Name	Peccary Hog			
+	Effet	power	35				
+	Duree	turn	1				
+
+POM002	Gallimimus	Chicken Mimic	Paleontology	Omnivores	Rare	Standard	
+1	3	2020					
+Play	Cible	player hand	Name	French Hen			
+	Effet	power	80				
+	Duree	turn	1				
+
+POM004	Gigantoraptor	Raptor-ous Applause	Paleontology	Omnivores	Legendary	Standard	
+2	28	2020					
+Return	Condition	turn score	>	0			
+	Cible	self					
+	Effet	power	60				
+	Duree	permanently					
+
+POM008	Heterodontosaurus	The Whole Tooth	Paleontology	Omnivores	Rare	Standard	
+1	6	2020					
+Play	Cible	player hand	Collection	Sharks!			
+	Effet	power	12				
+	Duree	until played					
+
+POM017	Hypsilophodon	Hyp to be Square	Paleontology	Omnivores	Common	Standard	
+3	24	2020					
+Play	Cible	player hand	Collection	Pioneers of Science			
+	Effet	power	20				
+	Duree	turn	1				
+
+POM001	Massospondylus		Paleontology	Omnivores	Common	Standard	
+8	86	2020					
+
+POM023	Microvenator	Dental Plan	Paleontology	Omnivores	Rare	Standard	
+3	36						
+Play	Cible	player deck	Name	Teeth			
+	Cible	player deck	Name	Deinonychus			
+	Effet	power	24				
+	Duree	until played					
+
+POM021	Mononykus	POKE!	Paleontology	Omnivores	Epic	Fusion ingredient	
+3	13	2020					
+Play	Cible	player hand	Collection	Omnivores			
+	Effet	power	17				
+	Duree	turn	1				
+
+POM009	Ornithomimus		Paleontology	Omnivores	Common	Fusion ingredient	
+5	61	2020					
+
+POM012	Oviraptor	Wrongly Accused	Paleontology	Omnivores	Legendary	Fusion ingredient	
+4	40	2020					
+Play	Cible	player hand	Name	Dinosaur Eggs			
+	Effet	power	50				
+	Duree	turn	1				
+
+POM007	Pelecanimimus		Paleontology	Omnivores	Common	Standard	
+5	61	2020					
+
+POM019	Plateosaurus	Broad Appeal	Paleontology	Omnivores	Rare	Standard	
+6	49	2020					
+Play	Cible	player hand					
+	Effet	power	30				
+	Duree	turn	1				
+Play	Cible	opponent hand					
+	Effet	power	15				
+	Duree	turn	1				
+
+POM016	Struthiomimus	Bird Brained	Paleontology	Omnivores	Rare	Fusion ingredient	
+2	16	2020					
+Play	Cible	player hand	Collection	Birds			
+	Effet	power	15				
+	Duree	turn	1				
+
+POM024	Tianyulong	Proto-Feather	Paleontology	Omnivores	Legendary	Standard	
+8	65						
+Play	Condition	player played	Collection	Birds	>	2	
+	Cible	player deck	Collection	Omnivores			
+	Effet	power	20				
+	Duree	until played					
+
+POM005	Troodon	Troo Facts	Paleontology	Omnivores	Epic	Limited	
+3	0	2020					
+Play	Cible	player hand	Album	Paleontology			
+	Effet	power	25				
+	Duree	turn	1				
+
+POM011	Yangchuanosaurus		Paleontology	Omnivores	Common	Fusion ingredient	
+6	68	2020					
+
+SBB001	Teeth	Bite Size	Science	Brilliant Human Body	Epic	Fusion ingredient	
+4	36						
+Draw	Cible	player deck	Collection	Sharks!			
+	Cible	player deck	Album	Paleontology			
+	Effet	power	9				
 	Duree	until played					
 
