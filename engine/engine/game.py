@@ -136,19 +136,18 @@ class Game(Deck):
         targets = self.get_targets(attack["cible"], card_id, player)
         if attack["filtre"] != []:
             for filtre in attack["filtre"]:
-                targets = self.filter_targets(targets, filtre, player, card_id)
-        self.apply_effects(attack["effet"], attack["multiplicateur"],
-                           attack["duree"], targets, player)
+                targets = self.filter_targets(targets, filtre, player, card_id)  # type:ignore
+        self.apply_effects(attack["effet"], attack["multiplicateur"], attack["duree"], targets, player)
 
     """___Filtre________________________________________________________________________________"""
 
     def filter_targets(
         self,
-        targets: Dict[int, List],
+        targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
         card_id: str,
-    ) -> Dict[int, List]:
+    ) -> Dict[int, List[str]]:
         try:
             return {
                 "base_power": self.filter_targets_card_attribut_amount,
@@ -162,11 +161,11 @@ class Game(Deck):
 
     def filter_targets_card_attribut_amount(
         self,
-        targets: Dict[int, List],
+        targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
         card_id: str,
-    ) -> Dict[int, List]:
+    ) -> Dict[int, List[str]]:
         filtered_targets = {0: [], 1: []}
         for player in range(2):
             for card_id in targets[player]:
@@ -176,11 +175,11 @@ class Game(Deck):
 
     def filter_targets_card_rarity(
         self,
-        targets: Dict[int, List],
+        targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
         card_id: str,
-    ) -> Dict[int, List]:
+    ) -> Dict[int, List[str]]:
         filtered_targets = {0: [], 1: []}
         for player in range(2):
             for card_id in targets[player]:
@@ -190,11 +189,11 @@ class Game(Deck):
 
     def filter_targets_other(
         self,
-        targets: Dict[int, List],
+        targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
         card_id: str,
-    ) -> Dict[int, List]:
+    ) -> Dict[int, List[str]]:
         targets[player].remove(card_id)
         return targets
 
@@ -229,26 +228,27 @@ class Game(Deck):
             "droite": self.check_condition_voisin_droite,
             "next to": self.check_condition_voisin_next_to,
         }[atk_cdt[1]](atk_cdt, plays, player, card_index)
-    
+
     def check_condition_voisin_next_to(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        return self.check_condition_voisin_gauche(atk_cdt, plays, player, card_index) or self.check_condition_voisin_droite(atk_cdt, plays, player, card_index)
+        return {
+            0: self.check_condition_voisin_droite,
+            1: self.check_condition_voisin_gauche or self.check_condition_voisin_droite,
+            2: self.check_condition_voisin_gauche,
+        }[card_index](atk_cdt, plays, player, card_index)
 
     def check_condition_voisin_gauche(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        if atk_cdt[2] == "vide": return plays[player][card_index-1] is None
-        
-        try: nei_card = self.decks[player].cards[plays[player][card_index-1]]
-        except KeyError: return False
-        except IndexError: return False
-        
-        return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+        try:
+            nei_card = self.decks[player].cards[plays[player][card_index - 1]]
+        except KeyError:
+            return atk_cdt[2] == "vide"
+        return atk_cdt[2] != "vide" and nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_voisin_droite(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        if atk_cdt[2] == "vide": return plays[player][card_index+1] is None
-
-        try: nei_card = self.decks[player].cards[plays[player][card_index+1]]
-        except KeyError: return False
-        except IndexError: return False
-        return nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+        try:
+            nei_card = self.decks[player].cards[plays[player][card_index + 1]]
+        except KeyError:
+            return atk_cdt[2] == "vide"
+        return atk_cdt[2] != "vide" and nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
@@ -339,20 +339,20 @@ class Game(Deck):
 
     """___Target________________________________________________________________________________"""
 
-    def get_targets(self, target_attacks: List, card: str, player: int) -> Dict[int, List]:
+    def get_targets(self, target_attacks: List, card: str, player: int) -> Dict[int, List[str | int]]:
         """
         Attention si la cible est un joueur
         """
         targets = {0: [], 1: []}
         for target_attack in target_attacks:
             target = self.get_target(target_attack, card, player)
-            for player in range(2):
-                targets[player] += target[player]
+            for joueur in range(2):
+                targets[joueur] += target[joueur]
         targets[0] = list(set(targets[0]))
         targets[1] = list(set(targets[1]))
         return targets
 
-    def get_target(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target(self, target_attack: List, card: str, player: int) -> Dict[int, List[str | int]]:
         try:
             return {
                 "self": self.get_target_self,
@@ -371,46 +371,46 @@ class Game(Deck):
         except KeyError:
             raise TargetKeyError(f"Target {target_attack} inconnue")
 
-    def get_target_self(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_self(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return {player: [card], 1 - player: []}
 
-    def get_target_player(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_player(self, target_attack: List, card: str, player: int) -> Dict[int, List[int]]:
         return {player: [player], 1 - player: []}
 
-    def get_target_opponent(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_opponent(self, target_attack: List, card: str, player: int) -> Dict[int, List[int]]:
         return {player: [1 - player], 1 - player: []}
 
-    def get_target_player_hand(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_player_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return self.get_target_cards(target_attack, player, "hand")
 
-    def get_target_player_deck(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_player_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return self.get_target_cards(target_attack, player, "order")
 
-    def get_target_player_remaining(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_player_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return self.get_target_cards(target_attack, player, "remaining")
 
-    def get_target_opponent_hand(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_opponent_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return self.get_target_cards(target_attack, 1 - player, "hand")
 
-    def get_target_opponent_deck(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_opponent_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return self.get_target_cards(target_attack, 1 - player, "order")
 
-    def get_target_opponent_remaining(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_opponent_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         return self.get_target_cards(target_attack, 1 - player, "remaining")
 
-    def get_target_both_hand(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_both_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         dict0 = self.get_target_cards(target_attack, player, "hand")
         dict1 = self.get_target_cards(target_attack, 1 - player, "hand")
         dict0.update(dict1)
         return dict0
 
-    def get_target_both_deck(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_both_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         dict0 = self.get_target_cards(target_attack, player, "order")
         dict1 = self.get_target_cards(target_attack, 1 - player, "order")
         dict0.update(dict1)
         return dict0
 
-    def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> Dict:
+    def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         dict0 = self.get_target_cards(target_attack, player, "remaining")
         dict1 = self.get_target_cards(target_attack, 1 - player, "remaining")
         dict0.update(dict1)
@@ -421,7 +421,7 @@ class Game(Deck):
         atk_target: List,
         player_targeted: int,
         location: Literal["hand", "order", "remaining"],
-    ) -> Dict:
+    ) -> Dict[int, List[str]]:
         # N'importe
         if len(atk_target) == 1:
             targets = {0: [], 1: []}
