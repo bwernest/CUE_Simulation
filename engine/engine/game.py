@@ -56,6 +56,7 @@ class Game(Deck):
             for deck in self.decks:
                 deck.shuffle()
         self.trigger_draw_attacks()
+        self.trigger_start_attacks()
 
         self.decks[0].remaining = self.decks[0].order[:self.hand_len]
         self.decks[1].remaining = self.decks[1].order[:self.hand_len]
@@ -101,7 +102,7 @@ class Game(Deck):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                self.trigger_attack("return", plays, player, k) # type:ignore
+                self.trigger_attack("return", plays, player, k)  # type:ignore
         self.add_energy_per_turn()
         self.debuff_cards(plays)
         self.debuff_resources_per_turn()
@@ -306,9 +307,6 @@ class Game(Deck):
     def check_condition_round_score(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
         amount_target = int(atk_cdt[2])
-        print("Juif là")
-        self.print_info("round score player", self.score[0, :, player])
-        self.print_info("round score opponent", self.score[self.round, :, 1 - player])
         return self.check_condition_amount(atk_cdt[1], amount_round_score, amount_target)
 
     def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:

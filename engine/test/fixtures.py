@@ -122,6 +122,7 @@ def unique_turn_play(
     engine.play(player_play, opponent_play)
     return engine.game
 
+
 def multiple_turns_play(
     player_plays: List[List[str | None]],
     opponent_plays: List[List[str | None]],
@@ -140,8 +141,6 @@ def multiple_turns_play(
         for card in opponent_play:
             if card is not None:
                 assert card in deck2.hand, f"Erreur dans la rédaction du test multiple_turns_play, {card} n'est pas en main."
-        print(f"Play hand : {deck1.hand}, opponent hand : {deck2.hand}")
-        print(f"Player play : {player_play}, opponent play : {opponent_play}")
         engine.play(player_play, opponent_play)
     return engine.game
 
@@ -149,6 +148,7 @@ def multiple_turns_play(
 def set_deck_power(deck: Deck, power: int) -> None:
     for card in deck.cards.values():
         card.base_power = power
+
 
 def set_deck_cost(deck: Deck, cost: int) -> None:
     for card in deck.cards.values():
