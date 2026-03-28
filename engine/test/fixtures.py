@@ -44,6 +44,7 @@ def collection_deck(collection: Literal[
     "Fearsome Flyers",
     "Groundbreakers",
     "Herbivores",
+    "Ice Age",
     "Land Before Time",
     "Monsters of The Deep",
     "Omnivores",
