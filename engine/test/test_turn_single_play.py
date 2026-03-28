@@ -4,7 +4,7 @@
 from . import *
 
 # Python
-from numpy import array, sum, zeros
+from numpy import zeros
 
 """___Tests_____________________________________________________________________________________"""
 
