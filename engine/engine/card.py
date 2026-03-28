@@ -29,7 +29,7 @@ class Card(GameUtility):
         return True
 
     def __str__(self):
-        return f"Card {self.name}\nAttacks :\n{self.attacks}"
+        return f"Card {self.name} / {self.album} / {self.collection}\nAttacks :\n{self.attacks}"
 
     @property
     def buff_dictionnary(self) -> Dict[Literal["power", "cost", "burn", "lock"], NDArray]:
