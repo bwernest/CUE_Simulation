@@ -115,9 +115,41 @@ def unique_turn_play(
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
     for card in player_play:
         if card is not None:
-            assert card in deck1.order, "Erreur dans la rédaction du test unique_turn_play."
+            assert card in deck1.hand, "Erreur dans la rédaction du test unique_turn_play."
     for card in opponent_play:
         if card is not None:
-            assert card in deck2.order, "Erreur dans la rédaction du test unique_turn_play."
+            assert card in deck2.hand, "Erreur dans la rédaction du test unique_turn_play."
     engine.play(player_play, opponent_play)
     return engine.game
+
+def multiple_turns_play(
+    player_plays: List[List[str | None]],
+    opponent_plays: List[List[str | None]],
+    player_deck: Optional[Deck] = None,
+    opponent_deck: Optional[Deck] = None,
+) -> Game:
+    engine = Engine("test")
+    engine.start_engine()
+    deck1 = dummy_deck() if player_deck is None else player_deck
+    deck2 = dummy_deck() if opponent_deck is None else opponent_deck
+    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
+    for player_play, opponent_play in zip(player_plays, opponent_plays):
+        for card in player_play:
+            if card is not None:
+                assert card in deck1.hand, f"Erreur dans la rédaction du test multiple_turns_play, {card} n'est pas en main."
+        for card in opponent_play:
+            if card is not None:
+                assert card in deck2.hand, f"Erreur dans la rédaction du test multiple_turns_play, {card} n'est pas en main."
+        print(f"Play hand : {deck1.hand}, opponent hand : {deck2.hand}")
+        print(f"Player play : {player_play}, opponent play : {opponent_play}")
+        engine.play(player_play, opponent_play)
+    return engine.game
+
+
+def set_deck_power(deck: Deck, power: int) -> None:
+    for card in deck.cards.values():
+        card.base_power = power
+
+def set_deck_cost(deck: Deck, cost: int) -> None:
+    for card in deck.cards.values():
+        card.base_cost = cost
