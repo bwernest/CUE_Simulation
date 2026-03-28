@@ -632,7 +632,7 @@ class Game(Deck):
 
     def get_maxed_multiplicateur(self, multiplicateur: int, attack_mult: List, index: int) -> int:
         try:
-            return max(multiplicateur, int(attack_mult[index]))
+            return min(multiplicateur, int(attack_mult[index]))
         except IndexError:
             return multiplicateur
 
