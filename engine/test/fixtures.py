@@ -28,11 +28,15 @@ def dummy_deck() -> Deck:
     return deck
 
 
-def album_deck(album: Literal["Paleontology"]) -> Deck:
+def album_deck(album: Literal[
+    "Paleontology",
+    "Science",
+]) -> Deck:
     deck = dummy_deck()
     for card in deck.cards.values():
         card.album = album.lower()
     return deck
+
 
 def collection_deck(collection: Literal[
     "Ancient Creatures",
@@ -49,6 +53,7 @@ def collection_deck(collection: Literal[
         card.album = "paleontology"
         card.collection = collection.lower()
     return deck
+
 
 def dummy_card() -> Card:
     card = Card("test")
@@ -96,6 +101,7 @@ def unique_card_play(
     engine.play([card_id, None, None], [None, None, None])
     return engine.game
 
+
 def unique_turn_play(
     player_play: List[str | None],
     opponent_play: List[str | None],
@@ -104,17 +110,14 @@ def unique_turn_play(
 ) -> Game:
     engine = Engine("test")
     engine.start_engine()
-    player_deck = dummy_deck() if player_deck is None else player_deck
-    opponent_deck = dummy_deck() if opponent_deck is None else opponent_deck
-    deck1 = player_deck
-    deck2 = opponent_deck
-
+    deck1 = dummy_deck() if player_deck is None else player_deck
+    deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
     for card in player_play:
         if card is not None:
-            assert card in player_deck.order, "Erreur dans la rédaction du test unique_turn_play."
+            assert card in deck1.order, "Erreur dans la rédaction du test unique_turn_play."
     for card in opponent_play:
         if card is not None:
-            assert card in opponent_deck.order, "Erreur dans la rédaction du test unique_turn_play."
+            assert card in deck2.order, "Erreur dans la rédaction du test unique_turn_play."
     engine.play(player_play, opponent_play)
     return engine.game

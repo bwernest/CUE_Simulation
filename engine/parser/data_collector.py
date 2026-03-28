@@ -126,7 +126,8 @@ class DataCollector(Game):
                         data[f"{row}.{column}"].append(raw_card[row][column])
                         row_filled = True
                         column_filled = True
-                    except IndexError: pass
+                    except IndexError:
+                        pass
                 column += 1
             row += 1
             column = 0
@@ -135,7 +136,8 @@ class DataCollector(Game):
     def print_check_raw_cards(self) -> None:
         data = self.get_check_raw_cards()
         for key, value in data.items():
-            if value == [] or isna(value[0]): continue
-            cvalue = {val:value.count(val) for val in value}
+            if value == [] or isna(value[0]):
+                continue
+            cvalue = {val: value.count(val) for val in value}
             print("\n")
             print(f"{key} : {cvalue}")
