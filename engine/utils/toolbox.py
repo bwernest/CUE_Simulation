@@ -6,7 +6,7 @@ from .settings import Settings
 # Python
 import os
 import datetime
-from typing import Dict, List
+from typing import Any, Dict, List
 
 """___Classes___________________________________________________________________________________"""
 
@@ -34,10 +34,13 @@ class ToolBox(Settings):
     def export_txt(self, txt: str, title: str = "DebugExport") -> None:
         self.write_txt(f"{title}", txt)
 
-    def print_info(self, text: str, object: any) -> None:
+    def print_info(self, text: str, object: Any, brut: bool = False) -> None:
         """
         Print function. Option available : liste -> displays object line by line.
         """
+        if brut:
+            print(f"{text} : {object}")
+            return
         if isinstance(object, list):
             print(f"{text} ({type(object)})\t:")
             for data in object:
@@ -49,7 +52,7 @@ class ToolBox(Settings):
         else:
             print(f"{text} ({type(object)})\t: {object}")
 
-    def add_log(self, text: str, objects: Dict[str, any] = {}, time: bool = True, disp: bool = True) -> None:
+    def add_log(self, text: str, objects: Dict[str, Any] = {}, time: bool = True, disp: bool = True) -> None:
         if objects == {}:
             log = f"{text}"
         else:
