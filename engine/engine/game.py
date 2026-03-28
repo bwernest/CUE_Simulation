@@ -5,10 +5,9 @@ from .deck import Deck
 from ..utils import *
 
 # Python
-import random
 import numpy as np
-import numpy.typing as npt
-from typing import Dict, List, Literal, Tuple
+from numpy.typing import NDArray
+from typing import Dict, List, Literal
 
 """___Classes___________________________________________________________________________________"""
 
@@ -17,13 +16,13 @@ class Game(Deck):
 
     decks: List[Deck]
 
-    score: npt.NDArray
+    score: NDArray
     turn: int
     round: int
     winner: int | None
 
-    min_energy: npt.NDArray
-    max_energy: npt.NDArray
+    min_energy: NDArray
+    max_energy: NDArray
 
     def create_game(
             self,
@@ -56,13 +55,24 @@ class Game(Deck):
         if shuffle:
             for deck in self.decks:
                 deck.shuffle()
-        self.trigger_attacks("draw")
-        self.trigger_attacks("start")
+        self.trigger_draw_attacks()
+
+        self.decks[0].remaining = self.decks[0].order[:self.hand_len]
+        self.decks[1].remaining = self.decks[1].order[:self.hand_len]
 
     def play(self, play0: List[str | None], play1: List[str | None]) -> None:
         plays = [play0, play1]
-        self.decks[0].update_remaining(play0)
-        self.decks[1].update_remaining(play1)
+        self.turn_play(plays)
+        self.turn_end(plays)
+        self.turn_begin()
+
+    def turn_begin(self) -> None:
+        self.trigger_draw_attacks()
+        self.trigger_start_attacks()
+
+    def turn_play(self, plays: List[List[str | None]]) -> None:
+        for player in range(2):
+            self.decks[player].update_remaining(plays[player])
 
         self.play_attacks(plays)
 
@@ -79,8 +89,6 @@ class Game(Deck):
             power_per_turn = np.sum(self.resource_per_turn["power"][player])
             self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
 
-        self.post_play(plays)
-
     def play_attacks(self, plays: List[List[str | None]]) -> None:
         for player in range(2):
             for k in range(self.play_len):
@@ -88,16 +96,18 @@ class Game(Deck):
                     continue
                 self.trigger_attack("play", plays, player, k)  # type:ignore
 
-    def post_play(self, plays) -> None:
+    def turn_end(self, plays: List[List[str | None]]) -> None:
         for player in range(2):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                self.trigger_attack("return", plays, player, k)
+                self.trigger_attack("return", plays, player, k) # type:ignore
         self.add_energy_per_turn()
         self.debuff_cards(plays)
         self.debuff_resources_per_turn()
         self.count_turn()
+        for player in range(2):
+            self.decks[player].cycle(plays[player])
 
     def add_energy_per_turn(self) -> None:
         for player in range(2):
@@ -119,10 +129,18 @@ class Game(Deck):
 
     """___Attack________________________________________________________________________________"""
 
-    def trigger_attacks(self, trigger: Literal["draw", "start"]) -> None:
+    def trigger_start_attacks(self) -> None:
         for player in range(2):
             for card in self.decks[player].hand:
-                for attack in self.decks[player].cards[card].attacks[trigger]:
+                for attack in self.decks[player].cards[card].attacks["start"]:
+                    if self.check_conditions(attack["condition"], attack["acondition"], [], player, 26):
+                        self.execute_attack(attack, card, player)
+
+    def trigger_draw_attacks(self) -> None:
+        for player in range(2):
+            cards_drawn = list(set(self.decks[player].hand) - set(self.decks[player].remaining))
+            for card in cards_drawn:
+                for attack in self.decks[player].cards[card].attacks["draw"]:
                     if self.check_conditions(attack["condition"], attack["acondition"], [], player, 26):
                         self.execute_attack(attack, card, player)
 
@@ -288,6 +306,9 @@ class Game(Deck):
     def check_condition_round_score(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
         amount_target = int(atk_cdt[2])
+        print("Juif là")
+        self.print_info("round score player", self.score[0, :, player])
+        self.print_info("round score opponent", self.score[self.round, :, 1 - player])
         return self.check_condition_amount(atk_cdt[1], amount_round_score, amount_target)
 
     def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:

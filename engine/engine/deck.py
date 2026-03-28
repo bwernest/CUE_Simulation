@@ -22,6 +22,7 @@ class Deck(Card):
             raise NombreIncorrectDeCartes("Création d'un deck")
         self.cards = {card.id: card for card in cards}
         self.order = [card.id for card in cards]
+        self.remaining = []
 
     def copy_deck(self) -> Deck:
         new_deck = Deck(self.category)
