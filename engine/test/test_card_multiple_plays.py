@@ -3,9 +3,6 @@
 # CUE_Simulation
 from . import *
 
-# Python
-from numpy import zeros
-
 """___Tests_____________________________________________________________________________________"""
 
 
@@ -38,8 +35,7 @@ class TestCardMultiplePlays(Assert):
         card = game.decks[0].cards["phu013"]
         self.assertEqual(card.base_power + 9 * 2, game.score[0, 1, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_buff_array[0] += 9 * 2
+        expected_buff_array = get_buff_array(0, 9 * 2)
         self.assertEqual(expected_buff_array, card.buff["power"])
 
     def test_card_PIC023(self, engine: Engine) -> None:
@@ -53,8 +49,7 @@ class TestCardMultiplePlays(Assert):
         card = game.decks[0].cards["pic023"]
         self.assertEqual(card.base_power + 3 * 10, game.score[0, 1, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_buff_array[0] += 3 * 10
+        expected_buff_array = get_buff_array(0, 3 * 10)
         self.assertEqual(expected_buff_array, card.buff["power"])
 
     def test_card_PFF038_true(self, engine: Engine) -> None:
@@ -70,7 +65,8 @@ class TestCardMultiplePlays(Assert):
         cardD = game.decks[0].cards["pff038"]
         self.assertEqual(cardP.base_power, game.score[0, 0, 0])
         self.assertEqual(cardD.base_power + 17, game.score[0, 1, 0])
-        self.assertEqual(zeros((game.buff_array_len), dtype=int), cardD.buff["power"])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, cardD.buff["power"])
 
     def test_card_PFF038_false(self, engine: Engine) -> None:
         player_deck = dummy_deck()
@@ -85,7 +81,8 @@ class TestCardMultiplePlays(Assert):
         cardD = game.decks[0].cards["pff038"]
         self.assertEqual(cardP.base_power, game.score[0, 0, 0])
         self.assertEqual(cardD.base_power, game.score[0, 1, 0])
-        self.assertEqual(zeros((game.buff_array_len), dtype=int), cardD.buff["power"])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, cardD.buff["power"])
 
     def test_card_PFF038_unused(self, engine: Engine) -> None:
         player_deck = dummy_deck()
@@ -100,8 +97,7 @@ class TestCardMultiplePlays(Assert):
         cardD = game.decks[0].cards["pff038"]
         self.assertEqual(cardP.base_power, game.score[0, 0, 0])
         self.assertEqual(0, game.score[0, 1, 0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_buff_array[1] += 17
+        expected_buff_array = get_buff_array(1, 17)
         self.assertEqual(expected_buff_array, cardD.buff["power"])
 
     def test_card_PFF023_after(self, engine: Engine) -> None:
@@ -117,8 +113,7 @@ class TestCardMultiplePlays(Assert):
         cardF = game.decks[0].cards["pff023"]
         self.assertEqual(cardP.base_power, game.score[0, 0, 0])
         self.assertEqual(cardF.base_power, game.score[0, 1, 0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_buff_array[1] += 18 + 16
+        expected_buff_array = get_buff_array(1, 18 + 16)
         self.assertEqual(expected_buff_array, cardP.buff["power"])
 
     def test_card_PFF023_before(self, engine: Engine) -> None:
@@ -133,8 +128,7 @@ class TestCardMultiplePlays(Assert):
         cardF = game.decks[0].cards["pff023"]
         cardP = game.decks[0].cards["acph003"]
         self.assertEqual(cardF.base_power, game.score[0, 0, 0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_buff_array[1] += 18
+        expected_buff_array = get_buff_array(1, 18)
         self.assertEqual(expected_buff_array, cardP.buff["power"])
 
     def test_card_PHE028(self, engine: Engine) -> None:
@@ -149,7 +143,6 @@ class TestCardMultiplePlays(Assert):
         cardT = game.decks[0].cards["lre042"]
         cardL = game.decks[0].cards["phe028"]
         self.assertEqual(cardT.base_power, game.score[0, 0, 0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_buff_array[4] += 2
+        expected_buff_array = get_buff_array(4, 2)
         self.assertEqual(expected_buff_array, game.resource_per_turn["energy"][0])
         self.assertEqual(100 - cardT.base_cost - cardL.base_cost + 2, game.energy[0])

@@ -3,9 +3,6 @@
 # CUE_Simulation
 from . import *
 
-# Python
-from numpy import zeros
-
 """___Tests_____________________________________________________________________________________"""
 
 
@@ -18,7 +15,8 @@ class TestTurnSinglePlay(Assert):
         card = game.decks[0].cards["pmo030"]
         self.assertEqual(card.base_power + 15 * 3, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, card.buff["power"])
 
     def test_card_PMO030_false(self, engine: Engine) -> None:
         player_deck = album_deck("Paleontology")
@@ -27,7 +25,8 @@ class TestTurnSinglePlay(Assert):
         card = game.decks[0].cards["pmo030"]
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, card.buff["power"])
 
     def test_card_PCA045_true(self, engine: Engine) -> None:
         player_deck = dummy_deck()
@@ -40,13 +39,12 @@ class TestTurnSinglePlay(Assert):
         self.assertEqual(card_45.base_power + card_13.base_power + 15 * 2 + 6, game.score[0, 0, 0])
         self.assertEqual(100 - card_45.base_cost - card_13.base_cost, game.energy[0])
 
-        expected_card_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_card_buff_array[3] += 15
-        self.assertEqual(expected_card_buff_array, card_45.buff["power"])
-        self.assertEqual(expected_card_buff_array, card_13.buff["power"])
+        expected_buff_array = get_buff_array(3, 15)
+        self.assertEqual(expected_buff_array, card_45.buff["power"])
+        self.assertEqual(expected_buff_array, card_13.buff["power"])
 
-        expected_player_buff_array = zeros((game.buff_array_len), dtype=int)
-        self.assertEqual(expected_player_buff_array, game.resource_per_turn["power"][0])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, game.resource_per_turn["power"][0])
 
     def test_card_PCA045_false(self, engine: Engine) -> None:
         player_deck = dummy_deck()
@@ -59,12 +57,10 @@ class TestTurnSinglePlay(Assert):
         self.assertEqual(card_45.base_power + card_13.base_power + 6, game.score[0, 0, 0])
         self.assertEqual(100 - card_45.base_cost - card_13.base_cost, game.energy[0])
 
-        expected_card_buff_array = zeros((game.buff_array_len), dtype=int)
-        self.assertEqual(expected_card_buff_array, card_45.buff["power"])
-        self.assertEqual(expected_card_buff_array, card_13.buff["power"])
-
-        expected_player_buff_array = zeros((game.buff_array_len), dtype=int)
-        self.assertEqual(expected_player_buff_array, game.resource_per_turn["power"][0])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, card_45.buff["power"])
+        self.assertEqual(expected_buff_array, card_13.buff["power"])
+        self.assertEqual(expected_buff_array, game.resource_per_turn["power"][0])
 
     def test_card_PMO040_false(self, engine: Engine) -> None:
         player_deck = album_deck("Paleontology")
@@ -73,7 +69,8 @@ class TestTurnSinglePlay(Assert):
         card = game.decks[0].cards["pmo040"]
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        self.assertEqual(zeros((game.buff_array_len), dtype=int), card.buff["power"])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, card.buff["power"])
 
     def test_card_PMO040_true(self, engine: Engine) -> None:
         player_deck = album_deck("Science")
@@ -82,9 +79,8 @@ class TestTurnSinglePlay(Assert):
         card = game.decks[0].cards["pmo040"]
         self.assertEqual(card.base_power + 20, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
-        expected_card_buff_array = zeros((game.buff_array_len), dtype=int)
-        expected_card_buff_array[2] += 20
-        self.assertEqual(expected_card_buff_array, card.buff["power"])
+        expected_buff_array = get_buff_array(2, 20)
+        self.assertEqual(expected_buff_array, card.buff["power"])
 
     def test_card_PAN058_true(self, engine: Engine) -> None:
         player_deck = dummy_deck()
@@ -95,7 +91,7 @@ class TestTurnSinglePlay(Assert):
         cardS = game.decks[0].cards["sbb001"]
         self.assertEqual(cardP.base_power + 9 + 60 + cardS.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - cardP.base_cost + 1 - cardS.base_cost, game.energy[0])
-        expected_buff_array = zeros((game.buff_array_len), dtype=int)
-        self.assertEqual(zeros((game.buff_array_len), dtype=int), cardP.buff["power"])
-        expected_buff_array[2] = -1
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, cardP.buff["power"])
+        expected_buff_array = get_buff_array(2, -1)
         self.assertEqual(expected_buff_array, cardP.buff["cost"])

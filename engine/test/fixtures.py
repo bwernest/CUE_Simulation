@@ -7,6 +7,8 @@ from ..engine.engine import Engine
 from ..engine.game import Game
 
 # Python
+from numpy import zeros
+from numpy.typing import NDArray
 import pytest
 from typing import List, Literal, Optional
 
@@ -154,3 +156,10 @@ def set_deck_power(deck: Deck, power: int) -> None:
 def set_deck_cost(deck: Deck, cost: int) -> None:
     for card in deck.cards.values():
         card.base_cost = cost
+
+
+def get_buff_array(index: int = 0, value: int = 0, buff_array: Optional[NDArray] = None) -> NDArray:
+    engine = Engine("test")
+    buff_array = zeros((engine.buff_array_len), dtype=int) if buff_array is None else buff_array
+    buff_array[index] += value
+    return buff_array
