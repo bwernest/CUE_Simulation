@@ -236,3 +236,22 @@ class TestCardSinglePlay(Assert):
         expected_buff_array = zeros((game.buff_array_len), dtype=int)
         expected_buff_array[3] += -12
         self.assertEqual(expected_buff_array, game.resource_per_turn["power"][1])
+
+    def test_card_PLB006_1(self) -> None:
+        player_deck = album_deck("Paleontology")
+        game = unique_card_play("PLB006", player_deck=player_deck)
+        card = game.decks[0].cards["plb006"]
+        self.assertEqual(card.base_power - 10, game.score[0, 0, 0])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[0] += -10
+        self.assertEqual(expected_buff_array, card.buff["power"])
+
+    def test_card_PLB006_2(self) -> None:
+        player_deck = album_deck("Science")
+        game = unique_card_play("PLB006", player_deck=player_deck)
+        card = game.decks[0].cards["plb006"]
+        self.assertEqual(card.base_power - 20, game.score[0, 0, 0])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[0] += -20
+        self.assertEqual(expected_buff_array, card.buff["power"])
+
