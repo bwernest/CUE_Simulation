@@ -314,20 +314,28 @@ class Game(Deck):
             "name": self.check_condition_played_card,
             "collection": self.check_condition_played_deck,
             "album": self.check_condition_played_deck,
-        }[atk_cdt[1]](atk_cdt, player)
+            "keyword": self.check_condition_played_keyword,
+        }[atk_cdt[1]](atk_cdt, plays, player, card_index)
 
     def check_condition_played_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         try:
             card_id = self.decks[player].name_to_id[atk_cdt[2]]
+            amount_played = self.decks[player].cards[card_id].played
         except KeyError:
-            raise CarteAbsenteDuDeck()
-        amount_played = self.decks[player].cards[card_id].played
-        return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
+            amount_played = 0
+        return self.check_condition_amount(">", amount_played, 0)
 
     def check_condition_played_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> int:
         amount_played = 0
         for card in self.decks[player].cards.values():
             if card.__getattribute__(atk_cdt[1]) == atk_cdt[2]:
+                amount_played += card.played
+        return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
+
+    def check_condition_played_keyword(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> int:
+        amount_played = 0
+        for card in self.decks[player].cards.values():
+            if atk_cdt[2] in card.keywords:
                 amount_played += card.played
         return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
 
@@ -451,6 +459,7 @@ class Game(Deck):
                 "name": self.get_target_cards_card,
                 "collection": self.get_target_cards_deck,
                 "album": self.get_target_cards_deck,
+                "keyword": self.get_target_cards_keyword,
             }[atk_target[1]](atk_target, player_targeted, location)
 
     def get_target_cards_card(
@@ -478,6 +487,18 @@ class Game(Deck):
         targets = {0: [], 1: []}
         for card_id in self.decks[player_targeted].__getattribute__(location):
             if self.decks[player_targeted].cards[card_id].__getattribute__(atk_target[1]) == atk_target[2]:
+                targets[player_targeted].append(card_id)
+        return targets
+
+    def get_target_cards_keyword(
+        self,
+        atk_target: List,
+        player_targeted: int,
+        location: Literal["hand", "order", "remaining"],
+    ) -> Dict:
+        targets = {0: [], 1: []}
+        for card_id in self.decks[player_targeted].__getattribute__(location):
+            if atk_target[2] in self.decks[player_targeted].cards[card_id].keywords:
                 targets[player_targeted].append(card_id)
         return targets
 
