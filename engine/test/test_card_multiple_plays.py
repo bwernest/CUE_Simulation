@@ -56,3 +56,67 @@ class TestCardMultiplePlays(Assert):
         expected_buff_array = zeros((game.buff_array_len), dtype=int)
         expected_buff_array[0] += 3 * 10
         self.assertEqual(expected_buff_array, card.buff["power"])
+
+    def test_card_PFF038_true(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id0", engine.cards["lmc033"])
+        player_deck.replace_card("id5", engine.cards["pff038"])
+        game = multiple_turns_play(
+            [["lmc033", None, None], [None, None, "pff038"]],
+            opponent_plays=[[None]*3, [None]*3],
+            player_deck=player_deck
+        )
+        cardP = game.decks[0].cards["lmc033"]
+        cardD = game.decks[0].cards["pff038"]
+        self.assertEqual(cardP.base_power, game.score[0, 0, 0])
+        self.assertEqual(cardD.base_power + 17, game.score[0, 1, 0])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), cardD.buff["power"])
+
+    def test_card_PFF038_false(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id0", engine.cards["lmc033"])
+        player_deck.replace_card("id4", engine.cards["pff038"])
+        game = multiple_turns_play(
+            [["lmc033", None, None], [None, None, "pff038"]],
+            opponent_plays=[[None]*3, [None]*3],
+            player_deck=player_deck
+        )
+        cardP = game.decks[0].cards["lmc033"]
+        cardD = game.decks[0].cards["pff038"]
+        self.assertEqual(cardP.base_power, game.score[0, 0, 0])
+        self.assertEqual(cardD.base_power, game.score[0, 1, 0])
+        self.assertEqual(zeros((game.buff_array_len), dtype=int), cardD.buff["power"])
+
+    def test_card_PFF038_unused(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id0", engine.cards["lmc033"])
+        player_deck.replace_card("id5", engine.cards["pff038"])
+        game = multiple_turns_play(
+            [["lmc033", None, None], [None, None, None]],
+            opponent_plays=[[None]*3, [None]*3],
+            player_deck=player_deck
+        )
+        cardP = game.decks[0].cards["lmc033"]
+        cardD = game.decks[0].cards["pff038"]
+        self.assertEqual(cardP.base_power, game.score[0, 0, 0])
+        self.assertEqual(0, game.score[0, 1, 0])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[1] += 17
+        self.assertEqual(expected_buff_array, cardD.buff["power"])
+
+    def test_card_PFF023(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id0", engine.cards["acph003"])
+        player_deck.replace_card("id3", engine.cards["pff023"])
+        game = multiple_turns_play(
+            [["acph003", None, None], ["pff023", None, None]],
+            opponent_plays=[[None]*3, [None]*3],
+            player_deck=player_deck
+        )
+        cardP = game.decks[0].cards["acph003"]
+        cardF = game.decks[0].cards["pff023"]
+        self.assertEqual(cardP.base_power, game.score[0, 0, 0])
+        self.assertEqual(cardF.base_power, game.score[0, 1, 0])
+        expected_buff_array = zeros((game.buff_array_len), dtype=int)
+        expected_buff_array[1] += 16 + 18
+        self.assertEqual(expected_buff_array, cardP.buff["power"])
