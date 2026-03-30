@@ -45,6 +45,10 @@ class FiltreKeyError(CUE_SimulationException):
     pass
 
 
+class MultiplicateurKeyError(CUE_SimulationException):
+    pass
+
+
 class NombreIncorrectDeCartes(CUE_SimulationException):
     pass
 

@@ -243,11 +243,15 @@ class Game(Deck):
             raise ConditionKeyError(f"Condition <{atk_cdt[0]}> inconnue")
 
     def check_condition_voisin(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        return {
-            "gauche": self.check_condition_voisin_gauche,
-            "droite": self.check_condition_voisin_droite,
-            "next to": self.check_condition_voisin_next_to,
-        }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+        try:
+            return {
+                "gauche": self.check_condition_voisin_gauche,
+                "droite": self.check_condition_voisin_droite,
+                "next to": self.check_condition_voisin_next_to,
+            }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+        except KeyError:
+            raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
+
 
     def check_condition_voisin_next_to(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {
@@ -271,22 +275,28 @@ class Game(Deck):
         return atk_cdt[2] != "vide" and nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
     def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        return {
-            "gauche": 0,
-            "milieu": 1,
-            "droite": 2,
-        }[atk_cdt[1]] == card_index
+        try:
+            return {
+                "gauche": 0,
+                "milieu": 1,
+                "droite": 2,
+            }[atk_cdt[1]] == card_index
+        except KeyError:
+            raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_player_album(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         amount_player = len(self.stats[player]["album"])
         return self.check_condition_amount(atk_cdt[1], amount_player, int(atk_cdt[2]))
 
     def check_condition_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        return {
-            "name": self.check_condition_deck_card,
-            "collection": self.check_condition_deck_set,
-            "album": self.check_condition_deck_set,
-        }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+        try:
+            return {
+                "name": self.check_condition_deck_card,
+                "collection": self.check_condition_deck_set,
+                "album": self.check_condition_deck_set,
+            }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+        except KeyError:
+            raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_deck_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         try:
@@ -311,12 +321,15 @@ class Game(Deck):
         return self.check_condition_amount(atk_cdt[1], amount_round_score, amount_target)
 
     def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
-        return {
-            "name": self.check_condition_played_card,
-            "collection": self.check_condition_played_deck,
-            "album": self.check_condition_played_deck,
-            "keyword": self.check_condition_played_keyword,
-        }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+        try:
+            return {
+                "name": self.check_condition_played_card,
+                "collection": self.check_condition_played_deck,
+                "album": self.check_condition_played_deck,
+                "keyword": self.check_condition_played_keyword,
+            }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+        except KeyError:
+            raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_played_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         try:
@@ -597,14 +610,17 @@ class Game(Deck):
     """___Multiplicateur________________________________________________________________________"""
 
     def get_multiplicateur(self, attack_mult: List, player: int) -> int:
-        return {
-            "player hand": self.get_multiplicateur_hand,
-            "player deck": self.get_multiplicateur_deck,
-            "player played": self.get_multiplicateur_played,
-            "player album": self.get_multiplicateur_album,
-            "round completed": self.get_multiplicateur_round_completed,
-            "both deck": self.get_multiplicateur_both_deck,
-        }[attack_mult[0]](attack_mult, player)
+        try:
+            return {
+                "player hand": self.get_multiplicateur_hand,
+                "player deck": self.get_multiplicateur_deck,
+                "player played": self.get_multiplicateur_played,
+                "player album": self.get_multiplicateur_album,
+                "round completed": self.get_multiplicateur_round_completed,
+                "both deck": self.get_multiplicateur_both_deck,
+            }[attack_mult[0]](attack_mult, player)
+        except KeyError:
+            raise MultiplicateurKeyError(f"Multiplicateur <{attack_mult[0]}> inconnue")
 
     def get_multiplicateur_hand(self, attack_mult: List, player: int) -> int:
         multiplicateur = 0
@@ -620,11 +636,14 @@ class Game(Deck):
             return 0
 
     def get_multiplicateur_played(self, attack_mult: List, player: int) -> int:
-        return self.get_maxed_multiplicateur({
-            "name": self.get_multiplicateur_played_card,
-            "collection": self.get_multiplicateur_played_deck,
-            "album": self.get_multiplicateur_played_deck,
-        }[attack_mult[1]](attack_mult, player), attack_mult, 3)
+        try:
+            return self.get_maxed_multiplicateur({
+                "name": self.get_multiplicateur_played_card,
+                "collection": self.get_multiplicateur_played_deck,
+                "album": self.get_multiplicateur_played_deck,
+            }[attack_mult[1]](attack_mult, player), attack_mult, 3)
+        except KeyError:
+            raise MultiplicateurKeyError(f"Multiplicateur <{attack_mult[1]}> inconnue")
 
     def get_multiplicateur_album(self, attack_mult: List, player: int) -> int:
         return len(self.stats[player]["album"])
