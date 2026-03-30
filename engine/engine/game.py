@@ -23,6 +23,7 @@ class Game(Deck):
 
     min_energy: NDArray
     max_energy: NDArray
+    resource_per_turn: Dict[Literal["power", "energy"], List[NDArray]]
 
     def create_game(
             self,
