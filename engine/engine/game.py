@@ -7,7 +7,7 @@ from ..utils import *
 # Python
 import numpy as np
 from numpy.typing import NDArray
-from typing import Dict, List, Literal
+from typing import Dict, List, Literal, Optional
 
 """___Classes___________________________________________________________________________________"""
 
@@ -19,7 +19,7 @@ class Game(Deck):
     score: NDArray
     turn: int
     round: int
-    winner: int | None
+    winner: Optional[int]
 
     min_energy: NDArray
     max_energy: NDArray
@@ -251,7 +251,6 @@ class Game(Deck):
             }[atk_cdt[1]](atk_cdt, plays, player, card_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
-
 
     def check_condition_voisin_next_to(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
         return {

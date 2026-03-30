@@ -3,7 +3,7 @@
 # Python
 from numpy import ndarray, round
 from numpy import int64
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 """___Classes___________________________________________________________________________________"""
 
@@ -16,7 +16,7 @@ class Assert():
             error_msg += f"argument {a + 1} :\n{arg}\n"
         return error_msg
 
-    def assertEqual(self, expected: Any, result: Any, rounder: int = None):
+    def assertEqual(self, expected: Any, result: Any, rounder: Optional[int] = None):
         rounder = 64 if rounder is None else rounder
         self.assertIsInstance(result, type(expected), "The two arguments must be of the same type")
         assert_method = {
@@ -27,6 +27,9 @@ class Assert():
             str: self._assertTextEqual,
             tuple: self._assertListEqual,
             list: self._assertListEqual,
+            type({}.keys()): self._assertListEqual,
+            type({}.values()): self._assertListEqual,
+            type({}.items()): self._assertListEqual,
             dict: self._assertDictEqual,
             ndarray: self._assertArrayEqual,
         }
@@ -35,10 +38,10 @@ class Assert():
         except KeyError:
             assert expected == result, self._analyseError(expected, result)
 
-    def _assertNoneEqual(self, a: None, b: None, rounder: int = None) -> None:
+    def _assertNoneEqual(self, a: None, b: None, rounder: Optional[int] = None) -> None:
         assert a is None and b is None, self._analyseError(a, b)
 
-    def _assertBoolEqual(self, a: bool, b: bool, rounder: int = None) -> None:
+    def _assertBoolEqual(self, a: bool, b: bool, rounder: Optional[int] = None) -> None:
         assert a is b, self._analyseError(a, b)
 
     def _assertValueEqual(self, a: int | float, b: int | float, rounder: int) -> None:
@@ -63,15 +66,16 @@ class Assert():
         array2 = round(array2, rounder)
         assert (array1 == array2).all()
 
-    def assertIsInstance(self, obj: Any, _class: object, error_msg: str = None) -> None:
-        error_msg = f"L'objet {obj} n'est pas de classe {_class} mais {type(obj)}"
+    def assertIsInstance(self, obj: Any, _type: type, error_msg: Optional[str] = None) -> None:
+        error_msg = f"L'objet {obj} n'est pas de classe {_type} mais {type(obj)}"
         for duo in self.same_types:
-            if type(obj) in duo and _class in duo:
+            if type(obj) in duo and _type in duo:
                 return
-        assert isinstance(obj, _class), error_msg
+        assert isinstance(obj, _type), error_msg
 
-    def assertIsNotInstance(self, obj: Any, _class: object) -> None:
-        assert not isinstance(obj, _class)
+    def assertIsNotInstance(self, obj: Any, _type: type, error_msg: Optional[str] = None) -> None:
+        error_msg = f"L'objet {obj} est bien de type {_type}"
+        assert not isinstance(obj, _type)
 
     @property
     def same_types(self) -> List[List[type]]:

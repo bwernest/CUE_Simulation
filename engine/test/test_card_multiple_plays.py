@@ -63,7 +63,7 @@ class TestCardMultiplePlays(Assert):
         player_deck.replace_card("id5", engine.cards["pff038"])
         game = multiple_turns_play(
             [["lmc033", None, None], [None, None, "pff038"]],
-            opponent_plays=[[None]*3, [None]*3],
+            opponent_plays=[[None] * 3, [None] * 3],
             player_deck=player_deck
         )
         cardP = game.decks[0].cards["lmc033"]
@@ -78,7 +78,7 @@ class TestCardMultiplePlays(Assert):
         player_deck.replace_card("id4", engine.cards["pff038"])
         game = multiple_turns_play(
             [["lmc033", None, None], [None, None, "pff038"]],
-            opponent_plays=[[None]*3, [None]*3],
+            opponent_plays=[[None] * 3, [None] * 3],
             player_deck=player_deck
         )
         cardP = game.decks[0].cards["lmc033"]
@@ -93,7 +93,7 @@ class TestCardMultiplePlays(Assert):
         player_deck.replace_card("id5", engine.cards["pff038"])
         game = multiple_turns_play(
             [["lmc033", None, None], [None, None, None]],
-            opponent_plays=[[None]*3, [None]*3],
+            opponent_plays=[[None] * 3, [None] * 3],
             player_deck=player_deck
         )
         cardP = game.decks[0].cards["lmc033"]
@@ -110,7 +110,7 @@ class TestCardMultiplePlays(Assert):
         player_deck.replace_card("id3", engine.cards["pff023"])
         game = multiple_turns_play(
             [["acph003", None, None], ["pff023", None, None]],
-            opponent_plays=[[None]*3, [None]*3],
+            opponent_plays=[[None] * 3, [None] * 3],
             player_deck=player_deck
         )
         cardP = game.decks[0].cards["acph003"]
@@ -127,7 +127,7 @@ class TestCardMultiplePlays(Assert):
         player_deck.replace_card("id3", engine.cards["pff023"])
         game = multiple_turns_play(
             [["pff023", None, None]],
-            opponent_plays=[[None]*3],
+            opponent_plays=[[None] * 3],
             player_deck=player_deck
         )
         cardF = game.decks[0].cards["pff023"]
@@ -143,7 +143,7 @@ class TestCardMultiplePlays(Assert):
         player_deck.replace_card("id3", engine.cards["phe028"])
         game = multiple_turns_play(
             [["lre042", None, None], [None, "phe028", None]],
-            opponent_plays=[[None]*3, [None]*3],
+            opponent_plays=[[None] * 3, [None] * 3],
             player_deck=player_deck
         )
         cardT = game.decks[0].cards["lre042"]

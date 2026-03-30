@@ -7,7 +7,7 @@ from ..utils import *
 import numpy as np
 from numpy.typing import NDArray
 from pandas import isna
-from typing import Dict, List, Literal
+from typing import Dict, List, Literal, Optional
 
 """___Classes___________________________________________________________________________________"""
 
@@ -47,11 +47,11 @@ class Card(GameUtility):
             keywords: List[str] = [],
             power: int = 0,
             cost: int = 0,
-            attack_name: str | None = None,
-            album: str | None = None,
-            collection: str | None = None,
-            rarity: str | None = None,
-            type: str | None = None
+            attack_name: Optional[str] = None,
+            album: Optional[str] = None,
+            collection: Optional[str] = None,
+            rarity: Optional[str] = None,
+            type: Optional[str] = None
     ) -> None:
         self.id = id.lower()
         self.name = name.lower()
