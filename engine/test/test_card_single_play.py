@@ -259,3 +259,11 @@ class TestCardSinglePlay(Assert):
         self.assertEqual(card.base_power - 20, game.score[0, 0, 0])
         expected_buff_array = get_buff_array(0, -20)
         self.assertEqual(expected_buff_array, card.buff["power"])
+
+    def test_card_PCA027(self) -> None:
+        game = unique_card_play("PCA027")
+        card = game.decks[0].cards["pca027"]
+        self.assertEqual(card.base_power, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost - 1 + 3, game.energy[0])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, card.buff["cost"])

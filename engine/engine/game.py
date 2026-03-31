@@ -439,16 +439,16 @@ class Game(Deck):
         return self.get_target_cards(target_attack, 1 - player, "remaining")
 
     def get_target_both_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        dict0 = self.get_target_cards(target_attack, player, "hand")
-        dict1 = self.get_target_cards(target_attack, 1 - player, "hand")
-        dict0.update(dict1)
-        return dict0
+        targets = {}
+        targets[player] = self.get_target_cards(target_attack, player, "hand")[player]
+        targets[1 - player] = self.get_target_cards(target_attack, 1 - player, "hand")[1 - player]
+        return targets
 
     def get_target_both_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        dict0 = self.get_target_cards(target_attack, player, "order")
-        dict1 = self.get_target_cards(target_attack, 1 - player, "order")
-        dict0.update(dict1)
-        return dict0
+        targets = {}
+        targets[player] = self.get_target_cards(target_attack, player, "order")[player]
+        targets[1 - player] = self.get_target_cards(target_attack, 1 - player, "order")[1 - player]
+        return targets
 
     def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
         dict0 = self.get_target_cards(target_attack, player, "remaining")
