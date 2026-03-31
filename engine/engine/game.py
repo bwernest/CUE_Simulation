@@ -5,6 +5,7 @@ from .deck import Deck
 from ..utils import *
 
 # Python
+from copy import deepcopy
 import numpy as np
 from numpy.typing import NDArray
 from typing import Dict, List, Literal, Optional
@@ -154,9 +155,12 @@ class Game(Deck):
 
     def execute_attack(self, attack: Dict, card_id: str, player: int) -> None:
         targets = self.get_targets(attack["cible"], card_id, player)
-        if attack["filtre"] != []:
-            for filtre in attack["filtre"]:
-                targets = self.filter_targets(targets, filtre, player, card_id)  # type:ignore
+        for filtre in attack["filtre"]:
+            targets = self.filter_targets(targets, filtre, player, card_id)  # type:ignore
+        for afiltre in attack["afiltre"]:
+            atargets = self.filter_targets(deepcopy(targets), afiltre, player, card_id)  # type:ignore
+            for player in range(2):
+                targets[player] = list(set(targets[player]) - set(atargets[player]))    # type:ignore
         self.apply_effects(attack["effet"], attack["multiplicateur"], attack["duree"], targets, player)
 
     """___Filtre________________________________________________________________________________"""
@@ -172,7 +176,8 @@ class Game(Deck):
             return {
                 "base_power": self.filter_targets_card_attribut_amount,
                 "base_cost": self.filter_targets_card_attribut_amount,
-                "rarity": self.filter_targets_card_rarity,
+                "rarity": self.filter_targets_card_raritype,
+                "type": self.filter_targets_card_raritype,
                 "random": self.filter_targets_random,
                 "other": self.filter_targets_other,
             }[atk_filtre[0]](targets, atk_filtre, player, card_id)
@@ -193,7 +198,7 @@ class Game(Deck):
                     filtered_targets[player].append(card_id)
         return filtered_targets
 
-    def filter_targets_card_rarity(
+    def filter_targets_card_raritype(
         self,
         targets: Dict[int, List[str]],
         atk_filtre: List,
@@ -203,7 +208,7 @@ class Game(Deck):
         filtered_targets = {0: [], 1: []}
         for player in range(2):
             for card_id in targets[player]:
-                if self.decks[player].cards[card_id].rarity == atk_filtre[1]:
+                if self.decks[player].cards[card_id].__getattribute__(atk_filtre[0]) == atk_filtre[1]:
                     filtered_targets[player].append(card_id)
         return filtered_targets
 

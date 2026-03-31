@@ -120,11 +120,12 @@ class Card(GameUtility):
                     "acondition": [],
                     "cible": [],
                     "filtre": [],
+                    "afiltre": [],
                     "effet": [],
                     "multiplicateur": [],
                     "duree": [],
                 })
-            if info in ["condition", "acondition", "cible", "filtre"]:
+            if info in ["condition", "acondition", "cible", "filtre", "afiltre"]:
                 attacks_dict[atk][-1][info].append(self.clean_data_line(line[2:]))
             else:
                 attacks_dict[atk][-1][info] = self.clean_data_line(line[2:])
