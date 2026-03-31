@@ -98,13 +98,30 @@ class TestTurnSinglePlay(Assert):
 
     def test_card_PCA027(self, engine: Engine) -> None:
         player_deck = dummy_deck()
-        opponent_deck = dummy_deck()
         set_deck_cost(player_deck, 10)
-        set_deck_cost(opponent_deck, 10)
         player_deck.replace_card("id4", engine.cards["pca027"])
+        opponent_deck = dummy_deck()
+        set_deck_cost(opponent_deck, 10)
         game = unique_turn_play(["id0", "id1", "id3"], ["id4", "id2", "id1"], player_deck, opponent_deck)
         card = game.decks[0].cards["pca027"]
         self.assertEqual(100 - (10 + 1) * 3 + 3, game.energy[0])
         self.assertEqual(100 - (10 + 1) * 3, game.energy[1])
         expected_buff_array = get_buff_array()
         self.assertEqual(expected_buff_array, card.buff["cost"])
+
+    def test_card_POM020(self, engine: Engine) -> None:
+        player_deck = album_deck("Paleontology")
+        player_deck.replace_card("id0", engine.cards["pom020"])
+        opponent_deck = dummy_deck()
+        set_deck_power(opponent_deck, 100)
+        game = unique_turn_play(["pom020", None, None], ["id4", "id2", "id1"], player_deck, opponent_deck)
+        cardA = game.decks[0].cards["pom020"]
+        card1 = game.decks[0].cards["id1"]
+        self.assertEqual(cardA.base_power, game.score[0, 0, 0])
+        self.assertEqual(3 * 100, game.score[0, 0, 1])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, cardA.buff["power"])
+        expected_buff_array = get_buff_array(3, 20)
+        self.assertEqual(expected_buff_array, card1.buff["power"])
+        expected_buff_array = get_buff_array(2, 35)
+        self.assertEqual(expected_buff_array, game.resource_per_turn["power"][0])

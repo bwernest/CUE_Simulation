@@ -24,7 +24,7 @@ def engine() -> Engine:
 
 def dummy_deck() -> Deck:
     cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", album="test_album", collection="test_collection") for k, card in enumerate(cards)]
+    [card.create_card(f"id{k}", f"card{k}", album="test_album", collection="test_collection", type="standard") for k, card in enumerate(cards)]
     deck = Deck("test")
     deck.create_deck(cards)
     return deck
