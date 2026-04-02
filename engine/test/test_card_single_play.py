@@ -287,3 +287,27 @@ class TestCardSinglePlay(Assert):
         card = game.decks[0].cards["phe024"]
         self.assertEqual(card.base_power, game.score[0, 0, 0])
         self.assertEqual(100 - card.base_cost, game.energy[0])
+
+    def test_card_PAN052_false(self) -> None:
+        game = unique_card_play("PAN052")
+        card = game.decks[0].cards["pan052"]
+        self.assertEqual(card.base_power, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost, game.energy[0])
+
+    def test_card_PAN052_true(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id10", engine.cards["ore018"])
+        game = unique_card_play("PAN052", player_deck)
+        card = game.decks[0].cards["ore018"]
+        expected_buff_array = get_buff_array(2, 25)
+        self.assertEqual(expected_buff_array, card.buff["power"])
+
+    def test_card_ORE018(self) -> None:
+        opponent_deck = dummy_deck()
+        set_deck_power(opponent_deck, 40)
+        game = unique_card_play("ORE018")
+        card = game.decks[0].cards["ore018"]
+        self.assertEqual(card.base_power, game.score[0, 0, 0])
+        self.assertEqual(100 - card.base_cost, game.energy[0])
+        expected_buff_array = get_buff_array()
+        self.assertEqual(expected_buff_array, game.decks[1].cards["id0"].buff["power"])

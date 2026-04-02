@@ -126,7 +126,7 @@ class TestTurnSinglePlay(Assert):
         expected_buff_array = get_buff_array(2, 35)
         self.assertEqual(expected_buff_array, game.resource_per_turn["power"][0])
 
-    def test_card_PHE024(self, engine: Engine) -> None:
+    def test_card_PHE024_true(self, engine: Engine) -> None:
         player_deck = dummy_deck()
         player_deck.replace_card("id0", engine.cards["phe014"])
         player_deck.replace_card("id1", engine.cards["phe024"])
@@ -137,4 +137,17 @@ class TestTurnSinglePlay(Assert):
         )
         card = game.decks[0].cards["phe014"]
         expected_buff_array = get_buff_array(0, 49)
+        self.assertEqual(expected_buff_array, card.buff["power"])
+
+    def test_card_PHE024_false(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id5", engine.cards["phe014"])
+        player_deck.replace_card("id1", engine.cards["phe024"])
+        game = unique_turn_play(
+            player_play=[None, "phe024", None],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+        )
+        card = game.decks[0].cards["phe014"]
+        expected_buff_array = get_buff_array()
         self.assertEqual(expected_buff_array, card.buff["power"])
