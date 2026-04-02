@@ -311,3 +311,23 @@ class TestCardSinglePlay(Assert):
         self.assertEqual(100 - card.base_cost, game.energy[0])
         expected_buff_array = get_buff_array()
         self.assertEqual(expected_buff_array, game.decks[1].cards["id0"].buff["power"])
+
+        expected_lock_statuses = [
+            {"id1": 0, "id2": 0, "id3": 0, "id4": 0, "id5": 0},
+            {"id0": 0, "id1": 0, "id2": 0, "id3": 0, "id4": 0},
+        ]
+        self.assertEqual(expected_lock_statuses, game.get_lock_statuses())
+
+    def test_card_PCA022(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_card("id5", engine.cards["pca022"])
+        game = unique_card_play("MYPA001", player_deck)
+        card = game.decks[0].cards["pca022"]
+        expected_buff_array = get_buff_array(2, 1)
+        expected_buff_array = get_buff_array(3, 1, expected_buff_array)
+        self.assertEqual(expected_buff_array, card.buff["lock"])
+        expected_lock_statuses = [
+            {"id1": 0, "id2": 0, "id3": 0, "id4": 0, "pca022": 2},
+            {"id0": 0, "id1": 0, "id2": 0, "id3": 0, "id4": 0},
+        ]
+        self.assertEqual(expected_lock_statuses, game.get_lock_statuses())

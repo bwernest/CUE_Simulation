@@ -7,6 +7,7 @@ from ..utils import *
 # Python
 from copy import deepcopy
 import numpy as np
+from numpy import argmin
 from numpy.typing import NDArray
 from typing import Dict, List, Literal, Optional
 
@@ -129,6 +130,14 @@ class Game(Deck):
         for player in range(2):
             for data_per_turn, buff in self.resource_per_turn.items():
                 self.resource_per_turn[data_per_turn][player] = self.debuff_array(buff[player])
+
+    def get_lock_statuses(self) -> List[Dict[str, int]]:
+        lock_statuses = [{}, {}]
+        for player in range(2):
+            for card in self.decks[player].hand:
+                lock_status = argmin(self.decks[player].cards[card].buff["lock"][2:])
+                lock_statuses[player][card] = lock_status
+        return lock_statuses
 
     """___Attack________________________________________________________________________________"""
 
@@ -568,7 +577,7 @@ class Game(Deck):
         index = self.get_index_from_duree(atk_duree)
         for player in range(2):
             for card in targets[player]:
-                self.decks[player].cards[card].buff[atk_effect[0]][index] += 1
+                self.decks[player].cards[card].buff[atk_effect[0]][2:index + 1] = [1] * (index - 2 + 1)
 
     def apply_effect_resource_per_turn(
         self,
