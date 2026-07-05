@@ -1,7 +1,6 @@
 # Python
 .pixi
 *.egg-info
-pixi.lock
 .gitattributes
 *.pyc
 .coverage
