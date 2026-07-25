@@ -331,3 +331,23 @@ class TestCardSinglePlay(Assert):
             {"id0": 0, "id1": 0, "id2": 0, "id3": 0, "id4": 0},
         ]
         self.assertEqual(expected_lock_statuses, game.get_lock_statuses())
+
+    def test_SCD004(self, engine: Engine) -> None:
+        player_deck = collection_deck("Hoaxes and Cons")
+        opponent_deck = collection_deck("Hoaxes and Cons")
+        opponent_deck.replace_card("id0", engine.cards["pca022"])
+        game = unique_card_play("scd004", player_deck, opponent_deck)
+
+        # Carte testée
+        card = game.decks[0].cards["scd004"]
+        expected_buff_array = get_buff_array(0, 25)
+        self.assertEqual(expected_buff_array, card.buff["power"])
+
+        # Autres cartes
+        expected_buff_array = get_buff_array(0, -5)
+        for deck in game.decks:
+            for card_id, card in deck.cards.items():
+                if card_id.startswith("id"):
+                    self.assertEqual(expected_buff_array, card.buff["power"])
+                elif card_id != "scd004":
+                    self.assertEqual(zeros((engine.buff_array_len)), card.buff["power"])
