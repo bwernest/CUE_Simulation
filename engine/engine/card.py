@@ -5,9 +5,7 @@ from ..utils import *
 
 # Python
 import numpy as np
-from numpy.typing import NDArray
 from pandas import isna
-from typing import Dict, List, Literal, Optional
 
 """___Classes___________________________________________________________________________________"""
 
@@ -32,7 +30,7 @@ class Card(GameUtility):
         return f"Card {self.name} / {self.album} / {self.collection}\nAttacks :\n{self.attacks}"
 
     @property
-    def buff_dictionnary(self) -> Dict[Literal["power", "cost", "burn", "lock"], NDArray]:
+    def buff_dictionnary(self) -> Dict[Effect, NDArray]:
         return {
             "power": np.zeros((self.buff_array_len), dtype=int),
             "cost": np.zeros((self.buff_array_len), dtype=int),
