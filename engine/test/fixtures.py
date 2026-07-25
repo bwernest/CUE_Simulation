@@ -5,12 +5,11 @@ from ..engine.card import Card
 from ..engine.deck import Deck
 from ..engine.engine import Engine
 from ..engine.game import Game
+from ..utils import *
 
 # Python
 from numpy import zeros
-from numpy.typing import NDArray
 import pytest
-from typing import List, Literal, Optional
 
 """___Functions_________________________________________________________________________________"""
 
@@ -30,27 +29,14 @@ def dummy_deck() -> Deck:
     return deck
 
 
-def album_deck(album: Literal[
-    "Paleontology",
-    "Science",
-]) -> Deck:
+def album_deck(album: Literal[Album]) -> Deck:
     deck = dummy_deck()
     for card in deck.cards.values():
         card.album = album.lower()
     return deck
 
 
-def collection_deck(collection: Literal[
-    "Ancient Creatures",
-    "Carnivores",
-    "Fearsome Flyers",
-    "Groundbreakers",
-    "Herbivores",
-    "Ice Age",
-    "Land Before Time",
-    "Monsters of The Deep",
-    "Omnivores",
-]) -> Deck:
+def collection_deck(collection: Literal[Collection]) -> Deck:
     deck = dummy_deck()
     for card in deck.cards.values():
         card.album = "paleontology"
@@ -92,6 +78,22 @@ def unique_card_play(
     player_deck: Optional[Deck] = None,
     opponent_deck: Optional[Deck] = None,
 ) -> Game:
+    """
+    unique_card_play
+    ----------------
+    Simulation d'une partie où une unique carte est jouée par player.
+    La partie est créée avec des decks par défaut ou ceux renseignés.
+    La 1ère carte du player_deck (id0) est remplacée par card_id.
+
+    Paramètres
+    ----------
+    card_id : str
+        Identifiant de la carte à ajouter en 1ère position dans le player_deck.
+    player_deck : Optional[Deck]
+        Deck de player par défaut un dummy deck.
+    opponent_deck : Optional[Deck]
+        Deck de opponent par défaut un dummy deck.
+    """
     engine = Engine("test")
     engine.start_engine()
     player_deck = dummy_deck() if player_deck is None else player_deck
