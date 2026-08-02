@@ -16,15 +16,40 @@ class DataCollector(Game):
 
     cards: Dict[str, Card]
 
-    def collect_data(self) -> None:
+    def collect_data(self, recyclage: bool = True) -> None:
         raw_cards = self.get_raw_cards()
+        ids = [raw_card[:2][0][0].lower() for raw_card in raw_cards]
+        if recyclage and self.recycler_cartes(ids):
+            return
         self.cards = {}
         for raw_card in raw_cards:
             card = Card()
             card.create_card_from_data(raw_card)
             if card.id in self.cards:
-                raise ValueError(f"Duplicate card id found: {card.id}")
+                raise ValueError(f"Carte en double : {card.id}")
             self.cards[card.id] = card
+        self.pickle_save(self.paths["file_cartes_pickle"], self.cards)
+
+    def recycler_cartes(self, ids: List[str]) -> bool:
+        """
+        recycler_cartes
+        ---------------
+        Fonction qui tente de récupérer les cartes précédemment créées. Le but est
+        d'éviter de recréer toutes les cartes à chaque fois. Ainsi la liste des ids
+        récupérés dans le fichier source est comparée à la liste connue dans le pickle.
+        """
+        cartes_pickle = self.pickle_load(self.paths["file_cartes_pickle"])
+        if cartes_pickle is None:
+            self.add_log("Pas de pickle trouvé !")
+            return False
+        old_ids = list(cartes_pickle.keys())
+        if sorted(old_ids) == sorted(ids):
+            self.cards = cartes_pickle
+            self.add_log("Vielles cartes récupérées !")
+            return True
+        else:
+            self.add_log("Nouvelles cartes différentes !")
+            return False
 
     def get_raw_cards(self) -> List[List[str]]:
         df = read_excel(self.paths["file_data"], engine="odf", sheet_name="Data")

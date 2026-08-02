@@ -5,6 +5,7 @@ from .errors import *
 
 # Python
 import json
+from typing import Dict, Literal
 
 """___Classes___________________________________________________________________________________"""
 
@@ -16,7 +17,13 @@ class Settings():
     # Settings
     project_title: str
     project_version: str
-    paths: dict
+    paths: Dict[Literal[
+        "file_data",
+        "folder_data",
+        "file_save",
+        "file_log",
+        "file_cartes_pickle",
+    ], str]
     test: bool
 
     # CUE_Simulation

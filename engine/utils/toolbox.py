@@ -4,8 +4,10 @@
 from .settings import Settings
 
 # Python
-import os
 import datetime
+import os
+import sys
+import pickle
 from typing import Any, Dict, List
 
 """___Classes___________________________________________________________________________________"""
@@ -97,3 +99,18 @@ class ToolBox(Settings):
                     self.clean_folder(f"{path}/{file}", subcall=True)
             if subcall:
                 os.rmdir(path)
+
+    def pickle_load(self, path: str) -> Any:
+        if not os.path.isfile(path):
+            return None
+        with open(path, "rb") as f:
+            try:
+                data = pickle.load(f)
+            except EOFError:
+                self.add_log("Echec de l'ouverture du pickle <path> le fichier semble corrompu.")
+                raise EOFError("Echec de l'ouverture du pickle <path> le fichier semble corrompu.")
+        return data
+
+    def pickle_save(self, path: str, data: Any) -> None:
+        with open(path, "wb") as f:
+            pickle.dump(data, f)

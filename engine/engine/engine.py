@@ -16,7 +16,7 @@ class Engine(DataCollector):
 
     def start_engine(self) -> None:
         self.add_log("Collecte des données.")
-        self.collect_data()
+        self.collect_data(recyclage=True)
 
     def start_game(self, deck1: Deck, deck2: Deck, start_energy: int, energy_per_turn: int, min_energy: int, max_energy: int, shuffle: bool = True) -> None:
         self.game = Game()
