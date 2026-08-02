@@ -3,7 +3,7 @@
 # CUE_Simulation
 from .asserts import Assert
 from .fixtures import *
-from ..utils.errors import *
+from ..utils import *
 from ..utils.settings import Settings
 
 # Python
