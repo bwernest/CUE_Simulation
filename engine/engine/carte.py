@@ -10,7 +10,7 @@ from pandas import isna
 """___Classes___________________________________________________________________________________"""
 
 
-class Card(GameUtility):
+class Carte(GameUtility):
 
     id: str
     name: str
@@ -27,7 +27,7 @@ class Card(GameUtility):
         return True
 
     def __str__(self):
-        return f"Card {self.name} / {self.album} / {self.collection}\nAttacks :\n{self.attacks}"
+        return f"Carte {self.name} / {self.album} / {self.collection}\nAttacks :\n{self.attacks}"
 
     @property
     def buff_dictionnary(self) -> Dict[Effect, NDArray]:
@@ -38,7 +38,7 @@ class Card(GameUtility):
             "lock": np.zeros((self.buff_array_len), dtype=int),
         }
 
-    def create_card(
+    def create_carte(
             self,
             id: str,
             name: str,
@@ -62,9 +62,9 @@ class Card(GameUtility):
         self.rarity = rarity
         self.type = type
         self.attacks = self.attacks_dict
-        self.reset_card()
+        self.reset_carte()
 
-    def create_card_from_data(
+    def create_carte_from_data(
             self,
             data: List
     ) -> None:
@@ -87,9 +87,9 @@ class Card(GameUtility):
             self.keywords.append(str(infos[1][column]).lower())
             column += 1
         self.attacks = self.add_attacks(attacks)
-        self.reset_card()
+        self.reset_carte()
 
-    def reset_card(self) -> None:
+    def reset_carte(self) -> None:
         self.played = 0
         self.buff = self.buff_dictionnary
 

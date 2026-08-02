@@ -1,7 +1,7 @@
 """___Modules___________________________________________________________________________________"""
 
 # CUE_Simulation
-from ..engine.card import Card
+from ..engine.carte import Carte
 from ..engine.game import Game
 from ..utils import *
 
@@ -14,21 +14,21 @@ from typing import Dict, Iterable, List
 
 class DataCollector(Game):
 
-    cards: Dict[str, Card]
+    cartes: Dict[str, Carte]
 
     def collect_data(self, recyclage: bool = True) -> None:
-        raw_cards = self.get_raw_cards()
-        ids = [raw_card[:2][0][0].lower() for raw_card in raw_cards]
+        raw_cartes = self.get_raw_cartes()
+        ids = [raw_carte[:2][0][0].lower() for raw_carte in raw_cartes]
         if recyclage and self.recycler_cartes(ids):
             return
-        self.cards = {}
-        for raw_card in raw_cards:
-            card = Card()
-            card.create_card_from_data(raw_card)
-            if card.id in self.cards:
-                raise ValueError(f"Carte en double : {card.id}")
-            self.cards[card.id] = card
-        self.pickle_save(self.paths["file_cartes_pickle"], self.cards)
+        self.cartes = {}
+        for raw_carte in raw_cartes:
+            carte = Carte()
+            carte.create_carte_from_data(raw_carte)
+            if carte.id in self.cartes:
+                raise ValueError(f"Carte en double : {carte.id}")
+            self.cartes[carte.id] = carte
+        self.pickle_save(self.paths["file_cartes_pickle"], self.cartes)
 
     def recycler_cartes(self, ids: List[str]) -> bool:
         """
@@ -44,35 +44,35 @@ class DataCollector(Game):
             return False
         old_ids = list(cartes_pickle.keys())
         if sorted(old_ids) == sorted(ids):
-            self.cards = cartes_pickle
+            self.cartes = cartes_pickle
             self.add_log("Vielles cartes récupérées !")
             return True
         else:
             self.add_log("Nouvelles cartes différentes !")
             return False
 
-    def get_raw_cards(self) -> List[List[str]]:
+    def get_raw_cartes(self) -> List[List[str]]:
         df = read_excel(self.paths["file_data"], engine="odf", sheet_name="Data")
-        raw_card = []
-        raw_cards = []
+        raw_carte = []
+        raw_cartes = []
         for row in df.itertuples():
             row = list(row)[1:]
             if all(isna(cell) for cell in row):
-                raw_cards.append(raw_card)
-                if len(raw_card) == 0:
-                    raise ValueError("Empty raw card found")
-                raw_card = []
+                raw_cartes.append(raw_carte)
+                if len(raw_carte) == 0:
+                    raise ValueError("Empty raw carte found")
+                raw_carte = []
             else:
-                raw_card.append(row)
-        raw_cards.append(raw_card)
-        return raw_cards
+                raw_carte.append(row)
+        raw_cartes.append(raw_carte)
+        return raw_cartes
 
     def rewrite_raw_data(self) -> None:
-        raw_cards = self.get_raw_cards()
-        sorted_raw_cards = self.sort_raw_cards(raw_cards)
+        raw_cartes = self.get_raw_cartes()
+        sorted_raw_cartes = self.sort_raw_cartes(raw_cartes)
         txt = "A\n"
-        for raw_card in sorted_raw_cards:
-            for line in raw_card:
+        for raw_carte in sorted_raw_cartes:
+            for line in raw_carte:
                 for data in line:
                     if isna(data):
                         data = ""
@@ -81,47 +81,47 @@ class DataCollector(Game):
             txt += "\n"
         self.write_txt(f"{self.paths["folder_data"]}/new_cartes.txt", txt)
 
-    def print_cards_albums(self) -> None:
+    def print_cartes_albums(self) -> None:
         albums = {}
-        for card in self.cards.values():
-            if card.album not in albums:
-                albums[card.album] = 0
-            albums[card.album] += 1
+        for carte in self.cartes.values():
+            if carte.album not in albums:
+                albums[carte.album] = 0
+            albums[carte.album] += 1
         print("\nAlbums :")
         for album, count in albums.items():
             print(f"{album}: {count}")
 
     def print_collection(self, collection: str) -> None:
         print(f"\nCollection {collection} :")
-        sorted_cards = sorted(self.cards.values(), key=lambda c: c.name)
-        for card in sorted_cards:
-            if card.collection == collection:
-                print(f"{card.id} - {card.name}")
+        sorted_cartes = sorted(self.cartes.values(), key=lambda c: c.name)
+        for carte in sorted_cartes:
+            if carte.collection == collection:
+                print(f"{carte.id} - {carte.name}")
 
-    def print_cards_collections(self) -> None:
+    def print_cartes_collections(self) -> None:
         collections = {}
-        for card in self.cards.values():
-            if card.collection not in collections:
-                collections[card.collection] = 0
-            collections[card.collection] += 1
+        for carte in self.cartes.values():
+            if carte.collection not in collections:
+                collections[carte.collection] = 0
+            collections[carte.collection] += 1
         print("\nCollections :")
         for collection in sorted(collections.keys()):
             print(f"{collection}: {collections[collection]}")
 
-    def sort_raw_cards(self, raw_cards: List[List[str]]) -> List[List[str]]:
-        lenC = len(raw_cards)
+    def sort_raw_cartes(self, raw_cartes: List[List[str]]) -> List[List[str]]:
+        lenC = len(raw_cartes)
         for i in range(lenC - 1):
             for j in range(lenC - 1):
-                if not self.check_alphabetical_order(raw_cards[j][0][0][:3], raw_cards[j + 1][0][0][:3]):
-                    temp = raw_cards[j + 1]
-                    raw_cards[j + 1] = raw_cards[j]
-                    raw_cards[j] = temp
-                elif raw_cards[j][0][0][:3] == raw_cards[j + 1][0][0][:3]:
-                    if not self.check_alphabetical_order(raw_cards[j][0][1], raw_cards[j + 1][0][1]):
-                        temp = raw_cards[j + 1]
-                        raw_cards[j + 1] = raw_cards[j]
-                        raw_cards[j] = temp
-        return raw_cards
+                if not self.check_alphabetical_order(raw_cartes[j][0][0][:3], raw_cartes[j + 1][0][0][:3]):
+                    temp = raw_cartes[j + 1]
+                    raw_cartes[j + 1] = raw_cartes[j]
+                    raw_cartes[j] = temp
+                elif raw_cartes[j][0][0][:3] == raw_cartes[j + 1][0][0][:3]:
+                    if not self.check_alphabetical_order(raw_cartes[j][0][1], raw_cartes[j + 1][0][1]):
+                        temp = raw_cartes[j + 1]
+                        raw_cartes[j + 1] = raw_cartes[j]
+                        raw_cartes[j] = temp
+        return raw_cartes
 
     def check_alphabetical_order(self, string1: str, string2: str) -> bool:
         """Check if string1 is alphabetically before string2."""
@@ -136,8 +136,8 @@ class DataCollector(Game):
             index += 1
         return len1 <= len2
 
-    def get_check_raw_cards(self) -> Dict[str, List[str]]:
-        raw_cards = self.get_raw_cards()
+    def get_check_raw_cartes(self) -> Dict[str, List[str]]:
+        raw_cartes = self.get_raw_cartes()
         row_filled, column_filled = True, True
         row, column = 0, 0
         data = {}
@@ -146,9 +146,9 @@ class DataCollector(Game):
             while column < 10:
                 column_filled = False
                 data[f"{row}.{column}"] = []
-                for raw_card in raw_cards:
+                for raw_carte in raw_cartes:
                     try:
-                        data[f"{row}.{column}"].append(raw_card[row][column])
+                        data[f"{row}.{column}"].append(raw_carte[row][column])
                         row_filled = True
                         column_filled = True
                     except IndexError:
@@ -158,8 +158,8 @@ class DataCollector(Game):
             column = 0
         return data
 
-    def print_check_raw_cards(self) -> None:
-        data = self.get_check_raw_cards()
+    def print_check_raw_cartes(self) -> None:
+        data = self.get_check_raw_cartes()
         for key, value in data.items():
             if value == [] or isna(value[0]):
                 continue

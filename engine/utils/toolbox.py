@@ -107,8 +107,11 @@ class ToolBox(Settings):
             try:
                 data = pickle.load(f)
             except EOFError:
-                self.add_log("Echec de l'ouverture du pickle <path> le fichier semble corrompu.")
-                raise EOFError("Echec de l'ouverture du pickle <path> le fichier semble corrompu.")
+                self.add_log(f"Echec de l'ouverture du pickle <{path}> le fichier semble corrompu.")
+                raise EOFError(f"Echec de l'ouverture du pickle <{path}> le fichier semble corrompu.")
+            except ModuleNotFoundError:
+                self.add_log(f"Echec de l'ouverture du pickle <{path}> qui cherche craisemblablement un attribut inexistant.")
+                raise ModuleNotFoundError(f"Echec de l'ouverture du pickle <{path}> qui cherche craisemblablement un attribut inexistant.")
         return data
 
     def pickle_save(self, path: str, data: Any) -> None:

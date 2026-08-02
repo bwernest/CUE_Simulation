@@ -14,11 +14,11 @@ import pytest
 class TestDeck(Assert):
 
     def test_create_deck_error1(self) -> None:
-        card = dummy_card()
+        carte = dummy_carte()
         deck = Deck("test")
-        cards = [card for _ in range(deck.deck_len + 1)]
+        cartes = [carte for _ in range(deck.deck_len + 1)]
         with pytest.raises(NombreIncorrectDeCartes):
-            deck.create_deck(cards)
+            deck.create_deck(cartes)
 
     def test_deck_keys(self) -> None:
         deck = dummy_deck()
@@ -27,19 +27,19 @@ class TestDeck(Assert):
         self.assertEqual(keys[0], "id0")
         self.assertEqual(keys[-1], "id17")
 
-    def test_replace_card(self) -> None:
+    def test_replace_carte(self) -> None:
         deck = dummy_deck()
-        card = dummy_card()
-        deck.replace_card("id0", card)
-        self.assertEqual(deck.cards["dummy_card"], card)
-        self.assertEqual(deck.order[0], "dummy_card")
-        self.assertNotIn("id0", deck.cards)
+        carte = dummy_carte()
+        deck.replace_carte("id0", carte)
+        self.assertEqual(deck.cartes["dummy_carte"], carte)
+        self.assertEqual(deck.order[0], "dummy_carte")
+        self.assertNotIn("id0", deck.cartes)
 
-    def test_replace_card_error(self) -> None:
+    def test_replace_carte_error(self) -> None:
         deck = dummy_deck()
-        card = dummy_card()
+        carte = dummy_carte()
         with pytest.raises(CarteInexistante):
-            deck.replace_card("id18", card)
+            deck.replace_carte("id18", carte)
 
     def test_shuffle1(self) -> None:
         expected = ["id11", "id13", "id17", "id0", "id1", "id4", "id10", "id8",
@@ -61,10 +61,10 @@ class TestDeck(Assert):
         result = game.decks[0].order
         self.assertEqual(expected, result)
 
-    def test_hand(self) -> None:
+    def test_main(self) -> None:
         deck = dummy_deck()
         expected = ["id0", "id1", "id2", "id3", "id4"]
-        result = deck.hand
+        result = deck.main
         self.assertEqual(expected, result)
 
     def test_cycle(self) -> None:
@@ -81,7 +81,7 @@ class TestDeck(Assert):
             deck.cycle(["id15", None, None])
 
     def test_name_to_id(self) -> None:
-        expected = {f"card{k}": f"id{k}" for k in range(18)}
+        expected = {f"carte{k}": f"id{k}" for k in range(18)}
         deck = dummy_deck()
         result = deck.name_to_id
         self.assertEqual(expected, result)

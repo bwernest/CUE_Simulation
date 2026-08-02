@@ -24,7 +24,7 @@ class GameUtility(ToolBox):
         targets: Dict[int, List],
         filtre: List,
         player: int,
-        card_id: str,
+        cid: str,
     ) -> Dict[int, List]:
         n_selected = int(filtre[1])
         len0, len1 = len(targets[0]), len(targets[1])

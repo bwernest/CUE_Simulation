@@ -1,7 +1,7 @@
 """___Modules___________________________________________________________________________________"""
 
 # CUE_Simulation
-from ..engine.card import Card
+from ..engine.carte import Carte
 from ..engine.deck import Deck
 from ..engine.engine import Engine
 from ..engine.game import Game
@@ -22,32 +22,32 @@ def engine() -> Engine:
 
 
 def dummy_deck() -> Deck:
-    cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", album="test_album", collection="test_collection", type="standard") for k, card in enumerate(cards)]
+    cartes = [Carte("test") for _ in range(18)]
+    [carte.create_carte(f"id{k}", f"carte{k}", album="test_album", collection="test_collection", type="standard") for k, carte in enumerate(cartes)]
     deck = Deck("test")
-    deck.create_deck(cards)
+    deck.create_deck(cartes)
     return deck
 
 
 def album_deck(album: Literal[Album]) -> Deck:
     deck = dummy_deck()
-    for card in deck.cards.values():
-        card.album = album.lower()
+    for carte in deck.cartes.values():
+        carte.album = album.lower()
     return deck
 
 
 def collection_deck(collection: Literal[Collection]) -> Deck:
     deck = dummy_deck()
-    for card in deck.cards.values():
-        card.album = "paleontology"
-        card.collection = collection.lower()
+    for carte in deck.cartes.values():
+        carte.album = "paleontology"
+        carte.collection = collection.lower()
     return deck
 
 
-def dummy_card() -> Card:
-    card = Card("test")
-    card.create_card("dummy_card", "test_card")
-    return card
+def dummy_carte() -> Carte:
+    carte = Carte("test")
+    carte.create_carte("dummy_carte", "test_carte")
+    return carte
 
 
 @pytest.fixture(scope="function")
@@ -58,36 +58,36 @@ def game() -> Game:
 
 
 def elephant_deck() -> Deck:
-    cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", power=260, cost=26) for k, card in enumerate(cards)]
+    cartes = [Carte("test") for _ in range(18)]
+    [carte.create_carte(f"id{k}", f"carte{k}", power=260, cost=26) for k, carte in enumerate(cartes)]
     deck = Deck("test")
-    deck.create_deck(cards)
+    deck.create_deck(cartes)
     return deck
 
 
 def mouse_deck() -> Deck:
-    cards = [Card("test") for _ in range(18)]
-    [card.create_card(f"id{k}", f"card{k}", power=10, cost=1) for k, card in enumerate(cards)]
+    cartes = [Carte("test") for _ in range(18)]
+    [carte.create_carte(f"id{k}", f"carte{k}", power=10, cost=1) for k, carte in enumerate(cartes)]
     deck = Deck("test")
-    deck.create_deck(cards)
+    deck.create_deck(cartes)
     return deck
 
 
-def unique_card_play(
-    card_id: str,
+def unique_carte_play(
+    cid: str,
     player_deck: Optional[Deck] = None,
     opponent_deck: Optional[Deck] = None,
 ) -> Game:
     """
-    unique_card_play
-    ----------------
+    unique_carte_play
+    -----------------
     Simulation d'une partie où une unique carte est jouée par player.
     La partie est créée avec des decks par défaut ou ceux renseignés.
-    La 1ère carte du player_deck (id0) est remplacée par card_id.
+    La 1ère carte du player_deck (id0) est remplacée par cid.
 
     Paramètres
     ----------
-    card_id : str
+    cid : str
         Identifiant de la carte à ajouter en 1ère position dans le player_deck.
     player_deck : Optional[Deck]
         Deck de player par défaut un dummy deck.
@@ -100,10 +100,10 @@ def unique_card_play(
     opponent_deck = dummy_deck() if opponent_deck is None else opponent_deck
     deck1 = player_deck
     deck2 = opponent_deck
-    card_id = card_id.lower()
-    deck1.replace_card("id0", engine.cards[card_id])
+    cid = cid.lower()
+    deck1.replace_carte("id0", engine.cartes[cid])
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
-    engine.play([card_id, None, None], [None, None, None])
+    engine.play([cid, None, None], [None, None, None])
     return engine.game
 
 
@@ -118,12 +118,12 @@ def unique_turn_play(
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
-    for card in player_play:
-        if card is not None:
-            assert card in deck1.hand, "Erreur dans la rédaction du test unique_turn_play."
-    for card in opponent_play:
-        if card is not None:
-            assert card in deck2.hand, "Erreur dans la rédaction du test unique_turn_play."
+    for carte in player_play:
+        if carte is not None:
+            assert carte in deck1.main, "Erreur dans la rédaction du test unique_turn_play."
+    for carte in opponent_play:
+        if carte is not None:
+            assert carte in deck2.main, "Erreur dans la rédaction du test unique_turn_play."
     engine.play(player_play, opponent_play)
     return engine.game
 
@@ -140,24 +140,24 @@ def multiple_turns_play(
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
     for player_play, opponent_play in zip(player_plays, opponent_plays):
-        for card in player_play:
-            if card is not None:
-                assert card in deck1.hand, f"Erreur dans la rédaction du test multiple_turns_play, {card} n'est pas en main."
-        for card in opponent_play:
-            if card is not None:
-                assert card in deck2.hand, f"Erreur dans la rédaction du test multiple_turns_play, {card} n'est pas en main."
+        for carte in player_play:
+            if carte is not None:
+                assert carte in deck1.main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
+        for carte in opponent_play:
+            if carte is not None:
+                assert carte in deck2.main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
         engine.play(player_play, opponent_play)
     return engine.game
 
 
 def set_deck_power(deck: Deck, power: int) -> None:
-    for card in deck.cards.values():
-        card.base_power = power
+    for carte in deck.cartes.values():
+        carte.base_power = power
 
 
 def set_deck_cost(deck: Deck, cost: int) -> None:
-    for card in deck.cards.values():
-        card.base_cost = cost
+    for carte in deck.cartes.values():
+        carte.base_cost = cost
 
 
 def get_buff_array(index: int = 0, value: int = 0, buff_array: Optional[NDArray] = None) -> NDArray:

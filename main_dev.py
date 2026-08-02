@@ -38,26 +38,26 @@ from engine.test.fixtures import dummy_deck
 """___Fonctions_____________________________________________________________"""
 
 
-def unique_card_play(card_id: str) -> Game:
+def unique_carte_play(cid: str) -> Game:
     engine = Engine("test")
     engine.start_engine()
     deck1 = dummy_deck()
     deck2 = dummy_deck()
-    card_id = card_id.lower()
-    deck1.replace_card("id0", engine.cards[card_id])
+    cid = cid.lower()
+    deck1.replace_carte("id0", engine.cartes[cid])
     engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
-    engine.play([card_id, None, None], [None, None, None])
+    engine.play([cid, None, None], [None, None, None])
     return engine.game
 
 
-def test_card_all() -> None:
+def test_cartes_all() -> None:
     engine = Engine("prod")
     engine.start_engine()
-    for card_id in engine.cards.keys():
-        print(f"Test de {engine.cards[card_id].name}")
+    for cid in engine.cartes.keys():
+        print(f"Test de {engine.cartes[cid].name}")
         deck0 = dummy_deck()
         deck1 = dummy_deck()
-        deck0.replace_card("id0", engine.cards[card_id])
+        deck0.replace_carte("id0", engine.cartes[cid])
         engine.start_game(deck0, deck1, 100, 0, 0, 250, shuffle=False)
 
 
@@ -65,8 +65,8 @@ def test_card_all() -> None:
 
 engine = Engine("prod")
 engine.start_engine()
-# engine.print_check_raw_cards()
+# engine.print_check_raw_cartes()
 engine.rewrite_raw_data()
-engine.print_cards_collections()
+engine.print_cartes_collections()
 engine.print_collection("omnivores")
-# test_card_all()
+# test_carte_all()

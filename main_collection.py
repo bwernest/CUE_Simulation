@@ -12,6 +12,6 @@ engine.start_engine()
 
 engine.rewrite_raw_data()
 
-engine.print_cards_albums()
-engine.print_cards_collections()
+engine.print_cartes_albums()
+engine.print_cartes_collections()
 engine.print_collection("herbivores")

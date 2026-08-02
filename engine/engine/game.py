@@ -59,8 +59,8 @@ class Game(Deck):
         self.trigger_draw_attacks()
         self.trigger_start_attacks()
 
-        self.decks[0].remaining = self.decks[0].order[:self.hand_len]
-        self.decks[1].remaining = self.decks[1].order[:self.hand_len]
+        self.decks[0].remaining = self.decks[0].order[:self.main_len]
+        self.decks[1].remaining = self.decks[1].order[:self.main_len]
 
     def play(self, play0: List[str | None], play1: List[str | None]) -> None:
         plays = [play0, play1]
@@ -79,17 +79,17 @@ class Game(Deck):
         self.play_attacks(plays)
 
         for player in range(2):
-            card_score = 0
+            carte_score = 0
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
-                card = self.decks[player].cards[plays[player][k]]  # type:ignore
-                card.played += 1
-                card_score += max(0, card.base_power + np.sum(card.buff["burn"]))
-                card_score += np.sum(card.buff["power"])
-                self.energy[player] -= max(0, card.base_cost + np.sum(card.buff["cost"]))
+                carte = self.decks[player].cartes[plays[player][k]]  # type:ignore
+                carte.played += 1
+                carte_score += max(0, carte.base_power + np.sum(carte.buff["burn"]))
+                carte_score += np.sum(carte.buff["power"])
+                self.energy[player] -= max(0, carte.base_cost + np.sum(carte.buff["cost"]))
             power_per_turn = np.sum(self.resource_per_turn["power"][player])
-            self.score[self.round, self.turn, player] += max(0, card_score) + power_per_turn
+            self.score[self.round, self.turn, player] += max(0, carte_score) + power_per_turn
 
     def play_attacks(self, plays: List[List[str | None]]) -> None:
         for player in range(2):
@@ -105,7 +105,7 @@ class Game(Deck):
                     continue
                 self.trigger_attack("return", plays, player, k)  # type:ignore
         self.add_energy_per_turn()
-        self.debuff_cards(plays)
+        self.debuff_cartes(plays)
         self.debuff_resources_per_turn()
         self.count_turn()
         for player in range(2):
@@ -116,13 +116,13 @@ class Game(Deck):
             self.energy[player] += np.sum(self.resource_per_turn["energy"][player])
         self.energy = np.clip(self.energy, self.min_energy, self.max_energy)
 
-    def debuff_cards(self, plays) -> None:
+    def debuff_cartes(self, plays) -> None:
         for player in range(2):
-            for card_id in self.decks[player].order:
-                for data, buff in self.decks[player].cards[card_id].buff.items():
-                    self.decks[player].cards[card_id].buff[data] = self.debuff_array(buff)
-                    if card_id in plays[player]:
-                        self.decks[player].cards[card_id].buff[data][1] = 0
+            for cid in self.decks[player].order:
+                for data, buff in self.decks[player].cartes[cid].buff.items():
+                    self.decks[player].cartes[cid].buff[data] = self.debuff_array(buff)
+                    if cid in plays[player]:
+                        self.decks[player].cartes[cid].buff[data][1] = 0
 
     def debuff_resources_per_turn(self) -> None:
         for player in range(2):
@@ -132,40 +132,40 @@ class Game(Deck):
     def get_lock_statuses(self) -> List[Dict[str, int]]:
         lock_statuses = [{}, {}]
         for player in range(2):
-            for card in self.decks[player].hand:
-                lock_status = argmin(self.decks[player].cards[card].buff["lock"][2:])
-                lock_statuses[player][card] = lock_status
+            for carte in self.decks[player].main:
+                lock_status = argmin(self.decks[player].cartes[carte].buff["lock"][2:])
+                lock_statuses[player][carte] = lock_status
         return lock_statuses
 
     """___Attack________________________________________________________________________________"""
 
     def trigger_start_attacks(self) -> None:
         for player in range(2):
-            for card in self.decks[player].hand:
-                for attack in self.decks[player].cards[card].attacks["start"]:
+            for carte in self.decks[player].main:
+                for attack in self.decks[player].cartes[carte].attacks["start"]:
                     if self.check_conditions(attack["condition"], attack["acondition"], [], player, 26):
-                        self.execute_attack(attack, card, player)
+                        self.execute_attack(attack, carte, player)
 
     def trigger_draw_attacks(self) -> None:
         for player in range(2):
-            cards_drawn = list(set(self.decks[player].hand) - set(self.decks[player].remaining))
-            for card in cards_drawn:
-                for attack in self.decks[player].cards[card].attacks["draw"]:
+            cartes_piochees = list(set(self.decks[player].main) - set(self.decks[player].remaining))
+            for carte in cartes_piochees:
+                for attack in self.decks[player].cartes[carte].attacks["draw"]:
                     if self.check_conditions(attack["condition"], attack["acondition"], [], player, 26):
-                        self.execute_attack(attack, card, player)
+                        self.execute_attack(attack, carte, player)
 
-    def trigger_attack(self, trigger: Literal["play", "return"], plays: List[List[str]], player: int, card_index: int) -> None:
-        card = plays[player][card_index]
-        for attack in self.decks[player].cards[card].attacks[trigger]:
-            if self.check_conditions(attack["condition"], attack["acondition"], plays, player, card_index):
-                self.execute_attack(attack, card, player)
+    def trigger_attack(self, trigger: Literal["play", "return"], plays: List[List[str]], player: int, carte_index: int) -> None:
+        carte = plays[player][carte_index]
+        for attack in self.decks[player].cartes[carte].attacks[trigger]:
+            if self.check_conditions(attack["condition"], attack["acondition"], plays, player, carte_index):
+                self.execute_attack(attack, carte, player)
 
-    def execute_attack(self, attack: Dict, card_id: str, player: int) -> None:
-        targets = self.get_targets(attack["cible"], card_id, player)
+    def execute_attack(self, attack: Dict, cid: str, player: int) -> None:
+        targets = self.get_targets(attack["cible"], cid, player)
         for filtre in attack["filtre"]:
-            targets = self.filter_targets(targets, filtre, player, card_id)  # type:ignore
+            targets = self.filter_targets(targets, filtre, player, cid)  # type:ignore
         for afiltre in attack["afiltre"]:
-            atargets = self.filter_targets(deepcopy(targets), afiltre, player, card_id)  # type:ignore
+            atargets = self.filter_targets(deepcopy(targets), afiltre, player, cid)  # type:ignore
             for player in range(2):
                 targets[player] = list(set(targets[player]) - set(atargets[player]))    # type:ignore
         self.apply_effects(attack["effet"], attack["multiplicateur"], attack["duree"], targets, player)
@@ -177,46 +177,46 @@ class Game(Deck):
         targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
-        card_id: str,
+        cid: str,
     ) -> Dict[int, List[str]]:
         try:
             return {
-                "base_power": self.filter_targets_card_attribut_amount,
-                "base_cost": self.filter_targets_card_attribut_amount,
-                "rarity": self.filter_targets_card_raritype,
-                "type": self.filter_targets_card_raritype,
+                "base_power": self.filter_targets_carte_attribut_amount,
+                "base_cost": self.filter_targets_carte_attribut_amount,
+                "rarity": self.filter_targets_carte_raritype,
+                "type": self.filter_targets_carte_raritype,
                 "random": self.filter_targets_random,
                 "other": self.filter_targets_other,
-            }[atk_filtre[0]](targets, atk_filtre, player, card_id)
+            }[atk_filtre[0]](targets, atk_filtre, player, cid)
         except KeyError:
             raise FiltreKeyError(f"Filtre {atk_filtre[0]} inconnu")
 
-    def filter_targets_card_attribut_amount(
+    def filter_targets_carte_attribut_amount(
         self,
         targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
-        card_id: str,
+        cid: str,
     ) -> Dict[int, List[str]]:
         filtered_targets = {0: [], 1: []}
         for player in range(2):
-            for card_id in targets[player]:
-                if self.check_condition_amount(atk_filtre[1], int(self.decks[player].cards[card_id].__getattribute__(atk_filtre[0])), int(atk_filtre[2])):
-                    filtered_targets[player].append(card_id)
+            for cid in targets[player]:
+                if self.check_condition_amount(atk_filtre[1], int(self.decks[player].cartes[cid].__getattribute__(atk_filtre[0])), int(atk_filtre[2])):
+                    filtered_targets[player].append(cid)
         return filtered_targets
 
-    def filter_targets_card_raritype(
+    def filter_targets_carte_raritype(
         self,
         targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
-        card_id: str,
+        cid: str,
     ) -> Dict[int, List[str]]:
         filtered_targets = {0: [], 1: []}
         for player in range(2):
-            for card_id in targets[player]:
-                if self.decks[player].cards[card_id].__getattribute__(atk_filtre[0]) == atk_filtre[1]:
-                    filtered_targets[player].append(card_id)
+            for cid in targets[player]:
+                if self.decks[player].cartes[cid].__getattribute__(atk_filtre[0]) == atk_filtre[1]:
+                    filtered_targets[player].append(cid)
         return filtered_targets
 
     def filter_targets_other(
@@ -224,23 +224,23 @@ class Game(Deck):
         targets: Dict[int, List[str]],
         atk_filtre: List,
         player: int,
-        card_id: str,
+        cid: str,
     ) -> Dict[int, List[str]]:
-        targets[player].remove(card_id)
+        targets[player].remove(cid)
         return targets
 
     """___Condition_____________________________________________________________________________"""
 
-    def check_conditions(self, conditions: List, aconditions: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_conditions(self, conditions: List, aconditions: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         for atk_cdt in conditions:
-            if not self.check_condition(atk_cdt, plays, player, card_index):
+            if not self.check_condition(atk_cdt, plays, player, carte_index):
                 return False
         for atk_cdt in aconditions:
-            if self.check_condition(atk_cdt, plays, player, card_index):
+            if self.check_condition(atk_cdt, plays, player, carte_index):
                 return False
         return True
 
-    def check_condition(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
             return {
                 "player deck": self.check_condition_deck,
@@ -250,118 +250,118 @@ class Game(Deck):
                 "player album": self.check_condition_player_album,
                 "placement": self.check_condition_placement,
                 "voisin": self.check_condition_voisin,
-            }[atk_cdt[0]](atk_cdt, plays, player, card_index)
+            }[atk_cdt[0]](atk_cdt, plays, player, carte_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[0]}> inconnue")
 
-    def check_condition_voisin(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_voisin(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
             return {
                 "gauche": self.check_condition_voisin_gauche,
                 "droite": self.check_condition_voisin_droite,
                 "next to": self.check_condition_voisin_next_to,
-            }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+            }[atk_cdt[1]](atk_cdt, plays, player, carte_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
-    def check_condition_voisin_next_to(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_voisin_next_to(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         return {
             0: self.check_condition_voisin_droite,
             1: self.check_condition_voisin_gauche or self.check_condition_voisin_droite,
             2: self.check_condition_voisin_gauche,
-        }[card_index](atk_cdt, plays, player, card_index)
+        }[carte_index](atk_cdt, plays, player, carte_index)
 
-    def check_condition_voisin_gauche(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_voisin_gauche(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
-            nei_card = self.decks[player].cards[plays[player][card_index - 1]]
+            nei_carte = self.decks[player].cartes[plays[player][carte_index - 1]]
         except KeyError:
             return atk_cdt[2] == "vide"
-        return atk_cdt[2] != "vide" and nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+        return atk_cdt[2] != "vide" and nei_carte.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
-    def check_condition_voisin_droite(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_voisin_droite(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
-            nei_card = self.decks[player].cards[plays[player][card_index + 1]]
+            nei_carte = self.decks[player].cartes[plays[player][carte_index + 1]]
         except KeyError:
             return atk_cdt[2] == "vide"
-        return atk_cdt[2] != "vide" and nei_card.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+        return atk_cdt[2] != "vide" and nei_carte.__getattribute__(atk_cdt[2]) == atk_cdt[3]
 
-    def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_placement(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
             return {
                 "gauche": 0,
                 "milieu": 1,
                 "droite": 2,
-            }[atk_cdt[1]] == card_index
+            }[atk_cdt[1]] == carte_index
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
-    def check_condition_player_album(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_player_album(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         amount_player = len(self.stats[player]["album"])
         return self.check_condition_amount(atk_cdt[1], amount_player, int(atk_cdt[2]))
 
-    def check_condition_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_deck(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
             return {
-                "name": self.check_condition_deck_card,
+                "name": self.check_condition_deck_carte,
                 "collection": self.check_condition_deck_set,
                 "album": self.check_condition_deck_set,
-            }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+            }[atk_cdt[1]](atk_cdt, plays, player, carte_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
-    def check_condition_deck_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_deck_carte(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
             _ = self.decks[player].name_to_id[atk_cdt[2]]
         except KeyError:
             return False
         return True
 
-    def check_condition_deck_set(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_deck_set(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         amount_deck = self.get_amount(player, atk_cdt[1], atk_cdt[2])
         amount_target = int(atk_cdt[4])
         return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
 
-    def check_condition_turn_score(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_turn_score(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         amount_turn_score = self.score[self.round, self.turn, player] - self.score[self.round, self.turn, 1 - player]
         amount_target = int(atk_cdt[2])
         return self.check_condition_amount(atk_cdt[1], amount_turn_score, amount_target)
 
-    def check_condition_round_score(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_round_score(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         amount_round_score = np.sum(self.score[self.round, :, player]) - np.sum(self.score[self.round, :, 1 - player])
         amount_target = int(atk_cdt[2])
         return self.check_condition_amount(atk_cdt[1], amount_round_score, amount_target)
 
-    def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_player_played(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
             return {
-                "name": self.check_condition_played_card,
+                "name": self.check_condition_played_carte,
                 "collection": self.check_condition_played_deck,
                 "album": self.check_condition_played_deck,
                 "keyword": self.check_condition_played_keyword,
-            }[atk_cdt[1]](atk_cdt, plays, player, card_index)
+            }[atk_cdt[1]](atk_cdt, plays, player, carte_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
-    def check_condition_played_card(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> bool:
+    def check_condition_played_carte(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> bool:
         try:
-            card_id = self.decks[player].name_to_id[atk_cdt[2]]
-            amount_played = self.decks[player].cards[card_id].played
+            cid = self.decks[player].name_to_id[atk_cdt[2]]
+            amount_played = self.decks[player].cartes[cid].played
         except KeyError:
             amount_played = 0
         return self.check_condition_amount(">", amount_played, 0)
 
-    def check_condition_played_deck(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> int:
+    def check_condition_played_deck(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> int:
         amount_played = 0
-        for card in self.decks[player].cards.values():
-            if card.__getattribute__(atk_cdt[1]) == atk_cdt[2]:
-                amount_played += card.played
+        for carte in self.decks[player].cartes.values():
+            if carte.__getattribute__(atk_cdt[1]) == atk_cdt[2]:
+                amount_played += carte.played
         return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
 
-    def check_condition_played_keyword(self, atk_cdt: List, plays: List[List[str]], player: int, card_index: int) -> int:
+    def check_condition_played_keyword(self, atk_cdt: List, plays: List[List[str]], player: int, carte_index: int) -> int:
         amount_played = 0
-        for card in self.decks[player].cards.values():
-            if atk_cdt[2] in card.keywords:
-                amount_played += card.played
+        for carte in self.decks[player].cartes.values():
+            if atk_cdt[2] in carte.keywords:
+                amount_played += carte.played
         return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
 
     def check_condition_amount(self, comparaison: str, amount_player: int, amount_target: int) -> bool:
@@ -391,87 +391,87 @@ class Game(Deck):
 
     """___Target________________________________________________________________________________"""
 
-    def get_targets(self, target_attacks: List, card: str, player: int) -> Dict[int, List[str | int]]:
+    def get_targets(self, target_attacks: List, carte: str, player: int) -> Dict[int, List[str | int]]:
         """
         Attention si la cible est un joueur
         """
         targets = {0: [], 1: []}
         for target_attack in target_attacks:
-            target = self.get_target(target_attack, card, player)
+            target = self.get_target(target_attack, carte, player)
             for joueur in range(2):
                 targets[joueur] += target[joueur]
         targets[0] = list(set(targets[0]))
         targets[1] = list(set(targets[1]))
         return targets
 
-    def get_target(self, target_attack: List, card: str, player: int) -> Dict[int, List[str | int]]:
+    def get_target(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str | int]]:
         try:
             return {
                 "self": self.get_target_self,
                 "player": self.get_target_player,
                 "opponent": self.get_target_opponent,
-                "player hand": self.get_target_player_hand,
+                "player main": self.get_target_player_main,
                 "player deck": self.get_target_player_deck,
                 "player remaining": self.get_target_player_remaining,
-                "opponent hand": self.get_target_opponent_hand,
+                "opponent main": self.get_target_opponent_main,
                 "opponent deck": self.get_target_opponent_deck,
                 "opponent remaining": self.get_target_opponent_remaining,
-                "both hand": self.get_target_both_hand,
+                "both main": self.get_target_both_main,
                 "both deck": self.get_target_both_deck,
                 "both remaining": self.get_target_both_remaining,
-            }[target_attack[0]](target_attack, card, player)
+            }[target_attack[0]](target_attack, carte, player)
         except KeyError:
             raise TargetKeyError(f"Target {target_attack} inconnue")
 
-    def get_target_self(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return {player: [card], 1 - player: []}
+    def get_target_self(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return {player: [carte], 1 - player: []}
 
-    def get_target_player(self, target_attack: List, card: str, player: int) -> Dict[int, List[int]]:
+    def get_target_player(self, target_attack: List, carte: str, player: int) -> Dict[int, List[int]]:
         return {player: [player], 1 - player: []}
 
-    def get_target_opponent(self, target_attack: List, card: str, player: int) -> Dict[int, List[int]]:
+    def get_target_opponent(self, target_attack: List, carte: str, player: int) -> Dict[int, List[int]]:
         return {player: [1 - player], 1 - player: []}
 
-    def get_target_player_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return self.get_target_cards(target_attack, player, "hand")
+    def get_target_player_main(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return self.get_target_cartes(target_attack, player, "main")
 
-    def get_target_player_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return self.get_target_cards(target_attack, player, "order")
+    def get_target_player_deck(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return self.get_target_cartes(target_attack, player, "order")
 
-    def get_target_player_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return self.get_target_cards(target_attack, player, "remaining")
+    def get_target_player_remaining(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return self.get_target_cartes(target_attack, player, "remaining")
 
-    def get_target_opponent_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return self.get_target_cards(target_attack, 1 - player, "hand")
+    def get_target_opponent_main(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return self.get_target_cartes(target_attack, 1 - player, "main")
 
-    def get_target_opponent_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return self.get_target_cards(target_attack, 1 - player, "order")
+    def get_target_opponent_deck(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return self.get_target_cartes(target_attack, 1 - player, "order")
 
-    def get_target_opponent_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        return self.get_target_cards(target_attack, 1 - player, "remaining")
+    def get_target_opponent_remaining(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        return self.get_target_cartes(target_attack, 1 - player, "remaining")
 
-    def get_target_both_hand(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
+    def get_target_both_main(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
         targets = {}
-        targets[player] = self.get_target_cards(target_attack, player, "hand")[player]
-        targets[1 - player] = self.get_target_cards(target_attack, 1 - player, "hand")[1 - player]
+        targets[player] = self.get_target_cartes(target_attack, player, "main")[player]
+        targets[1 - player] = self.get_target_cartes(target_attack, 1 - player, "main")[1 - player]
         return targets
 
-    def get_target_both_deck(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
+    def get_target_both_deck(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
         targets = {}
-        targets[player] = self.get_target_cards(target_attack, player, "order")[player]
-        targets[1 - player] = self.get_target_cards(target_attack, 1 - player, "order")[1 - player]
+        targets[player] = self.get_target_cartes(target_attack, player, "order")[player]
+        targets[1 - player] = self.get_target_cartes(target_attack, 1 - player, "order")[1 - player]
         return targets
 
-    def get_target_both_remaining(self, target_attack: List, card: str, player: int) -> Dict[int, List[str]]:
-        dict0 = self.get_target_cards(target_attack, player, "remaining")
-        dict1 = self.get_target_cards(target_attack, 1 - player, "remaining")
+    def get_target_both_remaining(self, target_attack: List, carte: str, player: int) -> Dict[int, List[str]]:
+        dict0 = self.get_target_cartes(target_attack, player, "remaining")
+        dict1 = self.get_target_cartes(target_attack, 1 - player, "remaining")
         return self.merge_dict(dict0, dict1)
 
-    def get_target_cards(
+    def get_target_cartes(
         self,
         atk_target: List,
         player_targeted: int,
-        location: Literal["hand", "order", "remaining"],
+        location: Literal["main", "order", "remaining"],
     ) -> Dict[int, List[str]]:
         # N'importe
         if len(atk_target) == 1:
@@ -481,50 +481,50 @@ class Game(Deck):
         # Collection ou Album spécifique
         else:
             return {
-                "name": self.get_target_cards_card,
-                "collection": self.get_target_cards_deck,
-                "album": self.get_target_cards_deck,
-                "keyword": self.get_target_cards_keyword,
+                "name": self.get_target_cartes_carte,
+                "collection": self.get_target_cartes_deck,
+                "album": self.get_target_cartes_deck,
+                "keyword": self.get_target_cartes_keyword,
             }[atk_target[1]](atk_target, player_targeted, location)
 
-    def get_target_cards_card(
+    def get_target_cartes_carte(
         self,
         atk_target: List,
         player_targeted: int,
-        location: Literal["hand", "order", "remaining"],
+        location: Literal["main", "order", "remaining"],
     ) -> Dict:
         targets = {0: [], 1: []}
         try:
-            card_id_targeted = self.decks[player_targeted].name_to_id[atk_target[2]]
+            cid_targeted = self.decks[player_targeted].name_to_id[atk_target[2]]
         except KeyError:
             return targets
-        if card_id_targeted in self.decks[player_targeted].__getattribute__(location):
-            targets[player_targeted].append(card_id_targeted)
+        if cid_targeted in self.decks[player_targeted].__getattribute__(location):
+            targets[player_targeted].append(cid_targeted)
             return targets
         return targets
 
-    def get_target_cards_deck(
+    def get_target_cartes_deck(
         self,
         atk_target: List,
         player_targeted: int,
-        location: Literal["hand", "order", "remaining"],
+        location: Literal["main", "order", "remaining"],
     ) -> Dict:
         targets = {0: [], 1: []}
-        for card_id in self.decks[player_targeted].__getattribute__(location):
-            if self.decks[player_targeted].cards[card_id].__getattribute__(atk_target[1]) == atk_target[2]:
-                targets[player_targeted].append(card_id)
+        for cid in self.decks[player_targeted].__getattribute__(location):
+            if self.decks[player_targeted].cartes[cid].__getattribute__(atk_target[1]) == atk_target[2]:
+                targets[player_targeted].append(cid)
         return targets
 
-    def get_target_cards_keyword(
+    def get_target_cartes_keyword(
         self,
         atk_target: List,
         player_targeted: int,
-        location: Literal["hand", "order", "remaining"],
+        location: Literal["main", "order", "remaining"],
     ) -> Dict:
         targets = {0: [], 1: []}
-        for card_id in self.decks[player_targeted].__getattribute__(location):
-            if atk_target[2] in self.decks[player_targeted].cards[card_id].keywords:
-                targets[player_targeted].append(card_id)
+        for cid in self.decks[player_targeted].__getattribute__(location):
+            if atk_target[2] in self.decks[player_targeted].cartes[cid].keywords:
+                targets[player_targeted].append(cid)
         return targets
 
     """___Effect________________________________________________________________________________"""
@@ -539,10 +539,10 @@ class Game(Deck):
     ) -> None:
         try:
             {
-                "power": self.apply_effect_card,
-                "burn": self.apply_effect_card,
-                "cost": self.apply_effect_card,
-                "lock": self.apply_effect_card_lock,
+                "power": self.apply_effect_carte,
+                "burn": self.apply_effect_carte,
+                "cost": self.apply_effect_carte,
+                "lock": self.apply_effect_carte_lock,
                 "energy": self.apply_effect_energy,
                 "power per turn": self.apply_effect_resource_per_turn,
                 "energy per turn": self.apply_effect_resource_per_turn,
@@ -550,7 +550,7 @@ class Game(Deck):
         except KeyError:
             raise EffectKeyError(f"Effect <{atk_effect[0]}> inconnu")
 
-    def apply_effect_card(
+    def apply_effect_carte(
         self,
         atk_effect: List,
         atk_mult: List,
@@ -561,10 +561,10 @@ class Game(Deck):
         index = self.get_index_from_duree(atk_duree)
         mult = 1 if atk_mult == [] else self.get_multiplicateur(atk_mult, player)
         for player in range(2):
-            for card in targets[player]:
-                self.decks[player].cards[card].buff[atk_effect[0]][index] += int(atk_effect[1]) * mult
+            for carte in targets[player]:
+                self.decks[player].cartes[carte].buff[atk_effect[0]][index] += int(atk_effect[1]) * mult
 
-    def apply_effect_card_lock(
+    def apply_effect_carte_lock(
         self,
         atk_effect: List,
         atk_mult: List,
@@ -574,8 +574,8 @@ class Game(Deck):
     ) -> None:
         index = self.get_index_from_duree(atk_duree)
         for player in range(2):
-            for card in targets[player]:
-                self.decks[player].cards[card].buff[atk_effect[0]][2:index + 1] = [1] * (index - 2 + 1)
+            for carte in targets[player]:
+                self.decks[player].cartes[carte].buff[atk_effect[0]][2:index + 1] = [1] * (index - 2 + 1)
 
     def apply_effect_resource_per_turn(
         self,
@@ -623,7 +623,7 @@ class Game(Deck):
     def get_multiplicateur(self, attack_mult: List, player: int) -> int:
         try:
             return {
-                "player hand": self.get_multiplicateur_hand,
+                "player main": self.get_multiplicateur_main,
                 "player deck": self.get_multiplicateur_deck,
                 "player played": self.get_multiplicateur_played,
                 "player album": self.get_multiplicateur_album,
@@ -633,10 +633,10 @@ class Game(Deck):
         except KeyError:
             raise MultiplicateurKeyError(f"Multiplicateur <{attack_mult[0]}> inconnue")
 
-    def get_multiplicateur_hand(self, attack_mult: List, player: int) -> int:
+    def get_multiplicateur_main(self, attack_mult: List, player: int) -> int:
         multiplicateur = 0
-        for card_id in self.decks[player].hand:
-            if self.decks[player].cards[card_id].__getattribute__(attack_mult[1]) == attack_mult[2]:
+        for cid in self.decks[player].main:
+            if self.decks[player].cartes[cid].__getattribute__(attack_mult[1]) == attack_mult[2]:
                 multiplicateur += 1
         return self.get_maxed_multiplicateur(multiplicateur, attack_mult, 3)
 
@@ -649,7 +649,7 @@ class Game(Deck):
     def get_multiplicateur_played(self, attack_mult: List, player: int) -> int:
         try:
             return self.get_maxed_multiplicateur({
-                "name": self.get_multiplicateur_played_card,
+                "name": self.get_multiplicateur_played_carte,
                 "collection": self.get_multiplicateur_played_deck,
                 "album": self.get_multiplicateur_played_deck,
             }[attack_mult[1]](attack_mult, player), attack_mult, 3)
@@ -659,18 +659,18 @@ class Game(Deck):
     def get_multiplicateur_album(self, attack_mult: List, player: int) -> int:
         return len(self.stats[player]["album"])
 
-    def get_multiplicateur_played_card(self, attack_mult: List, player: int) -> int:
+    def get_multiplicateur_played_carte(self, attack_mult: List, player: int) -> int:
         try:
-            card_id = self.decks[player].name_to_id[attack_mult[2]]
+            cid = self.decks[player].name_to_id[attack_mult[2]]
         except KeyError:
             raise CarteAbsenteDuDeck()
-        return self.decks[player].cards[card_id].played
+        return self.decks[player].cartes[cid].played
 
     def get_multiplicateur_played_deck(self, attack_mult: List, player: int) -> int:
         multiplicateur = 0
-        for card in self.decks[player].cards.values():
-            if card.__getattribute__(attack_mult[1]) == attack_mult[2]:
-                multiplicateur += card.played
+        for carte in self.decks[player].cartes.values():
+            if carte.__getattribute__(attack_mult[1]) == attack_mult[2]:
+                multiplicateur += carte.played
         return multiplicateur
 
     def get_multiplicateur_round_completed(self, attack_mult: List, player: int) -> int:

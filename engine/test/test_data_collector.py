@@ -12,4 +12,4 @@ class TestDataCollector(Assert):
     def test_collect_data(self) -> None:
         data_collector = DataCollector("test")
         data_collector.collect_data()
-        self.assertEqual(len(data_collector.cards) > 0, True)
+        self.assertEqual(len(data_collector.cartes) > 0, True)

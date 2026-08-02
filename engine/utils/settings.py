@@ -29,7 +29,7 @@ class Settings():
     # CUE_Simulation
     deck_len: int
     play_len: int
-    hand_len: int
+    main_len: int
     turns: int
     rounds: int
     start_energy: int

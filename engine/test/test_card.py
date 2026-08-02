@@ -2,7 +2,7 @@
 
 # CUE_Simulation
 from . import *
-from ..engine.card import Card
+from ..engine.carte import Carte
 from ..engine.engine import Engine
 
 # Python
@@ -12,31 +12,31 @@ import pytest
 """___Tests_____________________________________________________________________________________"""
 
 
-class TestCard(Assert):
+class TestCarte(Assert):
 
-    def test_create_card(self) -> None:
-        _ = Card("test")
+    def test_create_carte(self) -> None:
+        _ = Carte("test")
 
-    def test_card_import(self, engine: Engine) -> None:
-        card = engine.cards["mypa001"]
-        self.assertEqual(["2020"], card.keywords)
+    def test_carte_import(self, engine: Engine) -> None:
+        carte = engine.cartes["mypa001"]
+        self.assertEqual(["2020"], carte.keywords)
 
-    def test_card_equal(self, engine: Engine) -> None:
+    def test_carte_equal(self, engine: Engine) -> None:
         expected = True
-        card1 = engine.cards["mypa001"]
-        card2 = engine.cards["mypa001"]
-        result = card1 == card2
+        carte1 = engine.cartes["mypa001"]
+        carte2 = engine.cartes["mypa001"]
+        result = carte1 == carte2
         self.assertEqual(expected, result)
 
-    def test_card_not_equal1(self, engine: Engine) -> None:
+    def test_carte_not_equal1(self, engine: Engine) -> None:
         expected = False
-        card1 = engine.cards["mypa001"]
-        card2 = engine.cards["pan015"]
-        result = card1 == card2
+        carte1 = engine.cartes["mypa001"]
+        carte2 = engine.cartes["pan015"]
+        result = carte1 == carte2
         self.assertEqual(expected, result)
 
-    def test_card_not_equal2(self, engine: Engine) -> None:
+    def test_carte_not_equal2(self, engine: Engine) -> None:
         expected = False
-        card1 = engine.cards["pan015"]
-        result = card1 == engine
+        carte1 = engine.cartes["pan015"]
+        result = carte1 == engine
         self.assertEqual(expected, result)
