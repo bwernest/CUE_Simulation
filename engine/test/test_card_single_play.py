@@ -12,22 +12,22 @@ from numpy import array, sum
 class TestCarteSinglePlay(Assert):
 
     def test_carte_MYPA001(self) -> None:
-        game = unique_carte_play("MYPA001")
-        carte = game.decks[0].cartes["mypa001"]
+        party = unique_carte_play("MYPA001")
+        carte = party.decks[0].cartes["mypa001"]
         expected_buff_array = get_buff_array()
-        self.assertEqual(expected_buff_array, game.resource_per_turn["energy"][0])
-        self.assertEqual(carte.base_power + 77, game.score[0, 0, 0])
-        self.assertEqual(100 - carte.base_cost, game.energy[0])
+        self.assertEqual(expected_buff_array, party.resource_per_turn["energy"][0])
+        self.assertEqual(carte.base_power + 77, party.score[0, 0, 0])
+        self.assertEqual(100 - carte.base_cost, party.energy[0])
         self.assertEqual({
             "album": {"paleontology": 1, "test_album": 17},
             "collection": {"paleontology mythic cards": 1, "test_collection": 17}
-        }, game.stats[0])
+        }, party.stats[0])
 
     def test_carte_PCA002(self) -> None:
-        game = unique_carte_play("PCA002")
-        carte = game.decks[0].cartes["pca002"]
-        self.assertEqual(carte.base_power, game.score[0, 0, 0])
-        self.assertEqual(100 - carte.base_cost, game.energy[0])
+        party = unique_carte_play("PCA002")
+        carte = party.decks[0].cartes["pca002"]
+        self.assertEqual(carte.base_power, party.score[0, 0, 0])
+        self.assertEqual(100 - carte.base_cost, party.energy[0])
 
     def test_carte_PAN015(self) -> None:
         game = unique_carte_play("PAN015")

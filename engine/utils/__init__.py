@@ -43,3 +43,5 @@ Effect = Literal[
     "lock",
     "power",
 ]
+
+Play = List[str] | List[None] | List[Optional[str]]

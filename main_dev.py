@@ -1,12 +1,19 @@
 """___Notes_________________________________________________________________"""
 """
+___Optimisation___
 - Parsing pré game pour désactiver les attaques non activables
 - Parsing pré game pour compter le nombres de cartes de chaque type (opti attaques)
-- Contrôle : effet return sur le round, se termine juste maintenant
+- Classe Game qui récupère un dico, un play et donne le suivant
+
+___BaffWill___
 - But de l'hiver : trier les cartes par interet
     -> Fonction selection qui a une carte calcule un score
-- Tests d'un play à une carte (centrosaurus)
+
+___Jeu___
+- Contrôle : effet return sur le round, se termine juste maintenant
 - On draw, le burn affecte d'un tick les cartes adverses (hellboy)
+
+___IA___
 - Coder plusieurs IA qui s'affronteront :
     - Mallia : Jouer au hasard
     - Mauvaka : Maximiser le power au tour T

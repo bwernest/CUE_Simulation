@@ -40,7 +40,7 @@ class Deck(Carte):
     def main(self) -> List[str]:
         return self.order[:self.main_len]
 
-    def cycle(self, cartes_jouees: List[str | None]) -> None:
+    def cycle(self, cartes_jouees: Play) -> None:
         for carte in cartes_jouees:
             if carte is not None:
                 if carte not in self.main:
@@ -65,7 +65,7 @@ class Deck(Carte):
                 stats[key][carte.__getattribute__(key)] += 1
         return stats
 
-    def update_remaining(self, play: List[str | None]) -> None:
+    def update_remaining(self, play: Play) -> None:
         self.remaining = self.main
         for cid in play:
             if cid is not None:

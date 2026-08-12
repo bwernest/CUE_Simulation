@@ -55,10 +55,10 @@ class TestDeck(Assert):
                     "id7", "id16", "id17", "id13", "id4", "id10", "id12", "id5", "id8"]
         deck = dummy_deck()
         game = Game("test")
-        game.create_game(deck, deck, 100, 0, 0, 250)
+        party = game.create_game(deck, deck, 100, 0, 0, 250)
         seed("Porco Rosso")
-        game.start_game()
-        result = game.decks[0].order
+        game.start_game(party)
+        result = party.decks[0].order
         self.assertEqual(expected, result)
 
     def test_main(self) -> None:

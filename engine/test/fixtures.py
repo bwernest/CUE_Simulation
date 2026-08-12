@@ -5,6 +5,7 @@ from ..engine.carte import Carte
 from ..engine.deck import Deck
 from ..engine.engine import Engine
 from ..engine.game import Game
+from ..engine.party import Party
 from ..utils import *
 
 # Python
@@ -53,8 +54,14 @@ def dummy_carte() -> Carte:
 @pytest.fixture(scope="function")
 def game() -> Game:
     game = Game("test")
-    game.create_game(elephant_deck(), mouse_deck(), 100, 0, 100, 100)
     return game
+
+
+@pytest.fixture(scope="function")
+def party() -> Party:
+    game = Game("test")
+    party = game.create_game(elephant_deck(), mouse_deck(), 100, 0, 100, 100)
+    return party
 
 
 def elephant_deck() -> Deck:
@@ -77,7 +84,7 @@ def unique_carte_play(
     cid: str,
     player_deck: Optional[Deck] = None,
     opponent_deck: Optional[Deck] = None,
-) -> Game:
+) -> Party:
     """
     unique_carte_play
     -----------------
@@ -102,9 +109,10 @@ def unique_carte_play(
     deck2 = opponent_deck
     cid = cid.lower()
     deck1.replace_carte("id0", engine.cartes[cid])
-    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
-    engine.play([cid, None, None], [None, None, None])
-    return engine.game
+    party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
+    engine.start_game(party, shuffle=False)
+    engine.play(party, [cid, None, None], [None, None, None])
+    return party
 
 
 def unique_turn_play(
@@ -112,20 +120,21 @@ def unique_turn_play(
     opponent_play: List[str | None],
     player_deck: Optional[Deck] = None,
     opponent_deck: Optional[Deck] = None,
-) -> Game:
+) -> Party:
     engine = Engine("test")
     engine.start_engine()
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
-    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
+    party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
+    engine.start_game(party, shuffle=False)
     for carte in player_play:
         if carte is not None:
             assert carte in deck1.main, "Erreur dans la rédaction du test unique_turn_play."
     for carte in opponent_play:
         if carte is not None:
             assert carte in deck2.main, "Erreur dans la rédaction du test unique_turn_play."
-    engine.play(player_play, opponent_play)
-    return engine.game
+    engine.play(party, player_play, opponent_play)
+    return party
 
 
 def multiple_turns_play(
@@ -133,12 +142,13 @@ def multiple_turns_play(
     opponent_plays: List[List[str | None]],
     player_deck: Optional[Deck] = None,
     opponent_deck: Optional[Deck] = None,
-) -> Game:
+) -> Party:
     engine = Engine("test")
     engine.start_engine()
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
-    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
+    party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
+    engine.start_game(party, shuffle=False)
     for player_play, opponent_play in zip(player_plays, opponent_plays):
         for carte in player_play:
             if carte is not None:
@@ -146,8 +156,8 @@ def multiple_turns_play(
         for carte in opponent_play:
             if carte is not None:
                 assert carte in deck2.main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
-        engine.play(player_play, opponent_play)
-    return engine.game
+        engine.play(party, player_play, opponent_play)
+    return party
 
 
 def set_deck_power(deck: Deck, power: int) -> None:
