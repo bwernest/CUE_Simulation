@@ -12,10 +12,27 @@ from numpy import argmin
 
 
 class Party(Deck):
+    """
+    Party
+    -----
+    Classe permettant de sauvegarder une partie. Une instance est créée lors de la création d'une
+    partie. Le jeu CUE interragi avec cette instance pour faire avancer la partie.
+
+    Cette classe permet de consulter les informations sur la partie en cours ou terminées. De plus
+    c'est grâce à des sauvegardes intermédiaires qu'elle permet de simuler des Play.
+    """
 
     decks: List[Deck]
 
     energy: NDArray
+
+    arenas = [
+        "paleontology",
+        "Space",
+        "History",
+        "Life on Land",
+        "Oceans and Seas",
+    ]
 
     score: NDArray
     turn: int
@@ -25,6 +42,10 @@ class Party(Deck):
     min_energy: NDArray
     max_energy: NDArray
     resource_per_turn: Dict[Literal["power", "energy"], List[NDArray]]
+
+    @property
+    def arena(self) -> str:
+        return self.arenas[self.round]
 
     def calculate_stats(self):
         self.stats = [

@@ -81,7 +81,7 @@ def mouse_deck() -> Deck:
 
 
 def unique_carte_play(
-    cid: str,
+    cid: CarteID,
     player_deck: Optional[Deck] = None,
     opponent_deck: Optional[Deck] = None,
 ) -> Party:

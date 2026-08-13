@@ -16,7 +16,7 @@ class Carte(GameUtility):
     name: str
     base_power: int
     base_cost: int
-    attacks: Dict[str, List]
+    attacks: Dict[Trigger, List[Attack]]
 
     def __eq__(self, value):
         if type(value) != self.__class__:
@@ -99,7 +99,7 @@ class Carte(GameUtility):
         return infos, attacks
 
     @property
-    def attacks_dict(self) -> Dict[str, List]:
+    def attacks_dict(self) -> Dict[Trigger, List]:
         return {
             "draw": [],
             "start": [],
@@ -107,12 +107,12 @@ class Carte(GameUtility):
             "return": [],
         }
 
-    def add_attacks(self, attacks: List) -> Dict[str, List]:
+    def add_attacks(self, attacks: List) -> Attacks:
         attacks_dict = self.attacks_dict
         for line in attacks:
-            info = line[1].lower()
+            info: AttackInfo = line[1].lower()
             if not isna(line[0]):
-                atk = line[0].lower()
+                atk: Trigger = line[0].lower()
                 attacks_dict[atk].append({
                     "condition": [],
                     "acondition": [],
@@ -127,12 +127,6 @@ class Carte(GameUtility):
                 attacks_dict[atk][-1][info].append(self.clean_data_line(line[2:]))
             else:
                 attacks_dict[atk][-1][info] = self.clean_data_line(line[2:])
-        attacks_dict = self.convert_data(attacks_dict)
-        return attacks_dict
-
-    def convert_data(self, attacks_dict: Dict[str, List]) -> Dict[str, List]:
-        for atk in attacks_dict.keys():
-            pass
         return attacks_dict
 
     def clean_data_line(self, line: List) -> List:

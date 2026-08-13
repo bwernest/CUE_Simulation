@@ -1,11 +1,14 @@
 """___Modules___________________________________________________________________________________"""
 
 # CUE_Simulation
+from . import *
 from .toolbox import ToolBox
 
 # Python
 from numpy.typing import NDArray
-from typing import Dict, List
+from typing import TypeVar
+U = TypeVar("U")
+V = TypeVar("V")
 
 """___Classes___________________________________________________________________________________"""
 
@@ -18,8 +21,8 @@ class GameUtility(ToolBox):
         unbuff[-1] = 0
         return unbuff
 
-    def merge_dict(self, dict1: Dict[int, List], dict2: Dict[int, List]) -> Dict[int, List]:
+    def merge_dict(self, dict1: Dict[U, V], dict2: Dict[U, V]) -> Dict[U, V]:
         merged = {}
         for key in dict1.keys():
-            merged[key] = dict1[key] + dict2[key]
+            merged[key] = dict1[key] + dict2[key]   # type:ignore
         return merged

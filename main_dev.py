@@ -4,10 +4,12 @@ ___Optimisation___
 - Parsing pré game pour désactiver les attaques non activables
 - Parsing pré game pour compter le nombres de cartes de chaque type (opti attaques)
 - Classe Game qui récupère un dico, un play et donne le suivant
+- Pour le typing certains 'range(2)' ont été remplacés par des 'get_args(JoueurID)'
 
 ___BaffWill___
 - But de l'hiver : trier les cartes par interet
     -> Fonction selection qui a une carte calcule un score
+- Dev de la classe Party pour gérer le Monte Carlo
 
 ___Jeu___
 - Contrôle : effet return sur le round, se termine juste maintenant
@@ -39,22 +41,24 @@ ___IA___
 
 # CUE_Simulation
 from engine.engine.engine import Engine
-from engine.engine.game import Game
+from engine.engine.party import Party
 from engine.test.fixtures import dummy_deck
+from engine.utils import *
 
 """___Fonctions_____________________________________________________________"""
 
 
-def unique_carte_play(cid: str) -> Game:
-    engine = Engine("test")
+def unique_carte_play(cid: CarteID) -> Party:
+    engine = Engine("prod")
     engine.start_engine()
     deck1 = dummy_deck()
     deck2 = dummy_deck()
     cid = cid.lower()
     deck1.replace_carte("id0", engine.cartes[cid])
-    engine.start_game(deck1, deck2, 100, 0, 0, 250, shuffle=False)
-    engine.play([cid, None, None], [None, None, None])
-    return engine.game
+    party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
+    engine.start_game(party, shuffle=False)
+    engine.play(party, [cid, None, None], [None, None, None])
+    return party
 
 
 def test_cartes_all() -> None:
@@ -62,18 +66,24 @@ def test_cartes_all() -> None:
     engine.start_engine()
     for cid in engine.cartes.keys():
         print(f"Test de {engine.cartes[cid].name}")
-        deck0 = dummy_deck()
-        deck1 = dummy_deck()
-        deck0.replace_carte("id0", engine.cartes[cid])
-        engine.start_game(deck0, deck1, 100, 0, 0, 250, shuffle=False)
+        for placement in range(3):
+            deck0 = dummy_deck()
+            deck1 = dummy_deck()
+            deck0.replace_carte("id0", engine.cartes[cid])
+            party = engine.create_game(deck0, deck1, 100, 0, 0, 250)
+            engine.start_game(party, shuffle=False)
+            play0: List[Any] = [None, None, None]
+            play0[placement] = cid
+            engine.play(party, play0, [None, None, None])
 
 
 """___Execution_____________________________________________________________"""
 
-engine = Engine("prod")
-engine.start_engine()
+# engine = Engine("prod")
+# engine.start_engine()
 # engine.print_check_raw_cartes()
-engine.rewrite_raw_data()
-engine.print_cartes_collections()
-engine.print_collection("omnivores")
-# test_carte_all()
+# engine.rewrite_raw_data()
+# engine.print_cartes_collections()
+# engine.print_collection("omnivores")
+
+test_cartes_all()

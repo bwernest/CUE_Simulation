@@ -48,7 +48,7 @@ class Deck(Carte):
                 self.order.remove(carte)
                 self.order.append(carte)
 
-    def replace_carte(self, cid: str, new_carte: Carte) -> None:
+    def replace_carte(self, cid: CarteID, new_carte: Carte) -> None:
         if cid not in self.cartes:
             print(f"Voilà mes id : {self.order}")
             raise CarteInexistante(f"Remplacement de la carte {cid} dans le deck.")

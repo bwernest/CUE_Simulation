@@ -14,6 +14,6 @@ from typing import List
 
 class Engine(DataCollector):
 
-    def start_engine(self) -> None:
+    def start_engine(self, recyclage: bool = False) -> None:
         self.add_log("Collecte des données.")
-        self.collect_data(recyclage=True)
+        self.collect_data(recyclage)
