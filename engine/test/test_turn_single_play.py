@@ -257,3 +257,34 @@ class TestTurnSinglePlay(Assert):
         expected_score = 28 + 45
         result_score = party.score[0, 0, 0]
         self.assertEqual(expected_score, result_score)
+
+    def test_carte_phu012_false(self, engine: Engine) -> None:
+        player_deck = collection_deck("Human Evolution")
+        player_deck.replace_carte("id0", engine.cartes["phu012"])
+        opponent_deck = album_deck("Paleontology")
+        party = unique_turn_play(
+            player_play=[None, "phu012", "id1"],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+            opponent_deck=opponent_deck,
+        )
+        expected_buff_array = get_buff_array()
+        carte = party.decks[0].cartes["id1"]
+        self.assertEqual(expected_buff_array, carte.buff["power"])
+        self.assertEqual(54, party.score[0, 0, 0])
+
+    def test_carte_phu012_true(self, engine: Engine) -> None:
+        player_deck = collection_deck("Human Evolution")
+        player_deck.replace_carte("id0", engine.cartes["phu012"])
+        player_deck.cartes["id10"].keywords = ["beetle"]
+        opponent_deck = album_deck("Paleontology")
+        party = unique_turn_play(
+            player_play=[None, "phu012", "id1"],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+            opponent_deck=opponent_deck,
+        )
+        expected_buff_array = get_buff_array(2, 30)
+        carte = party.decks[0].cartes["id1"]
+        self.assertEqual(expected_buff_array, carte.buff["power"])
+        self.assertEqual(54 + 30 * 2, party.score[0, 0, 0])

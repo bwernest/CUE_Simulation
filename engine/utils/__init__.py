@@ -14,6 +14,12 @@ import sys
 
 """___Literal___________________________________________________________________________________"""
 
+Keyword = Literal[
+    "beetle",
+    "emperor",
+    "mega",
+]
+
 Album = Literal[
     "Arts & Culture",
     "History",
@@ -31,6 +37,7 @@ Collection = Literal[
     "Groundbreakers",
     "Herbivores",
     "Hoaxes and Cons",
+    "Human Evolution",
     "Ice Age",
     "Land Before Time",
     "Monsters of The Deep",

@@ -411,6 +411,7 @@ class Game(Deck):
                 "name": self.check_condition_deck_carte,
                 "collection": self.check_condition_deck_set,
                 "album": self.check_condition_deck_set,
+                "keyword": self.check_condition_deck_keyword,
             }[atk_cdt[1]](party, atk_cdt, plays, player, carte_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
@@ -423,7 +424,12 @@ class Game(Deck):
         return True
 
     def check_condition_deck_set(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
-        amount_deck = self.get_amount(party, player, atk_cdt[1], atk_cdt[2])
+        amount_deck = party.get_amount(player, atk_cdt[1], atk_cdt[2])
+        amount_target = int(atk_cdt[4])
+        return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
+
+    def check_condition_deck_keyword(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
+        amount_deck = party.get_keyword_amount(player, atk_cdt[2])
         amount_target = int(atk_cdt[4])
         return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
 
@@ -488,12 +494,6 @@ class Game(Deck):
             }[comparaison](amount_player, amount_target)
         except KeyError:
             raise ComparaisonKeyError(f"Comparaison {comparaison} inconnue")
-
-    def get_amount(self, party: Party, player: JoueurID, set_type: str, set_name: str) -> int:
-        try:
-            return party.stats[player][set_type][set_name]
-        except KeyError:
-            return 0
 
     def check_condition_amount_lt(self, amount_player: int, amount_target: int) -> bool:
         return amount_player < amount_target

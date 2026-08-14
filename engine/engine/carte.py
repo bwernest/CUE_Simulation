@@ -17,6 +17,7 @@ class Carte(GameUtility):
     base_power: int
     base_cost: int
     attacks: Dict[Trigger, List[Attack]]
+    keywords: List[Keyword]
 
     def __eq__(self, value):
         if type(value) != self.__class__:
@@ -42,7 +43,7 @@ class Carte(GameUtility):
             self,
             id: str,
             name: str,
-            keywords: List[str] = [],
+            keywords: List[Keyword] = [],
             power: int = 0,
             cost: int = 0,
             attack_name: Optional[str] = None,
@@ -84,7 +85,7 @@ class Carte(GameUtility):
         column = 2
         self.keywords = []
         while not isna(infos[1][column]):
-            self.keywords.append(str(infos[1][column]).lower())
+            self.keywords.append(str(infos[1][column]).lower())  # type:ignore
             column += 1
         self.attacks = self.add_attacks(attacks)
         self.reset_carte()

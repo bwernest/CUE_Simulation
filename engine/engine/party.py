@@ -94,3 +94,16 @@ class Party(Deck):
 
     def end_game(self) -> None:
         pass
+
+    def get_amount(self, player: JoueurID, set_type: Literal["album", "collection"], set_name: Album | Collection) -> int:
+        try:
+            return self.stats[player][set_type][set_name]
+        except KeyError:
+            return 0
+
+    def get_keyword_amount(self, player: JoueurID, keyword: Keyword) -> int:
+        compte = 0
+        for carte in self.decks[player].cartes.values():
+            if keyword in carte.keywords:
+                compte += 1
+        return compte
