@@ -261,7 +261,7 @@ class Game(Deck):
         targets: TargetsCarte,
         filtre: AttackFiltre,
         player: JoueurID,
-        cid: CarteID,            
+        cid: CarteID,
     ) -> TargetsCarte:
         keyword = filtre[1]
         filtered_targets = {arg: [] for arg in get_args(JoueurID)}
@@ -322,6 +322,7 @@ class Game(Deck):
                 "turn": self.check_condition_turn,
                 "turn score": self.check_condition_turn_score,
                 "round": self.check_condition_round,
+                "round won": self.check_condition_round_won,
                 "round score": self.check_condition_round_score,
                 "player played": self.check_condition_player_played,
                 "player album": self.check_condition_player_album,
@@ -411,7 +412,10 @@ class Game(Deck):
         return self.check_condition_amount(atk_cdt[1], amount_turn_score, amount_target)
 
     def check_condition_round(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
-        return self.check_condition_amount(atk_cdt[1], eval(atk_cdt[2]), party.round)
+        return self.check_condition_amount(atk_cdt[1], int(atk_cdt[2]), party.round)
+
+    def check_condition_round_won(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
+        return self.check_condition_amount(atk_cdt[1], party.score_rounds[player], int(atk_cdt[2]))
 
     def check_condition_round_score(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
         amount_round_score = np.sum(party.score[party.round, :, player]) - np.sum(party.score[party.round, :, 1 - player])

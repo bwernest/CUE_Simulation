@@ -32,7 +32,7 @@ class TestGame(Assert):
         self.assertEqual(party.turn, 0)
         self.assertEqual(party.round, 1)
         self.assertEqual(party.winner, None)
-        self.assertEqual(party.players_rounds, [0, 0])
+        self.assertEqual(party.score_rounds, [0, 0])
 
     def test_winner0(self, game: Game, party: Party) -> None:
         play0 = ["id0", None, None]

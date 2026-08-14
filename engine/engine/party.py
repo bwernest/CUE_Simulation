@@ -62,16 +62,16 @@ class Party(Deck):
         return lock_statuses
 
     @property
-    def players_rounds(self) -> List[int]:
-        players_rounds = [0, 0]
-        for round in range(self.rounds):
+    def score_rounds(self) -> List[int]:
+        score_rounds = [0, 0]
+        for round in range(self.round):
             round_score_player0 = np.sum(self.score[round, :, 0])
             round_score_player1 = np.sum(self.score[round, :, 1])
             if round_score_player0 > round_score_player1:
-                players_rounds[0] += 1
+                score_rounds[0] += 1
             elif round_score_player1 > round_score_player0:
-                players_rounds[1] += 1
-        return players_rounds
+                score_rounds[1] += 1
+        return score_rounds
 
     def count_turn(self) -> None:
         self.turn += 1
@@ -81,7 +81,7 @@ class Party(Deck):
             self.check_end_game()
 
     def check_end_game(self) -> None:
-        rounds_player0, rounds_player1 = self.players_rounds
+        rounds_player0, rounds_player1 = self.score_rounds
         if self.rounds - self.round < rounds_player0 - rounds_player1:
             self.winner = 0
             self.end_game()
