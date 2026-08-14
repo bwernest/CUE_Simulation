@@ -151,3 +151,29 @@ class TestTurnSinglePlay(Assert):
         carte = party.decks[0].cartes["phe014"]
         expected_buff_array = get_buff_array()
         self.assertEqual(expected_buff_array, carte.buff["power"])
+
+    def test_carte_PCA033_false(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_carte("id1", engine.cartes["pca033"])
+        party = unique_turn_play(
+            player_play=[None, "pca033", None],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+        )
+        expected_buff_array = get_buff_array()
+        carte = party.decks[0].cartes["id0"]
+        self.assertEqual(expected_buff_array, carte.buff["lock"])
+
+    def test_carte_PCA033_true(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_carte("id1", engine.cartes["pca033"])
+        player_deck.cartes["id0"].keywords = ["emperor"]
+        party = unique_turn_play(
+            player_play=[None, "pca033", None],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+        )
+        expected_buff_array = get_buff_array(3, 1)
+        expected_buff_array = get_buff_array(2, 1, expected_buff_array)
+        carte = party.decks[0].cartes["id0"]
+        self.assertEqual(expected_buff_array, carte.buff["lock"])
