@@ -829,7 +829,7 @@ class Game(Deck):
         try:
             cid = party.decks[player].name_to_id[attack_mult[2]]
         except KeyError:
-            raise CarteAbsenteDuDeck()
+            return 0
         return party.decks[player].cartes[cid].played
 
     def get_multiplicateur_played_deck(self, party: Party, attack_mult: List, player: JoueurID) -> int:
