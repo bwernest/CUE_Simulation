@@ -3,6 +3,9 @@
 # CUE_Simulation
 from . import *
 
+# Python
+from numpy import array
+
 """___Tests_____________________________________________________________________________________"""
 
 
@@ -200,5 +203,29 @@ class TestTurnSinglePlay(Assert):
         )
         expected_buff_array = get_buff_array()
         for id in range(1, 18):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PHE049_true(self, engine: Engine) -> None:
+        player_deck = collection_deck("Herbivores")
+        player_deck.replace_carte("id0", engine.cartes["phe049"])
+        party = unique_turn_play(
+            player_play=["id1", "phe049", "id2"],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+        )
+        expected_score = array([37 + 3 * 30, 0])
+        result_score = party.score[0, 0]
+        self.assertEqual(expected_score, result_score)
+        expected_buff_array = get_buff_array()
+        for id in range(1, 3):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+        expected_buff_array = get_buff_array(1, 30)
+        for id in range(3, 5):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+        expected_buff_array = get_buff_array()
+        for id in range(5, 17):
             result = party.decks[0].cartes[f"id{id}"].buff["power"]
             self.assertEqual(expected_buff_array, result)

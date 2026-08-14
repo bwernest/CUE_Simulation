@@ -3,6 +3,9 @@
 # CUE_Simulation
 from . import *
 
+# Python
+from numpy import array, sum
+
 """___Tests_____________________________________________________________________________________"""
 
 
@@ -244,3 +247,24 @@ class TestCarteMultiplePlays(Assert):
         for id in range(4, 18):
             result = party.decks[0].cartes[f"id{id}"].buff["power"]
             self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PHE049_false(self, engine: Engine) -> None:
+        player_deck = collection_deck("Herbivores")
+        player_deck.replace_carte("id0", engine.cartes["phe049"])
+        party = multiple_turns_play(
+            player_plays=[["id1", "phe049", "id2"], ["id3", "id4", "id5"], ["id6", "id7", "id8"], ["id9", "id10", "id11"], ["id12", "id13", "id14"], ["id15", "phe049", "id1"]],
+            opponent_plays=[[None] * 3, [None] * 3, [None] * 3, [None] * 3, [None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        expected_score_r1 = 37 + 5 * 30
+        result_score_r1 = sum(party.score[0, :, 0])
+        self.assertEqual(expected_score_r1, result_score_r1)
+        expected_score_r2 = 37
+        result_score_r2 = sum(party.score[1, :, 0])
+        self.assertEqual(expected_score_r2, result_score_r2)
+        expected_buff_array = get_buff_array()
+        for id in range(1, 17):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+        result = party.decks[0].cartes["phe049"].buff["power"]
+        self.assertEqual(expected_buff_array, result)

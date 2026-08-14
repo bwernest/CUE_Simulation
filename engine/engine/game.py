@@ -455,7 +455,7 @@ class Game(Deck):
             amount_played = party.decks[player].cartes[cid].played
         except KeyError:
             amount_played = 0
-        return self.check_condition_amount(">", amount_played, 0)
+        return self.check_condition_amount(atk_cdt[3], amount_played, int(atk_cdt[4]))
 
     def check_condition_played_deck(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> int:
         amount_played = 0

@@ -67,7 +67,7 @@ class Assert():
         assert (array1 == array2).all()
 
     def assertIsInstance(self, obj: Any, _type: type, error_msg: Optional[str] = None) -> None:
-        error_msg = f"L'objet {obj} n'est pas de classe {_type} mais {type(obj)}"
+        error_msg = f"L'expected {obj} est de type {_type} et le result de type {type(obj)}"
         for duo in self.same_types:
             if type(obj) in duo and _type in duo:
                 return
