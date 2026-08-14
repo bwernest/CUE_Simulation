@@ -189,3 +189,16 @@ class TestTurnSinglePlay(Assert):
         expected_buff_array = get_buff_array()
         result = party.resource_per_turn["energy"][0]
         self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PGB013_false(self, engine: Engine) -> None:
+        player_deck = collection_deck("Fearsome Flyers")
+        player_deck.replace_carte("id0", engine.cartes["pgb013"])
+        party = unique_turn_play(
+            player_play=["id1", "pgb013", "id2"],
+            opponent_play=[None] * 3,
+            player_deck=player_deck,
+        )
+        expected_buff_array = get_buff_array()
+        for id in range(1, 18):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)

@@ -30,7 +30,7 @@ class Carte(GameUtility):
         return f"Carte {self.name} / {self.album} / {self.collection}\nAttacks :\n{self.attacks}"
 
     @property
-    def buff_dictionnary(self) -> Dict[Effect, NDArray]:
+    def _buff_dictionnary(self) -> Dict[Effect, NDArray]:
         return {
             "power": np.zeros((self.buff_array_len), dtype=int),
             "cost": np.zeros((self.buff_array_len), dtype=int),
@@ -91,7 +91,7 @@ class Carte(GameUtility):
 
     def reset_carte(self) -> None:
         self.played = 0
-        self.buff = self.buff_dictionnary
+        self.buff = self._buff_dictionnary
 
     def split_data(self, data: List) -> tuple:
         infos = data[:2]

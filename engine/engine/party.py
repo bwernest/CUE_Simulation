@@ -41,7 +41,7 @@ class Party(Deck):
 
     min_energy: NDArray
     max_energy: NDArray
-    resource_per_turn: Dict[Literal["power", "energy"], List[NDArray]]
+    resource_per_turn: RessourcePerTurn
 
     @property
     def arena(self) -> str:

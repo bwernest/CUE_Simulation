@@ -52,7 +52,16 @@ Targets = TargetsCarte | TargetsJoueur
 
 Play = List[CarteID] | List[None] | List[Optional[CarteID]]
 
-AttackFiltre = List[Literal["base_power", "base_cost", "rarity", "type", "random", "other"]]
+BuffArray = NDArray
+
+Ressource = Literal["power", "energy"]
+RessourcePerTurn = Dict[Ressource, List[BuffArray]]
+
+AttackFiltre = Tuple[
+    Literal["base_power", "base_cost", "played", "rarity", "type", "random", "other"],
+    Literal["<", ">", "="],
+    str,
+]
 
 Trigger = Literal["draw", "start", "play", "return"]
 AttackInfo = Literal["condition", "acondition", "cible", "filtre", "afiltre", "effet", "multiplicateur", "duree"]

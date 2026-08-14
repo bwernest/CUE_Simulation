@@ -191,3 +191,56 @@ class TestCarteMultiplePlays(Assert):
         expected_buff_array = get_buff_array()
         result = party.resource_per_turn["energy"][0]
         self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PGB013_true(self, engine: Engine) -> None:
+        player_deck = collection_deck("Fearsome Flyers")
+        player_deck.replace_carte("id0", engine.cartes["pgb013"])
+        party = multiple_turns_play(
+            player_plays=[["id1", "id2", "id3"], ["id4", "id5", "pgb013"]],
+            opponent_plays=[[None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        expected_buff_array = get_buff_array(1, 20)
+        for id in range(1, 4):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+        expected_buff_array = get_buff_array()
+        for id in range(4, 18):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PGB013_true_2_games(self, engine: Engine) -> None:
+
+        # ___Game_1___
+        player_deck = collection_deck("Fearsome Flyers")
+        player_deck.replace_carte("id0", engine.cartes["pgb013"])
+        party = multiple_turns_play(
+            player_plays=[["id1", "id2", "id3"], ["id4", "id5", "pgb013"]],
+            opponent_plays=[[None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        expected_buff_array = get_buff_array(1, 20)
+        for id in range(1, 4):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+        expected_buff_array = get_buff_array()
+        for id in range(4, 18):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+
+        # ___Game_2___
+        player_deck = collection_deck("Fearsome Flyers")
+        player_deck.replace_carte("id0", engine.cartes["pgb013"])
+        party = multiple_turns_play(
+            player_plays=[["id1", "id2", "id3"], ["id4", "id5", "pgb013"]],
+            opponent_plays=[[None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        expected_buff_array = get_buff_array(1, 20)
+        for id in range(1, 4):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)
+        expected_buff_array = get_buff_array()
+        for id in range(4, 18):
+            result = party.decks[0].cartes[f"id{id}"].buff["power"]
+            self.assertEqual(expected_buff_array, result)

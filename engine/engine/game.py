@@ -218,6 +218,7 @@ class Game(Deck):
                 "rarity": self.filter_targets_carte_raritype,
                 "type": self.filter_targets_carte_raritype,
                 "keyword": self.filter_targets_carte_keyword,
+                "played": self.filter_targets_carte_played,
                 "random": self.filter_targets_random,
                 "other": self.filter_targets_other,
             }[atk_filtre[0]](party, targets, atk_filtre, player, cid)
@@ -248,7 +249,7 @@ class Game(Deck):
         player: JoueurID,
         cid: CarteID,
     ) -> TargetsCarte:
-        filtered_targets = {0: [], 1: []}
+        filtered_targets = {arg: [] for arg in get_args(JoueurID)}
         for joueur in get_args(JoueurID):
             for cid in targets[joueur]:
                 if party.decks[joueur].cartes[cid].__getattribute__(atk_filtre[0]) == atk_filtre[1]:
@@ -268,6 +269,21 @@ class Game(Deck):
         for joueur in get_args(JoueurID):
             for card_id in targets[joueur]:
                 if keyword in party.decks[joueur].cartes[card_id].keywords:
+                    filtered_targets[joueur].append(card_id)
+        return filtered_targets
+
+    def filter_targets_carte_played(
+        self,
+        party: Party,
+        targets: TargetsCarte,
+        filtre: AttackFiltre,
+        player: JoueurID,
+        cid: CarteID,
+    ) -> TargetsCarte:
+        filtered_targets = {arg: [] for arg in get_args(JoueurID)}
+        for joueur in get_args(JoueurID):
+            for card_id in targets[joueur]:
+                if self.check_condition_amount(filtre[1], party.decks[joueur].cartes[card_id].played, int(filtre[2])):
                     filtered_targets[joueur].append(card_id)
         return filtered_targets
 
@@ -412,7 +428,7 @@ class Game(Deck):
         return self.check_condition_amount(atk_cdt[1], amount_turn_score, amount_target)
 
     def check_condition_round(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
-        return self.check_condition_amount(atk_cdt[1], int(atk_cdt[2]), party.round)
+        return self.check_condition_amount(atk_cdt[1], int(atk_cdt[2]), party.round + 1)
 
     def check_condition_round_won(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
         return self.check_condition_amount(atk_cdt[1], party.score_rounds[player], int(atk_cdt[2]))
