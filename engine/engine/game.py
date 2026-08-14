@@ -355,6 +355,7 @@ class Game(Deck):
                 "gauche": self.check_condition_voisin_gauche,
                 "droite": self.check_condition_voisin_droite,
                 "next to": self.check_condition_voisin_next_to,
+                "oppose": self.check_condition_voisin_oppose,
             }[atk_cdt[1]](party, atk_cdt, plays, player, carte_index)
         except KeyError:
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
@@ -376,6 +377,13 @@ class Game(Deck):
     def check_condition_voisin_droite(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
         try:
             nei_carte = party.decks[player].cartes[plays[player][carte_index + 1]]  # type:ignore
+        except KeyError:
+            return atk_cdt[2] == "vide"
+        return atk_cdt[2] != "vide" and nei_carte.__getattribute__(atk_cdt[2]) == atk_cdt[3]
+
+    def check_condition_voisin_oppose(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
+        try:
+            nei_carte = party.decks[1 - player].cartes[plays[1 - player][carte_index]]  # type:ignore
         except KeyError:
             return atk_cdt[2] == "vide"
         return atk_cdt[2] != "vide" and nei_carte.__getattribute__(atk_cdt[2]) == atk_cdt[3]

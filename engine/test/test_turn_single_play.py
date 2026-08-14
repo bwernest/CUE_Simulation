@@ -229,3 +229,31 @@ class TestTurnSinglePlay(Assert):
         for id in range(5, 17):
             result = party.decks[0].cartes[f"id{id}"].buff["power"]
             self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PHU003_false(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_carte("id0", engine.cartes["phu003"])
+        opponent_deck = album_deck("Paleontology")
+        party = unique_turn_play(
+            player_play=[None, "phu003", None],
+            opponent_play=["id0", None, "id1"],
+            player_deck=player_deck,
+            opponent_deck=opponent_deck,
+        )
+        expected_score = 28
+        result_score = party.score[0, 0, 0]
+        self.assertEqual(expected_score, result_score)
+
+    def test_carte_PHU003_true(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        player_deck.replace_carte("id0", engine.cartes["phu003"])
+        opponent_deck = album_deck("Paleontology")
+        party = unique_turn_play(
+            player_play=[None, "phu003", None],
+            opponent_play=[None, "id0", None],
+            player_deck=player_deck,
+            opponent_deck=opponent_deck,
+        )
+        expected_score = 28 + 45
+        result_score = party.score[0, 0, 0]
+        self.assertEqual(expected_score, result_score)
