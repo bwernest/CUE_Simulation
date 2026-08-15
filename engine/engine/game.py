@@ -64,7 +64,7 @@ class Game(Deck):
         """
         party = Party()
 
-        party.decks = [deck_player, deck_opponent]
+        party.decks = (deck_player, deck_opponent)
         party.calculate_stats()
 
         party.energie = np.array([start_energy, start_energy])
@@ -631,7 +631,7 @@ class Game(Deck):
         cid_opposee = plays[1 - player][carte_index]
         targets = {arg: [] for arg in get_args(JoueurID)}
         if cid_opposee is not None:
-            targets[player].append(cid_opposee)
+            targets[1 - player].append(cid_opposee)
         return targets
 
     def get_target_cartes(
@@ -748,9 +748,9 @@ class Game(Deck):
     ) -> None:
         index = self.get_index_from_duree(party, atk_duree)
         mult = 1 if atk_mult == [] else self.get_multiplicateur(party, atk_mult, player)
-        for player in get_args(JoueurID):
-            for carte in targets[player]:
-                party.decks[player].cartes[carte].buff[atk_effect[0]][index] += int(atk_effect[1]) * mult
+        for joueur in get_args(JoueurID):
+            for carte_id in targets[joueur]:
+                party.decks[joueur].cartes[carte_id].buff[atk_effect[0]][index] += int(atk_effect[1]) * mult
 
     def apply_effect_carte_lock(
         self,

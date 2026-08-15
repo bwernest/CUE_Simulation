@@ -353,7 +353,7 @@ class TestCarteSinglePlay(Assert):
                 elif cid != "scd004":
                     self.assertEqual(zeros((engine.buff_array_len)), carte.buff["power"])
 
-    def test_carte_PAN026(self, engine: Engine) -> None:
+    def test_carte_PAN026(self) -> None:
         player_deck = dummy_deck()
         party = unique_carte_play("pan026", player_deck)
         # Score
@@ -368,3 +368,41 @@ class TestCarteSinglePlay(Assert):
         expected_buff_array = get_buff_array(0, -5)
         for carte in party.decks[1].cartes.values():
             self.assertEqual(expected_buff_array, carte.buff["power"])
+
+    def test_carte_PFF029(self) -> None:
+        player_deck = dummy_deck()
+        player_deck.cartes["id1"].album = "paleontology"
+        party = unique_carte_play("pff029", player_deck)
+        # Buff 1
+        expected_buff_array = get_buff_array(1, 18)
+        carte = party.decks[0].cartes["id1"]
+        self.assertEqual(expected_buff_array, carte.buff["power"])
+        # Buff 2
+        expected_buff_array = get_buff_array()
+        carte = party.decks[0].cartes["id2"]
+        self.assertEqual(expected_buff_array, carte.buff["power"])
+
+    def test_carte_PAN061(self) -> None:
+        player_deck = dummy_deck()
+        party = unique_carte_play("pan061", player_deck)
+        # Score
+        expected_score = array([80, 0])
+        result_score = party.score[0, 0]
+        self.assertEqual(expected_score, result_score)
+
+    def test_carte_PFF039_1(self) -> None:
+        player_deck = collection_deck("fearsome flyers")
+        player_deck.cartes["id17"].collection = "winged mythical creatures"
+        party = unique_carte_play("pff039", player_deck)
+        # Buff
+        expected_buff_array = get_buff_array(1, 12 * 3)
+        carte = party.decks[0].cartes["id17"]
+        self.assertEqual(expected_buff_array, carte.buff["power"])
+
+    def test_carte_PFF039_2(self) -> None:
+        player_deck = collection_deck("winged mythical creatures")
+        party = unique_carte_play("pff039", player_deck)
+        # Buff
+        expected_buff_array = get_buff_array(1, 1 * 3)
+        carte = party.decks[0].cartes["id15"]
+        self.assertEqual(expected_buff_array, carte.buff["power"])

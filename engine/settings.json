@@ -39,7 +39,7 @@
         
         "paths": {
             
-            "file_data": "engine/test/data/test_cartes.ods",
+            "file_data": "engine/data/cartes.ods",
             "folder_data": "engine/test/data",
             "folder_output": "engine/test/output",
             "file_save": "engine/test/data/save.bw",

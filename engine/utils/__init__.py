@@ -42,6 +42,7 @@ Collection = Literal[
     "land before time",
     "monsters of the deep",
     "omnivores",
+    "winged mythical creatures",
 ]
 
 Effect = Literal[

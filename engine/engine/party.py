@@ -22,7 +22,7 @@ class Party(Deck):
     c'est grâce à des sauvegardes intermédiaires qu'elle permet de simuler des Play.
     """
 
-    decks: List[Deck]
+    decks: Tuple[Deck, Deck]
     done: bool = False
 
     energie: NDArray

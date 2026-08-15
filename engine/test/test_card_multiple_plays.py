@@ -317,6 +317,10 @@ class TestCarteMultiplePlays(Assert):
         expected_power_per_turn = get_buff_array(2, 25)
         result_power_per_turn = party.resource_per_turn["power"][0]
         self.assertEqual(expected_power_per_turn, result_power_per_turn)
+        # Score
+        expected_score = engine.cartes["pan022"].base_power
+        result_score = sum(party.score[0, :, 0])
+        self.assertEqual(expected_score, result_score)
 
     def test_carte_PAN022_2(self, engine: Engine) -> None:
         player_deck = album_deck("paleontology")
@@ -330,3 +334,20 @@ class TestCarteMultiplePlays(Assert):
         expected_power_per_turn = get_buff_array()
         result_power_per_turn = party.resource_per_turn["power"][0]
         self.assertEqual(expected_power_per_turn, result_power_per_turn)
+        # Score
+        expected_score = engine.cartes["pan022"].base_power
+        result_score = sum(party.score[0, :, 0])
+        self.assertEqual(expected_score, result_score)
+
+    def test_carte_PAN022_3(self, engine: Engine) -> None:
+        player_deck = album_deck("paleontology")
+        player_deck.replace_carte("id0", engine.cartes["pan022"])
+        party = multiple_turns_play(
+            player_plays=[["pan022", None, None], [None] * 3, [None] * 3, [None] * 3],
+            opponent_plays=[[None] * 3, [None] * 3, [None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        # Score
+        expected_score = engine.cartes["pan022"].base_power + 50
+        result_score = sum(party.score[:, :, 0])
+        self.assertEqual(expected_score, result_score)

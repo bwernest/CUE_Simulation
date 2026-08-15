@@ -4,6 +4,7 @@
 from . import *
 
 # Python
+from random import seed
 from numpy import array
 
 """___Tests_____________________________________________________________________________________"""
@@ -385,3 +386,19 @@ class TestTurnSinglePlay(Assert):
         expected_buff_array = get_buff_array(0, 10)
         carte = party.decks[0].cartes["plb012"]
         self.assertEqual(expected_buff_array, carte.buff["power"])
+
+    def test_carte_PCA035(self, engine: Engine) -> None:
+        seed("La Vache")    # ça ne sert à rien
+        player_deck = album_deck("paleontology")
+        player_deck.replace_carte("id0", engine.cartes["pca035"])
+        opponent_deck = dummy_deck()
+        set_deck_power(opponent_deck, 100)
+        party = unique_turn_play(
+            player_play=["pca035", None, None],
+            opponent_play=["id1", None, None],
+            player_deck=player_deck,
+            opponent_deck=opponent_deck,
+        )
+        # Score
+        result_score = party.score[0, 0, 1]
+        self.assertIn(result_score, [100 - 15, 100 - 15 - 20])
