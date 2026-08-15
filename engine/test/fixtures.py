@@ -33,7 +33,7 @@ def dummy_deck() -> Deck:
 def album_deck(album: Literal[Album]) -> Deck:
     deck = dummy_deck()
     for carte in deck.cartes.values():
-        carte.album = album.lower()
+        carte.album = album
     return deck
 
 
@@ -41,7 +41,7 @@ def collection_deck(collection: Literal[Collection]) -> Deck:
     deck = dummy_deck()
     for carte in deck.cartes.values():
         carte.album = "paleontology"
-        carte.collection = collection.lower()
+        carte.collection = collection
     return deck
 
 
@@ -111,7 +111,7 @@ def unique_carte_play(
     deck1.replace_carte("id0", engine.cartes[cid])
     party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
     engine.start_game(party, shuffle=False)
-    engine.play(party, [cid, None, None], [None, None, None])
+    party = engine.play(party, [cid, None, None], [None, None, None])
     return party
 
 
@@ -133,7 +133,7 @@ def unique_turn_play(
     for carte in opponent_play:
         if carte is not None:
             assert carte in deck2.main, "Erreur dans la rédaction du test unique_turn_play."
-    engine.play(party, player_play, opponent_play)
+    party = engine.play(party, player_play, opponent_play)
     return party
 
 
@@ -156,7 +156,7 @@ def multiple_turns_play(
         for carte in opponent_play:
             if carte is not None:
                 assert carte in deck2.main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
-        engine.play(party, player_play, opponent_play)
+        party = engine.play(party, player_play, opponent_play)
     return party
 
 
@@ -170,7 +170,7 @@ def set_deck_cost(deck: Deck, cost: int) -> None:
         carte.base_cost = cost
 
 
-def get_buff_array(index: int = 0, value: int = 0, buff_array: Optional[NDArray] = None) -> NDArray:
+def get_buff_array(index: int = 0, value: int = 0, buff_array: Optional[NDArray] = None) -> BuffArray:
     engine = Engine("test")
     buff_array = zeros((engine.buff_array_len), dtype=int) if buff_array is None else buff_array
     buff_array[index] += value

@@ -31,17 +31,17 @@ Album = Literal[
 ]
 
 Collection = Literal[
-    "Ancient Creatures",
-    "Carnivores",
-    "Fearsome Flyers",
-    "Groundbreakers",
-    "Herbivores",
-    "Hoaxes and Cons",
-    "Human Evolution",
-    "Ice Age",
-    "Land Before Time",
-    "Monsters of The Deep",
-    "Omnivores",
+    "ancient creatures",
+    "carnivores",
+    "fearsome flyers",
+    "groundbreakers",
+    "herbivores",
+    "hoaxes and cons",
+    "human evolution",
+    "ice age",
+    "land before time",
+    "monsters of the deep",
+    "omnivores",
 ]
 
 Effect = Literal[
@@ -64,9 +64,10 @@ BuffArray = NDArray
 Ressource = Literal["power", "energy"]
 RessourcePerTurn = Dict[Ressource, List[BuffArray]]
 
+StrNumber = Literal["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
 AttackFiltre = Tuple[
     Literal["base_power", "base_cost", "played", "rarity", "type", "random", "other"],
-    Literal["<", ">", "="],
+    Literal["<", ">", "=", StrNumber],
     str,
 ]
 

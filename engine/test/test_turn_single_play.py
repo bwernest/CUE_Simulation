@@ -12,7 +12,7 @@ from numpy import array
 class TestTurnSinglePlay(Assert):
 
     def test_carte_PMO030_true(self, engine: Engine) -> None:
-        player_deck = collection_deck("Monsters of The Deep")
+        player_deck = collection_deck("monsters of the deep")
         player_deck.replace_carte("id0", engine.cartes["pmo030"])
         party = unique_turn_play(["id1", "pmo030", "id2"], [None] * 3, player_deck)
         carte = party.decks[0].cartes["pmo030"]
@@ -194,7 +194,7 @@ class TestTurnSinglePlay(Assert):
         self.assertEqual(expected_buff_array, result)
 
     def test_carte_PGB013_false(self, engine: Engine) -> None:
-        player_deck = collection_deck("Fearsome Flyers")
+        player_deck = collection_deck("fearsome flyers")
         player_deck.replace_carte("id0", engine.cartes["pgb013"])
         party = unique_turn_play(
             player_play=["id1", "pgb013", "id2"],
@@ -207,7 +207,7 @@ class TestTurnSinglePlay(Assert):
             self.assertEqual(expected_buff_array, result)
 
     def test_carte_PHE049_true(self, engine: Engine) -> None:
-        player_deck = collection_deck("Herbivores")
+        player_deck = collection_deck("herbivores")
         player_deck.replace_carte("id0", engine.cartes["phe049"])
         party = unique_turn_play(
             player_play=["id1", "phe049", "id2"],
@@ -259,7 +259,7 @@ class TestTurnSinglePlay(Assert):
         self.assertEqual(expected_score, result_score)
 
     def test_carte_PHU012_false(self, engine: Engine) -> None:
-        player_deck = collection_deck("Human Evolution")
+        player_deck = collection_deck("human evolution")
         player_deck.replace_carte("id0", engine.cartes["phu012"])
         opponent_deck = album_deck("paleontology")
         party = unique_turn_play(
@@ -274,7 +274,7 @@ class TestTurnSinglePlay(Assert):
         self.assertEqual(54, party.score[0, 0, 0])
 
     def test_carte_PHU012_true(self, engine: Engine) -> None:
-        player_deck = collection_deck("Human Evolution")
+        player_deck = collection_deck("human evolution")
         player_deck.replace_carte("id0", engine.cartes["phu012"])
         player_deck.cartes["id10"].keywords = ["beetle"]
         opponent_deck = album_deck("paleontology")

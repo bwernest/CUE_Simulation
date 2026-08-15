@@ -81,7 +81,7 @@ class TestCarteSinglePlay(Assert):
         self.assertEqual(expected_buff_array, carte.buff["power"])
         self.assertEqual(expected_buff_array, carte.buff["cost"])
 
-    def test_carte_PAN022(self) -> None:
+    def test_carte_PAN022_false(self) -> None:
         party = unique_carte_play("PAN022")
         carte = party.decks[0].cartes["pan022"]
         self.assertEqual(carte.base_power, party.score[0, 0, 0])
@@ -89,6 +89,7 @@ class TestCarteSinglePlay(Assert):
         expected_buff_array = get_buff_array()
         self.assertEqual(expected_buff_array, party.resource_per_turn["power"][0])
 
+    def test_carte_PAN022_true(self) -> None:
         party = unique_carte_play("PAN022", album_deck("paleontology"))
         carte = party.decks[0].cartes["pan022"]
         self.assertEqual(carte.base_power, party.score[0, 0, 0])
@@ -332,9 +333,9 @@ class TestCarteSinglePlay(Assert):
         ]
         self.assertEqual(expected_lock_statuses, party.get_lock_statuses())
 
-    def test_SCD004(self, engine: Engine) -> None:
-        player_deck = collection_deck("Hoaxes and Cons")
-        opponent_deck = collection_deck("Hoaxes and Cons")
+    def test_carte_SCD004(self, engine: Engine) -> None:
+        player_deck = collection_deck("hoaxes and cons")
+        opponent_deck = collection_deck("hoaxes and cons")
         opponent_deck.replace_carte("id0", engine.cartes["pca022"])
         party = unique_carte_play("scd004", player_deck, opponent_deck)
 
@@ -351,3 +352,19 @@ class TestCarteSinglePlay(Assert):
                     self.assertEqual(expected_buff_array, carte.buff["power"])
                 elif cid != "scd004":
                     self.assertEqual(zeros((engine.buff_array_len)), carte.buff["power"])
+
+    def test_carte_PAN026(self, engine: Engine) -> None:
+        player_deck = dummy_deck()
+        party = unique_carte_play("pan026", player_deck)
+        # Score
+        expected_score = array([37, 0])
+        result_score = party.score[0, 0]
+        self.assertEqual(expected_score, result_score)
+        # Buff 1
+        expected_buff_array = get_buff_array(1, 10)
+        for carte in party.decks[0].cartes.values():
+            self.assertEqual(expected_buff_array, carte.buff["power"])
+        # Buff 2
+        expected_buff_array = get_buff_array(0, -5)
+        for carte in party.decks[1].cartes.values():
+            self.assertEqual(expected_buff_array, carte.buff["power"])

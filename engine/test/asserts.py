@@ -4,6 +4,9 @@
 from numpy import ndarray, round
 from numpy import int64
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import TypeVar
+
+BW = TypeVar("BW")
 
 """___Classes___________________________________________________________________________________"""
 
@@ -16,7 +19,7 @@ class Assert():
             error_msg += f"argument {a + 1} :\n{arg}\n"
         return error_msg
 
-    def assertEqual(self, expected: Any, result: Any, rounder: Optional[int] = None):
+    def assertEqual(self, expected: BW, result: BW, rounder: Optional[int] = None):
         rounder = 64 if rounder is None else rounder
         self.assertIsInstance(result, type(expected), "The two arguments must be of the same type")
         assert_method = {

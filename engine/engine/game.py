@@ -25,6 +25,9 @@ class Game(Deck):
     max_energy: NDArray
     resource_per_turn: Dict[Literal["power", "energy"], List[NDArray]]
 
+    phase: Trigger
+    return_phase_shift: int = 0
+
     def create_game(
         self,
         deck_player: Deck,
@@ -87,20 +90,25 @@ class Game(Deck):
         if shuffle:
             for deck in party.decks:
                 deck.shuffle()
-        self.trigger_draw_attacks(party, [[None]])
-        self.trigger_start_attacks(party, [[None]])
+        self.turn_begin(party, [[None]])
 
         party.decks[0].remaining = party.decks[0].order[:self.main_len]
         party.decks[1].remaining = party.decks[1].order[:self.main_len]
 
-    def play(self, party: Party, play0: Play, play1: Play) -> None:
+    def play(self, party: Party, play0: Play, play1: Play) -> Party:
         plays = [play0, play1]
         self.turn_play(party, plays)
         self.turn_end(party, plays)
-        self.turn_begin(party, plays)
+        if not party.done:
+            self.turn_begin(party, plays)
+        return party
 
     def turn_begin(self, party: Party, plays: List[Play]) -> None:
+        self.phase = "draw"
+        self.return_phase_shift = 0
         self.trigger_draw_attacks(party, plays)
+        self.phase = "start"
+        self.return_phase_shift = 0
         self.trigger_start_attacks(party, plays)
 
     def turn_play(self, party: Party, plays: List[Play]) -> None:
@@ -124,6 +132,8 @@ class Game(Deck):
             party.score[party.round, party.turn, player] += max(0, carte_score) + power_per_turn
 
     def play_attacks(self, party: Party, plays: List[Play]) -> None:
+        self.phase = "play"
+        self.return_phase_shift = 0
         for player in get_args(JoueurID):
             for k in range(self.play_len):
                 if plays[player][k] is None:
@@ -131,14 +141,24 @@ class Game(Deck):
                 self.trigger_attack(party, "play", plays, player, k)
 
     def turn_end(self, party: Party, plays: List[Play]) -> None:
+        # Debuff until played
+        self.debuff_cartes_until_played(party, plays)
+
+        # Attack return
+        self.phase = "return"
+        self.return_phase_shift = 1
         for player in get_args(JoueurID):
             for k in range(self.play_len):
                 if plays[player][k] is None:
                     continue
                 self.trigger_attack(party, "return", plays, player, k)
-        self.add_energy_per_turn(party)
-        self.debuff_cartes(party, plays)
+
+        # Debuff turns
+        self.debuff_cartes_turns(party, plays)
         self.debuff_resources_per_turn(party)
+
+        # Comptes
+        self.add_energy_per_turn(party)
         party.count_turn()
         for player in range(2):
             party.decks[player].cycle(plays[player])
@@ -148,11 +168,16 @@ class Game(Deck):
             party.energie[player] += np.sum(party.resource_per_turn["energy"][player])
         party.energie = np.clip(party.energie, party.min_energy, party.max_energy)
 
-    def debuff_cartes(self, party: Party, plays) -> None:
+    def debuff_cartes_turns(self, party: Party, plays: List[Play]) -> None:
         for player in range(2):
             for cid in party.decks[player].order:
                 for data, buff in party.decks[player].cartes[cid].buff.items():
                     party.decks[player].cartes[cid].buff[data] = self.debuff_array(buff)
+
+    def debuff_cartes_until_played(self, party: Party, plays: List[Play]) -> None:
+        for player in range(2):
+            for cid in party.decks[player].order:
+                for data in party.decks[player].cartes[cid].buff.keys():
                     if cid in plays[player]:
                         party.decks[player].cartes[cid].buff[data][1] = 0
 
@@ -760,8 +785,8 @@ class Game(Deck):
     def get_index_from_duree(self, party: Party, duree: List) -> int:
         try:
             return {
-                "turn": int(duree[1]) + 1,
-                "round": int(duree[1]) * 3 - party.turn + 1,
+                "turn": int(duree[1]) + self.return_phase_shift - 1 + 2,
+                "round": int(duree[1]) * 3 - (party.turn) - 1 + 2,
                 "until played": 1,
                 "permanently": 0,
             }[duree[0]]

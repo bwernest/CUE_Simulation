@@ -23,6 +23,7 @@ class Party(Deck):
     """
 
     decks: List[Deck]
+    done: bool = False
 
     energie: NDArray
 
@@ -74,6 +75,12 @@ class Party(Deck):
         return score_rounds
 
     def count_turn(self) -> None:
+        """
+        count_turn
+        ----------
+        Incrémente les compteurs de tours et de rounds.
+        Vérfifie si la partie est terminée.
+        """
         self.turn += 1
         if self.turn == self.turns:
             self.turn = 0
@@ -93,7 +100,7 @@ class Party(Deck):
             self.end_game()
 
     def end_game(self) -> None:
-        pass
+        self.done = True
 
     def get_amount(self, player: JoueurID, set_type: Literal["album", "collection"], set_name: Album | Collection) -> int:
         try:

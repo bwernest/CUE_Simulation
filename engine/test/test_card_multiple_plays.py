@@ -42,7 +42,7 @@ class TestCarteMultiplePlays(Assert):
         self.assertEqual(expected_buff_array, carte.buff["power"])
 
     def test_carte_PIC023(self, engine: Engine) -> None:
-        player_deck = collection_deck("Ice Age")
+        player_deck = collection_deck("ice age")
         player_deck.replace_carte("id4", engine.cartes["pic023"])
         party = multiple_turns_play(
             player_plays=[["id0", "id3", "id1"], ["id2", "pic023", "id5"]],
@@ -196,7 +196,7 @@ class TestCarteMultiplePlays(Assert):
         self.assertEqual(expected_buff_array, result)
 
     def test_carte_PGB013_true(self, engine: Engine) -> None:
-        player_deck = collection_deck("Fearsome Flyers")
+        player_deck = collection_deck("fearsome flyers")
         player_deck.replace_carte("id0", engine.cartes["pgb013"])
         party = multiple_turns_play(
             player_plays=[["id1", "id2", "id3"], ["id4", "id5", "pgb013"]],
@@ -215,7 +215,7 @@ class TestCarteMultiplePlays(Assert):
     def test_carte_PGB013_true_2_games(self, engine: Engine) -> None:
 
         # ___Game_1___
-        player_deck = collection_deck("Fearsome Flyers")
+        player_deck = collection_deck("fearsome flyers")
         player_deck.replace_carte("id0", engine.cartes["pgb013"])
         party = multiple_turns_play(
             player_plays=[["id1", "id2", "id3"], ["id4", "id5", "pgb013"]],
@@ -232,7 +232,7 @@ class TestCarteMultiplePlays(Assert):
             self.assertEqual(expected_buff_array, result)
 
         # ___Game_2___
-        player_deck = collection_deck("Fearsome Flyers")
+        player_deck = collection_deck("fearsome flyers")
         player_deck.replace_carte("id0", engine.cartes["pgb013"])
         party = multiple_turns_play(
             player_plays=[["id1", "id2", "id3"], ["id4", "id5", "pgb013"]],
@@ -249,7 +249,7 @@ class TestCarteMultiplePlays(Assert):
             self.assertEqual(expected_buff_array, result)
 
     def test_carte_PHE049_false(self, engine: Engine) -> None:
-        player_deck = collection_deck("Herbivores")
+        player_deck = collection_deck("herbivores")
         player_deck.replace_carte("id0", engine.cartes["phe049"])
         party = multiple_turns_play(
             player_plays=[["id1", "phe049", "id2"], ["id3", "id4", "id5"], ["id6", "id7", "id8"], ["id9", "id10", "id11"], ["id12", "id13", "id14"], ["id15", "phe049", "id1"]],
@@ -304,3 +304,29 @@ class TestCarteMultiplePlays(Assert):
         for id in range(7, 18):
             carte = party.decks[0].cartes[f"id{id}"]
             self.assertEqual(expected_buff_array, carte.buff["cost"])
+
+    def test_carte_PAN022_1(self, engine: Engine) -> None:
+        player_deck = album_deck("paleontology")
+        player_deck.replace_carte("id0", engine.cartes["pan022"])
+        party = multiple_turns_play(
+            player_plays=[[None, None, None], ["pan022", None, None]],
+            opponent_plays=[[None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        # Puissance par tour
+        expected_power_per_turn = get_buff_array(2, 25)
+        result_power_per_turn = party.resource_per_turn["power"][0]
+        self.assertEqual(expected_power_per_turn, result_power_per_turn)
+
+    def test_carte_PAN022_2(self, engine: Engine) -> None:
+        player_deck = album_deck("paleontology")
+        player_deck.replace_carte("id0", engine.cartes["pan022"])
+        party = multiple_turns_play(
+            player_plays=[[None, None, None], [None, None, None], ["pan022", None, None]],
+            opponent_plays=[[None] * 3, [None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        # Puissance par tour
+        expected_power_per_turn = get_buff_array()
+        result_power_per_turn = party.resource_per_turn["power"][0]
+        self.assertEqual(expected_power_per_turn, result_power_per_turn)
