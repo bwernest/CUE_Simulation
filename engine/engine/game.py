@@ -64,10 +64,10 @@ class Game(Deck):
         party.decks = [deck_player, deck_opponent]
         party.calculate_stats()
 
-        party.energy = np.array([start_energy, start_energy])
+        party.energie = np.array([start_energy, start_energy])
         party.resource_per_turn = {
-            "power": [np.zeros((7), dtype=int), np.zeros((7), dtype=int)],
-            "energy": [np.zeros((7), dtype=int), np.zeros((7), dtype=int)]
+            "power": [np.zeros((self.buff_array_len), dtype=int), np.zeros((self.buff_array_len), dtype=int)],
+            "energy": [np.zeros((self.buff_array_len), dtype=int), np.zeros((self.buff_array_len), dtype=int)]
         }
         party.resource_per_turn["energy"][0][0] = energy_per_turn
         party.resource_per_turn["energy"][1][0] = energy_per_turn
@@ -119,7 +119,7 @@ class Game(Deck):
                 carte.played += 1
                 carte_score += max(0, carte.base_power + np.sum(carte.buff["burn"]))
                 carte_score += np.sum(carte.buff["power"])
-                party.energy[player] -= max(0, carte.base_cost + np.sum(carte.buff["cost"]))
+                party.energie[player] -= max(0, carte.base_cost + np.sum(carte.buff["cost"]))
             power_per_turn = np.sum(party.resource_per_turn["power"][player])
             party.score[party.round, party.turn, player] += max(0, carte_score) + power_per_turn
 
@@ -145,8 +145,8 @@ class Game(Deck):
 
     def add_energy_per_turn(self, party: Party) -> None:
         for player in range(2):
-            party.energy[player] += np.sum(party.resource_per_turn["energy"][player])
-        party.energy = np.clip(party.energy, party.min_energy, party.max_energy)
+            party.energie[player] += np.sum(party.resource_per_turn["energy"][player])
+        party.energie = np.clip(party.energie, party.min_energy, party.max_energy)
 
     def debuff_cartes(self, party: Party, plays) -> None:
         for player in range(2):
@@ -434,7 +434,7 @@ class Game(Deck):
         return self.check_condition_amount(atk_cdt[3], amount_deck, amount_target)
 
     def check_condition_turn(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
-        return self.check_condition_amount(atk_cdt[1], eval(atk_cdt[2]), party.turn)
+        return self.check_condition_amount(atk_cdt[1], eval(atk_cdt[2]), party.turn + 1)
 
     def check_condition_turn_score(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
         amount_turn_score = party.score[party.round, party.turn, player] - party.score[party.round, party.turn, 1 - player]
@@ -782,7 +782,7 @@ class Game(Deck):
         targets: TargetsJoueur,
         player: JoueurID,
     ) -> None:
-        party.energy[targets[player][0]] += int(atk_effect[1])
+        party.energie[targets[player][0]] += int(atk_effect[1])
 
     """___Multiplicateur________________________________________________________________________"""
 

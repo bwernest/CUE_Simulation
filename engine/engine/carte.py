@@ -18,6 +18,8 @@ class Carte(GameUtility):
     base_cost: int
     attacks: Dict[Trigger, List[Attack]]
     keywords: List[Keyword]
+    album: Album
+    collection: Collection
 
     def __eq__(self, value):
         if type(value) != self.__class__:
@@ -39,6 +41,9 @@ class Carte(GameUtility):
             "lock": np.zeros((self.buff_array_len), dtype=int),
         }
 
+    def is_locked(self) -> bool:
+        return sum(self.buff["lock"]) > 0
+
     def create_carte(
             self,
             id: str,
@@ -58,8 +63,8 @@ class Carte(GameUtility):
         self.base_power = power
         self.base_cost = cost
         self.attack_name = attack_name
-        self.album = album
-        self.collection = collection
+        self.album = album  # type:ignore
+        self.collection = collection    # type:ignore
         self.rarity = rarity
         self.type = type
         self.attacks = self.attacks_dict

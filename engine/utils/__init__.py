@@ -21,13 +21,13 @@ Keyword = Literal[
 ]
 
 Album = Literal[
-    "Arts & Culture",
-    "History",
-    "Life on Land",
-    "Oceans and Seas",
-    "Paleontology",
-    "Science",
-    "Space",
+    "arts & culture",
+    "history",
+    "life on land",
+    "oceans and seas",
+    "paleontology",
+    "science",
+    "space",
 ]
 
 Collection = Literal[

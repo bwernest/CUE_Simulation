@@ -24,7 +24,7 @@ class Party(Deck):
 
     decks: List[Deck]
 
-    energy: NDArray
+    energie: NDArray
 
     arenas = [
         "paleontology",

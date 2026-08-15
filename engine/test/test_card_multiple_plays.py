@@ -37,7 +37,7 @@ class TestCarteMultiplePlays(Assert):
         )
         carte = party.decks[0].cartes["phu013"]
         self.assertEqual(carte.base_power + 9 * 2, party.score[0, 1, 0])
-        self.assertEqual(100 - carte.base_cost, party.energy[0])
+        self.assertEqual(100 - carte.base_cost, party.energie[0])
         expected_buff_array = get_buff_array(0, 9 * 2)
         self.assertEqual(expected_buff_array, carte.buff["power"])
 
@@ -51,7 +51,7 @@ class TestCarteMultiplePlays(Assert):
         )
         carte = party.decks[0].cartes["pic023"]
         self.assertEqual(carte.base_power + 3 * 10, party.score[0, 1, 0])
-        self.assertEqual(100 - carte.base_cost, party.energy[0])
+        self.assertEqual(100 - carte.base_cost, party.energie[0])
         expected_buff_array = get_buff_array(0, 3 * 10)
         self.assertEqual(expected_buff_array, carte.buff["power"])
 
@@ -148,7 +148,7 @@ class TestCarteMultiplePlays(Assert):
         self.assertEqual(carteT.base_power, party.score[0, 0, 0])
         expected_buff_array = get_buff_array(4, 2)
         self.assertEqual(expected_buff_array, party.resource_per_turn["energy"][0])
-        self.assertEqual(100 - carteT.base_cost - carteL.base_cost + 2, party.energy[0])
+        self.assertEqual(100 - carteT.base_cost - carteL.base_cost + 2, party.energie[0])
 
     def test_carte_PHE014(self, engine: Engine) -> None:
         player_deck = dummy_deck()
@@ -268,3 +268,39 @@ class TestCarteMultiplePlays(Assert):
             self.assertEqual(expected_buff_array, result)
         result = party.decks[0].cartes["phe049"].buff["power"]
         self.assertEqual(expected_buff_array, result)
+
+    def test_carte_PLB012(self, engine: Engine) -> None:
+        player_deck = album_deck("paleontology")
+        player_deck.replace_carte("id0", engine.cartes["plb012"])
+        player_deck.replace_carte("id1", engine.cartes["pev001"])
+        for id in range(2, 4):
+            player_deck.cartes[f"id{id}"].album = "life on land"
+        party = multiple_turns_play(
+            player_plays=[[None, "id2", "pev001"], ["plb012", None, "id4"]],
+            opponent_plays=[[None] * 3, [None] * 3],
+            player_deck=player_deck,
+        )
+        # Score
+        expected_score = (18 + 10) + (25 + 10) + 10
+        result_score = sum(party.score[0, :, 0])
+        self.assertEqual(expected_score, result_score)
+        # Energie
+        expected_energie = 100 - 2 - 6
+        result_energie = party.energie[0]
+        self.assertEqual(expected_energie, result_energie)
+        # Hors buff
+        expected_buff_array = get_buff_array()
+        for id in range(2, 4):
+            carte = party.decks[0].cartes[f"id{id}"]
+            self.assertEqual(expected_buff_array, carte.buff["power"])
+            self.assertEqual(expected_buff_array, carte.buff["cost"])
+        # Energie buff
+        expected_buff_array = get_buff_array(0, -1)
+        for id in range(5, 7):
+            carte = party.decks[0].cartes[f"id{id}"]
+            self.assertEqual(expected_buff_array, carte.buff["cost"])
+        # Energie hors buff
+        expected_buff_array = get_buff_array()
+        for id in range(7, 18):
+            carte = party.decks[0].cartes[f"id{id}"]
+            self.assertEqual(expected_buff_array, carte.buff["cost"])
