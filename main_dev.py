@@ -47,6 +47,7 @@ from engine.utils import *
 
 """___Fonctions_____________________________________________________________"""
 
+
 def test_cartes_all() -> None:
     engine = Engine("prod")
     engine.start_engine(recyclage=True)

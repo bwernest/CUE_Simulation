@@ -223,7 +223,7 @@ class Game(Deck):
                     for joueur in get_args(JoueurID):
                         targets_carte[joueur] = list(set(targets_carte[joueur]) - set(atargets[joueur]))
                 self.apply_effects_carte(party, attack["effet"], attack["multiplicateur"], attack["duree"], targets_carte, player)
-            except KeyError:
+            except KeyError:    # pragma: no cover
                 raise TargetKeyError(f"Target {attack["cible"]} inconnue")
 
     """___Filtre________________________________________________________________________________"""
@@ -247,7 +247,7 @@ class Game(Deck):
                 "random": self.filter_targets_random,
                 "other": self.filter_targets_other,
             }[atk_filtre[0]](party, targets, atk_filtre, player, cid)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise FiltreKeyError(f"Filtre {atk_filtre[0]} inconnu")
 
     def filter_targets_carte_attribut_amount(
@@ -371,7 +371,7 @@ class Game(Deck):
                 "voisin": self.check_condition_voisin,
                 "arena": self.check_condition_arena,
             }[atk_cdt[0]](party, atk_cdt, plays, player, carte_index)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise ConditionKeyError(f"Condition <{atk_cdt[0]}> inconnue")
 
     def check_condition_voisin(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
@@ -382,7 +382,7 @@ class Game(Deck):
                 "next to": self.check_condition_voisin_next_to,
                 "oppose": self.check_condition_voisin_oppose,
             }[atk_cdt[1]](party, atk_cdt, plays, player, carte_index)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_voisin_next_to(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
@@ -423,7 +423,7 @@ class Game(Deck):
                 "milieu": 1,
                 "droite": 2,
             }[atk_cdt[1]] == carte_index
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_player_album(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
@@ -438,7 +438,7 @@ class Game(Deck):
                 "album": self.check_condition_deck_set,
                 "keyword": self.check_condition_deck_keyword,
             }[atk_cdt[1]](party, atk_cdt, plays, player, carte_index)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_deck_carte(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
@@ -485,7 +485,7 @@ class Game(Deck):
                 "album": self.check_condition_played_deck,
                 "keyword": self.check_condition_played_keyword,
             }[atk_cdt[1]](party, atk_cdt, plays, player, carte_index)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise ConditionKeyError(f"Condition <{atk_cdt[1]}> inconnue")
 
     def check_condition_played_carte(self, party: Party, atk_cdt: List, plays: List[Play], player: JoueurID, carte_index: int) -> bool:
@@ -517,7 +517,7 @@ class Game(Deck):
                 ">": self.check_condition_amount_gt,
                 "=": self.check_condition_amount_eq,
             }[comparaison](amount_player, amount_target)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise ComparaisonKeyError(f"Comparaison {comparaison} inconnue")
 
     def check_condition_amount_lt(self, amount_player: int, amount_target: int) -> bool:
@@ -716,7 +716,7 @@ class Game(Deck):
                 "cost": self.apply_effect_carte_buff,
                 "lock": self.apply_effect_carte_lock,
             }[atk_effect[0]](party, atk_effect, atk_mult, atk_duree, targets, player)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise EffectKeyError(f"Effect <{atk_effect[0]}> inconnu")
 
     def apply_effects_joueur(
@@ -734,7 +734,7 @@ class Game(Deck):
                 "power per turn": self.apply_effect_resource_per_turn,
                 "energy per turn": self.apply_effect_resource_per_turn,
             }[atk_effect[0]](party, atk_effect, atk_mult, atk_duree, targets, player)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise EffectKeyError(f"Effect <{atk_effect[0]}> inconnu")
 
     def apply_effect_carte_buff(
@@ -795,7 +795,7 @@ class Game(Deck):
                 "until played": 1,
                 "permanently": 0,
             }[duree[0]]
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise DureeKeyError(f"Durée {duree[0]} inconnue")
 
     def apply_effect_energy(
@@ -821,7 +821,7 @@ class Game(Deck):
                 "round completed": self.get_multiplicateur_round_completed,
                 "both deck": self.get_multiplicateur_both_deck,
             }[attack_mult[0]](party, attack_mult, player)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise MultiplicateurKeyError(f"Multiplicateur <{attack_mult[0]}> inconnue")
 
     def get_multiplicateur_main(self, party: Party, attack_mult: List, player: JoueurID) -> int:
@@ -844,7 +844,7 @@ class Game(Deck):
                 "collection": self.get_multiplicateur_played_deck,
                 "album": self.get_multiplicateur_played_deck,
             }[attack_mult[1]](party, attack_mult, player), attack_mult, 3)
-        except KeyError:
+        except KeyError:    # pragma: no cover
             raise MultiplicateurKeyError(f"Multiplicateur <{attack_mult[1]}> inconnue")
 
     def get_multiplicateur_album(self, party: Party, attack_mult: List, player: JoueurID) -> int:
