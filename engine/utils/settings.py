@@ -23,6 +23,7 @@ class Settings():
         "file_save",
         "file_log",
         "file_cartes_pickle",
+        "file_cartes_pickle_size",
     ], str]
     test: bool
 

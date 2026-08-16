@@ -47,23 +47,9 @@ from engine.utils import *
 
 """___Fonctions_____________________________________________________________"""
 
-
-def unique_carte_play(cid: CarteID) -> Party:
-    engine = Engine("prod")
-    engine.start_engine()
-    deck1 = dummy_deck()
-    deck2 = dummy_deck()
-    cid = cid.lower()
-    deck1.replace_carte("id0", engine.cartes[cid])
-    party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
-    engine.start_game(party, shuffle=False)
-    engine.play(party, [cid, None, None], [None, None, None])
-    return party
-
-
 def test_cartes_all() -> None:
     engine = Engine("prod")
-    engine.start_engine()
+    engine.start_engine(recyclage=True)
     for cid in engine.cartes.keys():
         print(f"Test de {engine.cartes[cid].name}")
         for placement in range(3):

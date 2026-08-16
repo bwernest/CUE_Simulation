@@ -17,10 +17,9 @@ class DataCollector(Game):
     cartes: Dict[str, Carte]
 
     def collect_data(self, recyclage: bool = True) -> None:
-        raw_cartes = self.get_raw_cartes()
-        ids = [raw_carte[:2][0][0].lower() for raw_carte in raw_cartes]
-        if recyclage and self.recycler_cartes(ids):
+        if recyclage and self.recycler_cartes():
             return
+        raw_cartes = self.get_raw_cartes()
         self.cartes = {}
         for raw_carte in raw_cartes:
             carte = Carte()
@@ -29,21 +28,23 @@ class DataCollector(Game):
                 raise ValueError(f"Carte en double : {carte.id}")
             self.cartes[carte.id] = carte
         self.pickle_save(self.paths["file_cartes_pickle"], self.cartes)
+        self.pickle_save(self.paths["file_cartes_pickle_size"], os.path.getsize(self.paths["file_data"]))
 
-    def recycler_cartes(self, ids: List[str]) -> bool:
+    def recycler_cartes(self) -> bool:
         """
         recycler_cartes
         ---------------
         Fonction qui tente de récupérer les cartes précédemment créées. Le but est
-        d'éviter de recréer toutes les cartes à chaque fois. Ainsi la liste des ids
-        récupérés dans le fichier source est comparée à la liste connue dans le pickle.
+        d'éviter de recréer toutes les cartes à chaque fois. Ainsi la taille du fichier
+        source est comparée à la taille précédemment enregistrée.
         """
         cartes_pickle = self.pickle_load(self.paths["file_cartes_pickle"])
         if cartes_pickle is None:
             self.add_log("Pas de pickle trouvé !")
             return False
-        old_ids = list(cartes_pickle.keys())
-        if sorted(old_ids) == sorted(ids):
+        old_size = self.pickle_load(self.paths["file_cartes_pickle_size"])
+        current_size = os.path.getsize(self.paths["file_data"])
+        if old_size == current_size:
             self.cartes = cartes_pickle
             self.add_log("Vielles cartes récupérées !")
             return True

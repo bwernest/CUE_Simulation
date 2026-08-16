@@ -18,7 +18,7 @@ import pytest
 @pytest.fixture(scope="function")
 def engine() -> Engine:
     engine = Engine("test")
-    engine.start_engine()
+    engine.start_engine(recyclage=True)
     return engine
 
 
@@ -102,7 +102,7 @@ def unique_carte_play(
         Deck de opponent par défaut un dummy deck.
     """
     engine = Engine("test")
-    engine.start_engine()
+    engine.start_engine(recyclage=True)
     player_deck = dummy_deck() if player_deck is None else player_deck
     opponent_deck = dummy_deck() if opponent_deck is None else opponent_deck
     deck1 = player_deck
@@ -122,7 +122,7 @@ def unique_turn_play(
     opponent_deck: Optional[Deck] = None,
 ) -> Party:
     engine = Engine("test")
-    engine.start_engine()
+    engine.start_engine(recyclage=True)
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
@@ -144,7 +144,7 @@ def multiple_turns_play(
     opponent_deck: Optional[Deck] = None,
 ) -> Party:
     engine = Engine("test")
-    engine.start_engine()
+    engine.start_engine(recyclage=True)
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     party = engine.create_game(deck1, deck2, 100, 0, 0, 250)

@@ -24,7 +24,8 @@
             "folder_data": "engine/data",
             "file_save": "engine/data/save.bw",
             "file_log": "engine/data/log.bw",
-            "file_cartes_pickle": "engine/data/cartes.pkl"
+            "file_cartes_pickle": "engine/data/cartes.pkl",
+            "file_cartes_pickle_size": "engine/data/cartes_size.pkl"
             
         }
     },
@@ -44,7 +45,8 @@
             "folder_output": "engine/test/output",
             "file_save": "engine/test/data/save.bw",
             "file_log": "engine/test/data/log.bw",
-            "file_cartes_pickle": "engine/test/data/cartes.pkl"
+            "file_cartes_pickle": "engine/test/data/cartes.pkl",
+            "file_cartes_pickle_size": "engine/data/cartes_size.pkl"
 
         }
     }
