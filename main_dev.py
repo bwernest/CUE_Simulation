@@ -76,7 +76,8 @@ player_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
 opponent_deck = Deck("prod")
 opponent_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
 
-party = engine.fight(player_deck, opponent_deck, "Mallia", "Mallia")
-party.show_score()
+for _ in range(10):
+    party = engine.fight(player_deck, opponent_deck, "Mauvaka", "Mauvaka")
+    party.show_score()
 
 # test_cartes_all()

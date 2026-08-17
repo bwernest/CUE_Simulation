@@ -5,6 +5,7 @@ from .deck import Deck
 from ..utils import *
 
 # Python
+from itertools import permutations
 import numpy as np
 from numpy import argmin
 
@@ -157,5 +158,19 @@ class Party(Deck):
         return True
 
     def show_score(self) -> None:
-        print(f"Round score {self.score_rounds}")
-        print(" / ".join([f"R{k + 1} {self.score[k, 0]} {self.score[k, 1]} {self.score[k, 2]}" for k in range(self.round)]))
+        # print(f"Round score {self.score_rounds}")
+        print(f"W{'N' if self.winner is None else self.winner} : " + " / ".join([f"R{k + 1} {np.sum(self.score[k, :], axis=0)}" for k in range(self.round)]))
+        # print(" / ".join([f"R{k + 1} {self.score[k, 0]} {self.score[k, 1]} {self.score[k, 2]}" for k in range(self.round)]))
+
+    def get_all_plays(self, cards_ids: List[CarteID], player: JoueurID) -> List[Play]:
+        plays = [list(p) for p in permutations(cards_ids, 3)]
+        plays += [list(p) + [None] for p in permutations(cards_ids, 2)]
+        plays += [list(p) + [None, None] for p in permutations(cards_ids, 1)]
+        plays += [[None] * 3]
+        return [play for play in plays if self.check_play(play, player)]
+
+    @property
+    def last_score(self) -> NDArray:
+        if self.turn == 0:
+            return self.score[self.round - 1][self.turns - 1]
+        return self.score[self.round][self.turn]

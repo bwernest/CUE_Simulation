@@ -27,6 +27,7 @@ Keyword = Literal[
 ]
 
 Joueur = Literal[
+    "Mauvaka",
     "Mallia",
 ]
 
