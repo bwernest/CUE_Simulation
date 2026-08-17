@@ -14,10 +14,20 @@ import sys
 
 """___Literal___________________________________________________________________________________"""
 
+deck_list_grodino = [
+    "pan015", "pan046", "pan003", "pan035", "pan022", "pan038",
+    "pca029", "plb012", "pan024", "pgb009", "plb011", "pgb003",
+    "pgb015", "pgb006", "pan061", "pan006", "plb007", "pan009",
+]
+
 Keyword = Literal[
     "beetle",
     "emperor",
     "mega",
+]
+
+Joueur = Literal[
+    "Mallia",
 ]
 
 Album = Literal[

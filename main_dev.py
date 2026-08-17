@@ -41,6 +41,7 @@ ___IA___
 
 # CUE_Simulation
 from engine.engine.carte import Carte
+from engine.engine.deck import Deck
 from engine.engine.engine import Engine
 from engine.engine.party import Party
 from engine.test.fixtures import dummy_deck
@@ -68,15 +69,14 @@ def test_cartes_all() -> None:
 """___Execution_____________________________________________________________"""
 
 engine = Engine("prod")
-print(type(engine))
-carte = Carte("prod")
-print(type(carte))
-print(type(engine) == type(carte))
-print(carte == engine)
-# engine.start_engine()
-# engine.print_check_raw_cartes()
-# engine.rewrite_raw_data()
-# engine.print_cartes_collections()
-# engine.print_collection("omnivores")
+engine.start_engine()
+
+player_deck = Deck("prod")
+player_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
+opponent_deck = Deck("prod")
+opponent_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
+
+party = engine.fight(player_deck, opponent_deck, "Mallia", "Mallia")
+party.show_score()
 
 # test_cartes_all()

@@ -137,3 +137,25 @@ class Party(Deck):
             if keyword in carte.keywords:
                 compte += 1
         return compte
+
+    def check_play(self, play: Play, player: JoueurID) -> bool:
+        cost = 0
+        for cid in play:
+            if cid is not None:
+                # En main
+                if cid not in self.decks[player].main:
+                    return False
+                
+                carte = self.decks[player].cartes[cid]
+                # Lock
+                if carte.is_locked():
+                    return False
+                # Coût
+                cost += carte.cost
+        if cost > self.energie[player]:
+            return False
+        return True
+
+    def show_score(self) -> None:
+        print(f"Round score {self.score_rounds}")
+        print(" / ".join([f"R{k + 1} {self.score[k, 0]} {self.score[k, 1]} {self.score[k, 2]}" for k in range(self.round)]))

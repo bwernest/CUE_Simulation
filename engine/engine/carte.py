@@ -95,6 +95,10 @@ class Carte(GameUtility):
         self.attacks = self.add_attacks(attacks)
         self.reset_carte()
 
+    @property
+    def cost(self) -> int:
+        return self.base_cost + np.sum(self.buff["cost"])
+
     def reset_carte(self) -> None:
         self.played = 0
         self.buff = self._buff_dictionnary
