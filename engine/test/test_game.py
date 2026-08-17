@@ -47,17 +47,17 @@ class TestGame(Assert):
     def test_winner1(self, game: Game, party: Party) -> None:
         play0 = ["id0", None, None]
         play1 = [None, None, None]
-        game.play(party, play1, play0)
+        party = game.play(party, play1, play0)
         for _ in range(game.turns - 1 + (game.rounds - 1) * game.turns):
-            game.play(party, play1, play1)
+            party = game.play(party, play1, play1)
         self.assertEqual(1, party.winner)
         self.assertEqual(True, party.done)
 
     def test_winner2(self, game: Game, party: Party) -> None:
         play1 = [None, None, None]
-        game.play(party, play1, play1)
+        party = game.play(party, play1, play1)
         for _ in range(game.turns - 1 + (game.rounds - 1) * game.turns):
-            game.play(party, play1, play1)
+            party = game.play(party, play1, play1)
         self.assertEqual(None, party.winner)
         self.assertEqual(True, party.done)
 

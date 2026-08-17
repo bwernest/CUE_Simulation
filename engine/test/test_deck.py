@@ -20,13 +20,6 @@ class TestDeck(Assert):
         with pytest.raises(NombreIncorrectDeCartes):
             deck.create_deck(cartes)
 
-    def test_deck_keys(self) -> None:
-        deck = dummy_deck()
-        keys = list(deck.keys())
-        self.assertEqual(len(keys), 18)
-        self.assertEqual(keys[0], "id0")
-        self.assertEqual(keys[-1], "id17")
-
     def test_replace_carte(self) -> None:
         deck = dummy_deck()
         carte = dummy_carte()
@@ -57,7 +50,7 @@ class TestDeck(Assert):
         game = Game("test")
         party = game.create_game(deck, deck, 100, 0, 0, 250)
         seed("Porco Rosso")
-        game.start_game(party)
+        party = game.start_game(party)
         result = party.decks[0].order
         self.assertEqual(expected, result)
 
@@ -85,3 +78,33 @@ class TestDeck(Assert):
         deck = dummy_deck()
         result = deck.name_to_id
         self.assertEqual(expected, result)
+
+    class TestDeck_Id(Assert):
+
+        def test_id_1(self) -> None:
+            expected = "id0id1id10id11id12id13id14id15id16id17id2id3id4id5id6id7id8id9"
+            result = dummy_deck().deck_id
+            self.assertEqual(expected, result)
+
+        def test_id_2(self, carte: Carte) -> None:
+            expected = "aaa001id1id10id11id12id13id14id15id16id17id2id3id4id5id6id7id8id9"
+            deck = dummy_deck()
+            carte.create_carte("aaa001", "test_carte")
+            deck.replace_carte("id0", carte)
+            result = deck.deck_id
+            self.assertEqual(expected, result)
+
+        def test_id_3(self, carte: Carte) -> None:
+            expected = "id1id10id11id12id13id14id15id16id17id2id3id4id5id6id7id8id9zzz999"
+            deck = dummy_deck()
+            carte.create_carte("zzz999", "test_carte")
+            deck.replace_carte("id0", carte)
+            result = deck.deck_id
+            self.assertEqual(expected, result)
+
+        def test_id_4(self) -> None:
+            expected = "id0id1id10id11id12id13id14id15id16id17id2id3id4id5id6id7id8id9"
+            deck = dummy_deck()
+            deck.shuffle()
+            result = deck.deck_id
+            self.assertEqual(expected, result)

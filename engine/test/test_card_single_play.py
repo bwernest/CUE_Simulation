@@ -109,27 +109,28 @@ class TestCarteSinglePlay(Assert):
         self.assertEqual(expected_buff_array, party.decks[1].cartes["id1"].buff["power"])
 
     def test_carte_PIC008(self) -> None:
-        deck = album_deck("paleontology")
+        player_deck = album_deck("paleontology")
         for cid in range(10):
-            deck.cartes[f"id{cid}"].base_cost = 10
+            player_deck.cartes[f"id{cid}"].base_cost = 10
         for cid in range(0, 3):
-            deck.cartes[f"id{cid}"].rarity = "rare"
+            player_deck.cartes[f"id{cid}"].rarity = "rare"
         for cid in range(3, 6):
-            deck.cartes[f"id{cid}"].rarity = "epic"
+            player_deck.cartes[f"id{cid}"].rarity = "epic"
         for cid in range(6, 9):
-            deck.cartes[f"id{cid}"].rarity = "legendary"
+            player_deck.cartes[f"id{cid}"].rarity = "legendary"
 
-        party = unique_carte_play("PIC008", deck)
+        party = unique_carte_play("PIC008", player_deck)
         carte = party.decks[0].cartes["pic008"]
         self.assertEqual(carte.base_power, party.score[0, 0, 0])
         self.assertEqual(100 - carte.base_cost + 1, party.energie[0])
 
-        for cid in range(1, 3):
-            self.assertEqual(-1, deck.cartes[f"id{cid}"].buff["cost"][0])
-        for cid in range(3, 6):
-            self.assertEqual(-1, deck.cartes[f"id{cid}"].buff["cost"][0])
+        deck = party.decks[0]
+        expected_buff_array = get_buff_array(0, -1)
+        for cid in range(1, 6):
+            self.assertEqual(expected_buff_array, deck.cartes[f"id{cid}"].buff["cost"])
+        expected_buff_array = get_buff_array()
         for cid in range(6, 9):
-            self.assertEqual(0, deck.cartes[f"id{cid}"].buff["cost"][0])
+            self.assertEqual(expected_buff_array, deck.cartes[f"id{cid}"].buff["cost"])
 
     def test_carte_PAN058(self) -> None:
         party = unique_carte_play("PAN058")
@@ -157,7 +158,7 @@ class TestCarteSinglePlay(Assert):
         expected_buff_array = get_buff_array()
         self.assertEqual(expected_buff_array, carte.buff["power"])
 
-    def test_carte_PMO045_true(self, engine: Engine) -> None:
+    def test_carte_PMO045_true(self) -> None:
         player_deck = dummy_deck()
         for cid, carte in player_deck.cartes.items():
             carte.album = cid    # type:ignore

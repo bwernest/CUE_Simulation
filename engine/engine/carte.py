@@ -21,8 +21,8 @@ class Carte(GameUtility):
     album: Album
     collection: Collection
 
-    def __eq__(self, value):
-        if type(value) != self.__class__:
+    def __eq__(self, value: Carte):
+        if type(value) != Carte:
             return False
         for key in ["id", "name", "keywords", "base_power", "base_cost", "attacks", "album", "collection", "rarity", "type"]:
             if self.__dict__[key] != value.__dict__[key]:
@@ -30,7 +30,7 @@ class Carte(GameUtility):
         return True
 
     def __str__(self):
-        return f"Carte {self.name} / {self.album} / {self.collection}\nAttacks :\n{self.attacks}"
+        return f"Carte {self.id}"
 
     @property
     def _buff_dictionnary(self) -> Dict[Effect, NDArray]:

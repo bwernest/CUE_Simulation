@@ -5,10 +5,13 @@ from .settings import Settings
 
 # Python
 import datetime
+import numpy as np
 import os
 import sys
 import pickle
-from typing import Any, Dict, List
+from typing import Any, Dict, List, TypeVar
+
+O = TypeVar("O")
 
 """___Classes___________________________________________________________________________________"""
 
@@ -117,3 +120,39 @@ class ToolBox(Settings):
     def pickle_save(self, path: str, data: Any) -> None:
         with open(path, "wb") as f:
             pickle.dump(data, f)
+
+    def compare_attributs(self, attribut: str, obj1: O, obj2: O) -> bool:
+        attr1 = obj1.__getattribute__(attribut)
+        attr2 = obj2.__getattribute__(attribut)
+        tattr1 = type(attr1)
+        if not self.compare_stuff(attr1, attr2):
+            print(f"Attributs {attribut} différents !\n1 : {obj1.__getattribute__(attribut)}\n2 : {obj2.__getattribute__(attribut)}")
+            return False
+        return True
+
+    def compare_stuff(self, stuff1: O, stuff2: O) -> bool:
+        if not isinstance(stuff1, type(stuff2)):
+            print("Types différents !")
+            return False
+        if isinstance(stuff1, np.ndarray):
+            if not (stuff1 == stuff2).all():
+                return False
+        elif isinstance(stuff1, list):
+            if not len(stuff1) == stuff2:
+                print("Longueurs de listes différentes !")
+                return False
+            for s1, s2 in zip(stuff1, stuff2):
+                if not self.compare_stuff(s1, s2):
+                    return False
+        elif isinstance(stuff1, dict):
+            if not len(stuff1) == stuff2:
+                print("Longueurs de dictionnaires différentes !")
+                return False
+            for key in stuff1.keys():
+                if not key in stuff2:
+                    print(f"La clé {key} est seulement présente dans le 1er dictionnaire !")
+                    return False
+                if not self.compare_stuff(stuff1[key], stuff2[key]):
+                    print(f"Les dictionnaires diffèrent à la clé {key} !")
+                    return False
+        return True

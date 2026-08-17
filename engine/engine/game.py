@@ -85,23 +85,26 @@ class Game(Deck):
 
     """___Play__________________________________________________________________________________"""
 
-    def start_game(self, party: Party, shuffle: bool = True) -> None:
-        self.stats = [self.get_stats(party.decks[0]), self.get_stats(party.decks[1])]
+    def start_game(self, party: Party, shuffle: bool = True) -> Party:
+        new_party = deepcopy(party)
+        self.stats = [self.get_stats(new_party.decks[0]), self.get_stats(new_party.decks[1])]
         if shuffle:
-            for deck in party.decks:
+            for deck in new_party.decks:
                 deck.shuffle()
-        self.turn_begin(party, [[None]])
+        self.turn_begin(new_party, [[None]])
 
-        party.decks[0].remaining = party.decks[0].order[:self.main_len]
-        party.decks[1].remaining = party.decks[1].order[:self.main_len]
+        new_party.decks[0].remaining = new_party.decks[0].order[:self.main_len]
+        new_party.decks[1].remaining = new_party.decks[1].order[:self.main_len]
+        return new_party
 
     def play(self, party: Party, play0: Play, play1: Play) -> Party:
+        new_party = deepcopy(party)
         plays = [play0, play1]
-        self.turn_play(party, plays)
-        self.turn_end(party, plays)
-        if not party.done:
-            self.turn_begin(party, plays)
-        return party
+        self.turn_play(new_party, plays)
+        self.turn_end(new_party, plays)
+        if not new_party.done:
+            self.turn_begin(new_party, plays)
+        return new_party
 
     def turn_begin(self, party: Party, plays: List[Play]) -> None:
         self.phase = "draw"

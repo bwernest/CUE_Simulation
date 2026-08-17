@@ -29,7 +29,7 @@ cover_show = "coverage html"
 format = "autopep8 --in-place --recursive ./"
 go = "python main_dev.py"
 test = "pytest engine"
-testx = "pytest -s -x engine"
+testf = "pytest --lf engine"
 print_test = "pytest -s engine"
 
 # Multi

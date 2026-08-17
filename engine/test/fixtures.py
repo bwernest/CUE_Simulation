@@ -12,6 +12,14 @@ from ..utils import *
 from numpy import zeros
 import pytest
 
+"""___Data______________________________________________________________________________________"""
+
+deck_list_grodino = [
+    "pan015", "pan046", "pan003", "pan035", "pan022", "pan038",
+    "pca029", "plb012", "pan024", "pgb009", "plb011", "pgb003",
+    "pgb015", "pgb006", "pan061", "pan006", "plb007", "pan009",
+]
+
 """___Functions_________________________________________________________________________________"""
 
 
@@ -20,6 +28,12 @@ def engine() -> Engine:
     engine = Engine("test")
     engine.start_engine(recyclage=True)
     return engine
+
+
+@pytest.fixture(scope="function")
+def carte() -> Carte:
+    carte = Carte("test")
+    return carte
 
 
 def dummy_deck() -> Deck:
@@ -110,7 +124,7 @@ def unique_carte_play(
     cid = cid.lower()
     deck1.replace_carte("id0", engine.cartes[cid])
     party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
-    engine.start_game(party, shuffle=False)
+    party = engine.start_game(party, shuffle=False)
     party = engine.play(party, [cid, None, None], [None, None, None])
     return party
 
@@ -126,7 +140,7 @@ def unique_turn_play(
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
-    engine.start_game(party, shuffle=False)
+    party = engine.start_game(party, shuffle=False)
     for carte in player_play:
         if carte is not None:
             assert carte in deck1.main, "Erreur dans la rédaction du test unique_turn_play."
@@ -148,14 +162,14 @@ def multiple_turns_play(
     deck1 = dummy_deck() if player_deck is None else player_deck
     deck2 = dummy_deck() if opponent_deck is None else opponent_deck
     party = engine.create_game(deck1, deck2, 100, 0, 0, 250)
-    engine.start_game(party, shuffle=False)
+    party = engine.start_game(party, shuffle=False)
     for player_play, opponent_play in zip(player_plays, opponent_plays):
         for carte in player_play:
             if carte is not None:
-                assert carte in deck1.main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
+                assert carte in party.decks[0].main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
         for carte in opponent_play:
             if carte is not None:
-                assert carte in deck2.main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
+                assert carte in party.decks[1].main, f"Erreur dans la rédaction du test multiple_turns_play, {carte} n'est pas en main."
         party = engine.play(party, player_play, opponent_play)
     return party
 

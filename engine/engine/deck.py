@@ -13,9 +13,18 @@ from typing import Dict, Iterable, List
 
 class Deck(Carte):
 
+    deck_id: str
     cartes: Dict[str, Carte]
-    order: List[str]
-    remaining: List[str]
+    order: List[CarteID]
+    remaining: List[CarteID]
+
+    def __eq__(self, value: Deck) -> bool:
+        if not (self.deck_id == value.deck_id and self.remaining == value.remaining and self.order == value.order):
+            return False
+        for cid in self.order:
+            if not self.cartes[cid] == value.cartes[cid]:
+                return False
+        return True
 
     def create_deck(self, cartes: List[Carte]):
         if not len(cartes) == self.deck_len:
@@ -23,6 +32,10 @@ class Deck(Carte):
         self.cartes = {carte.id: carte for carte in cartes}
         self.order = [carte.id for carte in cartes]
         self.remaining = []
+        self.update_id()
+
+    def update_id(self) -> None:
+        self.deck_id = "".join(sorted([cid for cid in self.cartes.keys()]))
 
     def copy_deck(self) -> Deck:
         new_deck = Deck(self.category)
@@ -30,10 +43,12 @@ class Deck(Carte):
             new_deck.__dict__[key] = value
         return new_deck
 
-    def keys(self) -> Iterable[str]:
-        return self.cartes.keys()
-
     def shuffle(self) -> None:
+        """
+        shuffle
+        -------
+        Mélange le deck.
+        """
         shuffle(self.order)
 
     @property
@@ -55,6 +70,7 @@ class Deck(Carte):
         del self.cartes[cid]
         self.cartes[new_carte.id] = new_carte
         self.order[self.order.index(cid)] = new_carte.id
+        self.update_id()
 
     def get_stats(self, deck: Deck) -> Dict[str, Dict[str, int]]:
         stats = {"album": {}, "collection": {}}

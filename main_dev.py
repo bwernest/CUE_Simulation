@@ -40,6 +40,7 @@ ___IA___
 """___Modules_______________________________________________________________"""
 
 # CUE_Simulation
+from engine.engine.carte import Carte
 from engine.engine.engine import Engine
 from engine.engine.party import Party
 from engine.test.fixtures import dummy_deck
@@ -66,11 +67,16 @@ def test_cartes_all() -> None:
 
 """___Execution_____________________________________________________________"""
 
-# engine = Engine("prod")
+engine = Engine("prod")
+print(type(engine))
+carte = Carte("prod")
+print(type(carte))
+print(type(engine) == type(carte))
+print(carte == engine)
 # engine.start_engine()
 # engine.print_check_raw_cartes()
 # engine.rewrite_raw_data()
 # engine.print_cartes_collections()
 # engine.print_collection("omnivores")
 
-test_cartes_all()
+# test_cartes_all()

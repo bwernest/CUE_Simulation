@@ -44,6 +44,29 @@ class Party(Deck):
     max_energy: NDArray
     resource_per_turn: RessourcePerTurn
 
+    def __str__(self):
+        return "Party"
+
+    def __eq__(self, value: Party):
+        for attribut in [
+            "turn",
+            "round",
+            "score",
+            "winner",
+            "done",
+            "min_energy",
+            "max_energy",
+            "resource_per_turn",
+        ]:
+            self.compare_attributs(attribut, self, value)
+        if not self.decks[0] == value.decks[0]:
+            print("Deck player différents !")
+            return False
+        if not self.decks[1] == value.decks[1]:
+            print("Deck opponent différents !")
+            return False
+        return True
+
     @property
     def arena(self) -> str:
         return self.arenas[self.round]
