@@ -174,3 +174,6 @@ class Party(Deck):
         if self.turn == 0:
             return self.score[self.round - 1][self.turns - 1]
         return self.score[self.round][self.turn]
+
+    def get_deck_power(self, player: JoueurID) -> int:
+        return sum([carte.base_power + sum(carte.buff["power"]) for carte in self.decks[player].cartes.values()])

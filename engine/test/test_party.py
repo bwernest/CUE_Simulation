@@ -67,3 +67,14 @@ class TestParty(Assert):
             # Play 2
             play = [None, "id1", None]
             self.assertEqual(False, party.check_play(play, 0))
+
+    class TestParty_GetDeckPower(Assert):
+
+        def test_get_deck_power_1(self, engine: Engine) -> None:
+            player_deck = Deck("test")
+            player_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
+            expected = sum([carte.base_power for carte in player_deck.cartes.values()])
+            opponent_deck = dummy_deck()
+            party = engine.create_game(player_deck, opponent_deck, 100, 0, 0, 250)
+            result = party.get_deck_power(0)
+            self.assertEqual(expected, result)
