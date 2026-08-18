@@ -159,15 +159,15 @@ class Party(Deck):
 
     def show_score(self) -> None:
         # print(f"Round score {self.score_rounds}")
-        print(f"W{'N' if self.winner is None else self.winner} : " + " / ".join([f"R{k + 1} {np.sum(self.score[k, :], axis=0)}" for k in range(self.round)]))
+        print(f"W{'N' if self.winner is None else self.winner} en R{self.round} : " + " / ".join([f"R{k + 1} {np.sum(self.score[k, :], axis=0)}" for k in range(self.round)]))
         # print(" / ".join([f"R{k + 1} {self.score[k, 0]} {self.score[k, 1]} {self.score[k, 2]}" for k in range(self.round)]))
 
     def get_all_plays(self, cards_ids: List[CarteID], player: JoueurID) -> List[Play]:
-        plays = [list(p) for p in permutations(cards_ids, 3)]
-        plays += [list(p) + [None] for p in permutations(cards_ids, 2)]
-        plays += [list(p) + [None, None] for p in permutations(cards_ids, 1)]
+        plays = [list(p) for p in permutations(cards_ids, 3) if self.check_play(list(p), player)]
+        plays += [list(p) + [None] for p in permutations(cards_ids, 2) if self.check_play(list(p) + [None], player)]
+        plays += [list(p) + [None, None] for p in permutations(cards_ids, 1) if self.check_play(list(p) + [None, None], player)]
         plays += [[None] * 3]
-        return [play for play in plays if self.check_play(play, player)]
+        return plays
 
     @property
     def last_score(self) -> NDArray:

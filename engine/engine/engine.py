@@ -29,7 +29,7 @@ class Engine(DataCollector, Player):
             player: Joueur,
             opponent: Joueur,
     ) -> Party:
-        party = self.create_game(player_deck, opponent_deck, 20, 10, 12, 30)
+        party = self.create_game(player_deck, opponent_deck, 20, 21, 12, 250)
         party = self.start_game(party)
         while not party.done:
             player_play = self.get_play(party, player, 0)

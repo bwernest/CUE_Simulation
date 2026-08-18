@@ -27,8 +27,11 @@ Keyword = Literal[
 ]
 
 Joueur = Literal[
+    "Graou",
+    "Jelonch",
     "Mauvaka",
     "Mallia",
+    "Noves",
 ]
 
 Album = Literal[

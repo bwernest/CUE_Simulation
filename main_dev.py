@@ -17,10 +17,10 @@ ___Jeu___
 
 ___IA___
 - Coder plusieurs IA qui s'affronteront :
-    - Mallia : Jouer au hasard
-    - Mauvaka : Maximiser le power au tour T
+    - Mallia : Jouer au hasard                                  OK
+    - Mauvaka : Maximiser le power au tour T                    OK
     - Marchand : Maximiser le power à la fin du round
-    - Novès :   Maximiser le power total du deck au tour T
+    - Novès :   Maximiser le power total du deck au tour T      OK
     - Mola :    Maximiser le power total du deck au tour T+1
     - Lacroix : Maximiser le power total du deck au tour T+2
     
@@ -30,10 +30,10 @@ ___IA___
     - Lebel :   Novès puis Marchand à 2-X
     - Capuozzo : Mola puis Marchand à 2-X
     - Kinghorn :  Lacroix puis Marchand à 2-X
-    - Jelonch : Novès puis Mauvaka à X-2
+    - Jelonch : Novès puis Mauvaka à X-2        OK
     - Willis : Mola puis Mauvaka à X-2
     - Meafou : Lacroix puis Mauvaka à X-2
-    - Graou : Novès puis Mauvaka à 2-X
+    - Graou : Novès puis Mauvaka à 2-X          OK
     - Barassi : Mola puis Mauvaka à 2-X
     - Ahki : Lacroix puis Mauvaka à 2-X
 """
@@ -44,8 +44,12 @@ from engine.engine.carte import Carte
 from engine.engine.deck import Deck
 from engine.engine.engine import Engine
 from engine.engine.party import Party
+from engine.engine.script import Script
 from engine.test.fixtures import dummy_deck
 from engine.utils import *
+
+# Python
+from tqdm import tqdm
 
 """___Fonctions_____________________________________________________________"""
 
@@ -76,8 +80,11 @@ player_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
 opponent_deck = Deck("prod")
 opponent_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
 
-for _ in range(10):
-    party = engine.fight(player_deck, opponent_deck, "Mauvaka", "Mauvaka")
-    party.show_score()
+# for _ in range(10):
+#     party = engine.fight(player_deck, opponent_deck, "Mauvaka", "Noves")
+#     party.show_score()
+
+script = Script()
+script.championnat(["Graou", "Jelonch", "Mallia", "Mauvaka", "Noves"], player_deck, 6)
 
 # test_cartes_all()

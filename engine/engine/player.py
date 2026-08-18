@@ -51,3 +51,37 @@ class Player(Game):
                 best_score = score
                 best_play = play
         return best_play
+
+    def Noves(self, party: Party, player: JoueurID) -> Play:
+        cards_ids = party.decks[player].main
+        plays = party.get_all_plays(cards_ids, player)
+        best_play = plays[0]
+        play0, play1 = {
+            0: (best_play, [None] * 3),
+            1: ([None] * 3, best_play),
+        }[player]
+        forward_party = self.play(party, play0, play1)
+        best_score = forward_party.get_deck_power(player)
+        for play in plays[1:]:
+            play0, play1 = {
+                0: (best_play, [None] * 3),
+                1: ([None] * 3, best_play),
+            }[player]
+            forward_party = self.play(party, play0, play1)
+            score = forward_party.get_deck_power(player)
+            if score > best_score:
+                best_score = score
+                best_play = play
+        return best_play
+
+    def Jelonch(self, party: Party, player: JoueurID) -> Play:
+        if party.score_rounds[1 - player] == 2:
+            return self.Mauvaka(party, player)
+        else:
+            return self.Noves(party, player)
+
+    def Graou(self, party: Party, player: JoueurID) -> Play:
+        if party.score_rounds[player] == 2:
+            return self.Mauvaka(party, player)
+        else:
+            return self.Noves(party, player)
