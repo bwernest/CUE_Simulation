@@ -21,7 +21,7 @@ ___IA___
     - Mauvaka : Maximiser le power au tour T                    OK
     - Marchand : Maximiser le power à la fin du round
     - Novès :   Maximiser le power total du deck au tour T      OK
-    - Mola :    Maximiser le power total du deck au tour T+1
+    - Mola :    Maximiser le power total du deck au tour T+1    OK
     - Lacroix : Maximiser le power total du deck au tour T+2
     
     - Ramos :   Novès puis Marchand à X-2
@@ -31,10 +31,10 @@ ___IA___
     - Capuozzo : Mola puis Marchand à 2-X
     - Kinghorn :  Lacroix puis Marchand à 2-X
     - Jelonch : Novès puis Mauvaka à X-2        OK
-    - Willis : Mola puis Mauvaka à X-2
+    - Willis : Mola puis Mauvaka à X-2          OK
     - Meafou : Lacroix puis Mauvaka à X-2
     - Graou : Novès puis Mauvaka à 2-X          OK
-    - Barassi : Mola puis Mauvaka à 2-X
+    - Barassi : Mola puis Mauvaka à 2-X         OK
     - Ahki : Lacroix puis Mauvaka à 2-X
 """
 """___Modules_______________________________________________________________"""
@@ -81,10 +81,19 @@ opponent_deck = Deck("prod")
 opponent_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
 
 # for _ in range(10):
-#     party = engine.fight(player_deck, opponent_deck, "Mauvaka", "Noves")
+#     party = engine.fight(player_deck, opponent_deck, "Mauvaka", "Mallia")
 #     party.show_score()
 
 script = Script()
-script.championnat(["Graou", "Jelonch", "Mallia", "Mauvaka", "Noves"], player_deck, 6)
+script.championnat([
+    "Barassi",
+    "Graou",
+    "Jelonch",
+    "Mallia",
+    "Mauvaka",
+    "Mola",
+    "Noves",
+    "Willis",
+], player_deck, 10)
 
 # test_cartes_all()

@@ -27,11 +27,14 @@ Keyword = Literal[
 ]
 
 Joueur = Literal[
+    "Barassi",
     "Graou",
     "Jelonch",
     "Mauvaka",
     "Mallia",
+    "Mola",
     "Noves",
+    "Willis",
 ]
 
 Album = Literal[
@@ -72,7 +75,7 @@ TargetsCarte = Dict[JoueurID, List[CarteID]]
 TargetsJoueur = Dict[JoueurID, List[JoueurID]]
 Targets = TargetsCarte | TargetsJoueur
 
-Play = List[CarteID] | List[None] | List[Optional[CarteID]]
+Play = Tuple[CarteID | None, CarteID | None, CarteID | None] | List[CarteID | None]
 
 BuffArray = NDArray
 

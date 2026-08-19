@@ -19,3 +19,9 @@ class TestPlayer(Assert):
             expected_party = deepcopy(party)
             _ = engine.get_play(party, "Mauvaka", 0)
             self.assertEqual(expected_party, party)
+
+        def test_get_play_2(self, engine: Engine) -> None:
+            party = engine.create_game(dummy_deck(), dummy_deck(), 100, 0, 0, 250)
+            expected_party = deepcopy(party)
+            _ = engine.get_play(party, "Mola", 0)
+            self.assertEqual(expected_party, party)

@@ -63,6 +63,7 @@ class Game(Deck):
             Instance de Party, état initial d'une partie.
         """
         party = Party()
+        party.done = False
 
         party.decks = (deck_player, deck_opponent)
         party.calculate_stats()

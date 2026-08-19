@@ -18,19 +18,21 @@ class TestParty(Assert):
             player_deck = dummy_deck()
             player_deck.replace_carte("id0", engine.cartes["pca014"])
             opponent_deck = dummy_deck()
-            inti_party = engine.create_game(player_deck, opponent_deck, 100, 0, 0, 250)
-            expected_party = deepcopy(inti_party)
-            _ = engine.play(inti_party, ["pca014", None, None], [None, None, None])
-            self.assertEqual(expected_party, inti_party)
+            init_party = engine.create_game(player_deck, opponent_deck, 100, 0, 0, 250)
+            self.assertEqual(0, init_party.last_score[0])
+            self.assertEqual(0, init_party.last_score[1])
+            expected_party = deepcopy(init_party)
+            _ = engine.play(init_party, ["pca014", None, None], [None, None, None])
+            self.assertEqual(expected_party, init_party)
 
         def test_modification_2(self, engine: Engine) -> None:
             player_deck = Deck("test")
             player_deck.create_deck([engine.cartes[cid] for cid in deck_list_grodino])
             opponent_deck = dummy_deck()
-            inti_party = engine.create_game(player_deck, opponent_deck, 100, 0, 0, 250)
-            expected_party = deepcopy(inti_party)
-            _ = engine.play(inti_party, ["pan015", "pan035", "pan022"], [None, None, None])
-            self.assertEqual(expected_party, inti_party)
+            init_party = engine.create_game(player_deck, opponent_deck, 100, 0, 0, 250)
+            expected_party = deepcopy(init_party)
+            _ = engine.play(init_party, ["pan015", "pan035", "pan022"], [None, None, None])
+            self.assertEqual(expected_party, init_party)
 
     class TestParty_CheckPlay(Assert):
 

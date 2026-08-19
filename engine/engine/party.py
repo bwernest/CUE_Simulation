@@ -5,7 +5,7 @@ from .deck import Deck
 from ..utils import *
 
 # Python
-from itertools import permutations
+from itertools import combinations, permutations
 import numpy as np
 from numpy import argmin
 
@@ -24,7 +24,7 @@ class Party(Deck):
     """
 
     decks: Tuple[Deck, Deck]
-    done: bool = False
+    done: bool
 
     energie: NDArray
 
@@ -125,6 +125,7 @@ class Party(Deck):
 
     def end_game(self) -> None:
         self.done = True
+        return
 
     def get_amount(self, player: JoueurID, set_type: Literal["album", "collection"], set_name: Album | Collection) -> int:
         try:
@@ -146,7 +147,7 @@ class Party(Deck):
                 # En main
                 if cid not in self.decks[player].main:
                     return False
-                
+
                 carte = self.decks[player].cartes[cid]
                 # Lock
                 if carte.is_locked():
@@ -163,17 +164,21 @@ class Party(Deck):
         # print(" / ".join([f"R{k + 1} {self.score[k, 0]} {self.score[k, 1]} {self.score[k, 2]}" for k in range(self.round)]))
 
     def get_all_plays(self, cards_ids: List[CarteID], player: JoueurID) -> List[Play]:
-        plays = [list(p) for p in permutations(cards_ids, 3) if self.check_play(list(p), player)]
-        plays += [list(p) + [None] for p in permutations(cards_ids, 2) if self.check_play(list(p) + [None], player)]
-        plays += [list(p) + [None, None] for p in permutations(cards_ids, 1) if self.check_play(list(p) + [None, None], player)]
-        plays += [[None] * 3]
-        return plays
+        plays = [p for p in combinations(cards_ids, 3) if self.check_play(p, player)]
+        if len(plays) == 0:
+            plays += [list(p) + [None] for p in combinations(cards_ids, 2) if self.check_play(list(p) + [None], player)]
+        if len(plays) == 0:
+            plays += [list(p) + [None, None] for p in combinations(cards_ids, 1) if self.check_play(list(p) + [None, None], player)]
+        return plays    # type:ignore
 
     @property
     def last_score(self) -> NDArray:
         if self.turn == 0:
-            return self.score[self.round - 1][self.turns - 1]
-        return self.score[self.round][self.turn]
+            if self.round == 0:
+                return self.score[0, 0]
+            else:
+                return self.score[self.round - 1][self.turns - 1]
+        return self.score[self.round][self.turn - 1]
 
     def get_deck_power(self, player: JoueurID) -> int:
         return sum([carte.base_power + sum(carte.buff["power"]) for carte in self.decks[player].cartes.values()])

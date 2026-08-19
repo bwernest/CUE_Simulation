@@ -6,6 +6,7 @@ from ..engine.deck import Deck
 from ..engine.engine import Engine
 from ..engine.game import Game
 from ..engine.party import Party
+from ..engine.script import Script
 from ..utils import *
 
 # Python
@@ -20,6 +21,12 @@ def engine() -> Engine:
     engine = Engine("test")
     engine.start_engine(recyclage=True)
     return engine
+
+
+@pytest.fixture(scope="function")
+def script() -> Script:
+    script = Script("test")
+    return script
 
 
 @pytest.fixture(scope="function")

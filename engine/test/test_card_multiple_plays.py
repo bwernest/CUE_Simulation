@@ -25,6 +25,8 @@ class TestCarteMultiplePlays(Assert):
         carte = party.decks[0].cartes["pan063"]
         self.assertEqual(100 * 3, party.score[0, 0, 1])
         self.assertEqual(100 * 3, party.score[0, 1, 1])
+        self.assertEqual(carte.base_power + 40, party.last_score[0])
+        self.assertEqual(100 * 3, party.last_score[1])
         self.assertEqual(carte.base_power + 40, party.score[0, 1, 0])
 
     def test_carte_PHU013(self, engine: Engine) -> None:
@@ -191,6 +193,7 @@ class TestCarteMultiplePlays(Assert):
             player_deck=player_deck,
             opponent_deck=opponent_deck,
         )
+        self.assertEqual(100, party.last_score[0])
         expected_buff_array = get_buff_array()
         result = party.resource_per_turn["energy"][0]
         self.assertEqual(expected_buff_array, result)
@@ -338,6 +341,7 @@ class TestCarteMultiplePlays(Assert):
         expected_score = engine.cartes["pan022"].base_power
         result_score = sum(party.score[0, :, 0])
         self.assertEqual(expected_score, result_score)
+        self.assertEqual(expected_score, party.last_score[0])
 
     def test_carte_PAN022_3(self, engine: Engine) -> None:
         player_deck = album_deck("paleontology")

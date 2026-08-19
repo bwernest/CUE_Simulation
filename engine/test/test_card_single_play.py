@@ -33,6 +33,8 @@ class TestCarteSinglePlay(Assert):
         party = unique_carte_play("PAN015")
         carte = party.decks[0].cartes["pan015"]
         self.assertEqual(carte.base_power + 24, party.score[0, 0, 0])
+        self.assertEqual(carte.base_power + 24, party.last_score[0])
+        self.assertEqual(0, party.last_score[1])
         self.assertEqual(100 - carte.base_cost, party.energie[0])
         self.assertEqual(get_buff_array(), carte.buff["power"])
         self.assertEqual(get_buff_array(2, -1), carte.buff["cost"])
