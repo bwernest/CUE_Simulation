@@ -94,6 +94,6 @@ script.championnat([
     "Mola",
     "Noves",
     "Willis",
-], player_deck, 10)
+], player_deck, 20)
 
 # test_cartes_all()

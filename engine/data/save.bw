@@ -1,9 +1,9 @@
 CUE	Barassi	Graou	Jelonch	Mallia	Mauvaka	Mola	Noves	Willis
-Barassi	//	40	40	50	50	20	80	50
-Graou	60	//	50	60	10	60	50	50
-Jelonch	60	50	//	80	20	50	70	30
-Mallia	50	40	20	//	10	30	50	20
-Mauvaka	50	90	80	90	//	90	100	60
-Mola	80	40	50	70	10	//	70	50
-Noves	20	50	30	50	0	30	//	10
-Willis	50	50	70	80	40	50	90	//
+Barassi	//	65	60	65	20	80	80	60
+Graou	35	//	45	65	30	50	65	45
+Jelonch	40	55	//	55	5	85	85	40
+Mallia	35	35	45	//	15	65	70	50
+Mauvaka	75	70	95	85	//	70	95	55
+Mola	20	50	15	35	30	//	65	35
+Noves	20	35	15	30	5	35	//	5
+Willis	40	55	60	50	45	65	95	//
